@@ -1,0 +1,110 @@
+   0  $accept : programa $end
+
+   1  programa : lista_declaraciones
+
+   2  lista_declaraciones : lista_declaraciones declaracion
+   3                      | declaracion
+
+   4  declaracion : DIM IDENT AS tipo ';'
+
+   5  tipo : INTEGER
+   6       | REAL
+   7       | CHARACTER
+
+state 0
+	$accept : . programa $end  (0)
+
+	DIM  shift 1
+	.  error
+
+	programa  goto 2
+	lista_declaraciones  goto 3
+	declaracion  goto 4
+
+
+state 1
+	declaracion : DIM . IDENT AS tipo ';'  (4)
+
+	IDENT  shift 5
+	.  error
+
+
+state 2
+	$accept : programa . $end  (0)
+
+	$end  accept
+
+
+state 3
+	programa : lista_declaraciones .  (1)
+	lista_declaraciones : lista_declaraciones . declaracion  (2)
+
+	DIM  shift 1
+	$end  reduce 1
+
+	declaracion  goto 6
+
+
+state 4
+	lista_declaraciones : declaracion .  (3)
+
+	.  reduce 3
+
+
+state 5
+	declaracion : DIM IDENT . AS tipo ';'  (4)
+
+	AS  shift 7
+	.  error
+
+
+state 6
+	lista_declaraciones : lista_declaraciones declaracion .  (2)
+
+	.  reduce 2
+
+
+state 7
+	declaracion : DIM IDENT AS . tipo ';'  (4)
+
+	INTEGER  shift 8
+	REAL  shift 9
+	CHARACTER  shift 10
+	.  error
+
+	tipo  goto 11
+
+
+state 8
+	tipo : INTEGER .  (5)
+
+	.  reduce 5
+
+
+state 9
+	tipo : REAL .  (6)
+
+	.  reduce 6
+
+
+state 10
+	tipo : CHARACTER .  (7)
+
+	.  reduce 7
+
+
+state 11
+	declaracion : DIM IDENT AS tipo . ';'  (4)
+
+	';'  shift 12
+	.  error
+
+
+state 12
+	declaracion : DIM IDENT AS tipo ';' .  (4)
+
+	.  reduce 4
+
+
+19 terminals, 5 nonterminals
+8 grammar rules, 13 states

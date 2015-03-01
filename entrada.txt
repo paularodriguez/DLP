@@ -1,0 +1,12 @@
+/*
+NOTA. Este ejemplo pretende mostrar la sintaxis del lenguaje. No está pensado para ser compilado sin errores.
+
+- La sintaxis tiene que ser obligatoriamente la que se muestra en este ejemplo
+- Las declaraciones de funciones, procedimientos y variables globales pueden venir en cualquier orden.
+- Las funciones y procedimientos deben tener paréntesis aunque no tengan parámetros
+- Tanto las funciones como los procedimientos podrán declarar variables locales solo al inicio de su cuerpo. Por tanto no podrá haber declaración de variables locales en cualquier lugar de la función/procedimiento ni dentro de bloques anidados (por ejemplo el creado por un while)
+- No pueden aparecer expresiones como sentencias
+*/
+
+dim a as integer;
+dim b as character;
