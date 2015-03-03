@@ -44,17 +44,39 @@ Real = ([0-9]* \.[0-9]+) | [0-9][eE][+-]?[0-9]+ | [0-9]+ \. [0-9]* [eE]-?[0-9]+
 {ComentariosLinea} 					{}
 {ComentariosMultiLinea} 			{}
 dim									{return Parser.DIM;}
-"integer" 							{parser.setYylval(yytext()); return Parser.INTEGER;}
-"double" 							{parser.setYylval(yytext()); return Parser.REAL;}
-"character" 						{parser.setYylval(yytext()); return Parser.CHARACTER;}
+integer 							{parser.setYylval(yytext()); return Parser.INTEGER;}
+real 								{parser.setYylval(yytext()); return Parser.REAL;}
+character 							{parser.setYylval(yytext()); return Parser.CHARACTER;}
 as									{return Parser.AS;}
-while 								{System.out.println("SENT WHILE");}
-if 									{System.out.println("SENT IF");}
-else 								{System.out.println("SENT ELSE");}
-{Real}								{return Parser.REAL;}
+end									{return Parser.END;}
+proc								{return Parser.PROC;}
+type								{return Parser.TYPE;}
+print								{return Parser.PRINT;}
+while 								{return Parser.WHILE;}
+if 									{return Parser.IF;}
+else 								{return Parser.ELSE;}
+then 								{return Parser.THEN;}
+{Real}								{parser.setYylval(yytext()); return Parser.REAL;}
 ";" 								{parser.setYylval(yytext()); return (int)yycharat(0);}
-[0-9]+								{return Parser.CTE_ENTERA;}	
-\'[^\']\'   						{return Parser.CHARACTER;}
+[0-9]+								{parser.setYylval(yytext()); return Parser.CTE_ENTERA;}	
+\'[^\']\'   						{parser.setYylval(yytext()); return Parser.CHARACTER;}
+
+")" |
+"(" |
+">" |
+"<" |
+"*" |
+"/" |
+"%" |
+"-" |
+"+" |
+"=" |
+"}" |
+"{" |
+"!" |
+"[" |
+"]" |
+"." {parser.setYylval(yytext()); return (int)yycharat(0);}
 
 {CARACTER}({CARACTER}|{DIGITO})* 	{parser.setYylval(yytext()); return Parser.IDENT;}
 

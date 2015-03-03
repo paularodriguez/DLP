@@ -25,13 +25,18 @@ import ast.expr.*;
 %token PRINT
 %token FUNCTION
 %token PROC
-%token STRUCT
+%token END
+%token TYPE
+%token IF
+%token THEN
+%token ELSE
+%token WHILE
 %left '+', '-'
 %left '*', '/'
 %%
 // * Gramática y acciones Yacc
 
-programa:  lista_declaraciones 						{this.ast = new Programa((List)$1);}			
+programa:  lista_declaraciones						{this.ast = new Programa((List)$1);}	
 	;
 
 lista_declaraciones
@@ -40,25 +45,77 @@ lista_declaraciones
 	;
 	
 declaracion
-	: DIM IDENT AS tipo ';'							{$$ = new DefinicionVariable((Tipo)$4, (String)$2);}
-	//| definicion_proc								{ $$ = $1;}
+	: definicion_variable							{ $$ = $1;}
+	| definicion_proc								{ $$ = $1;}
+	;
+
+definicion_variable
+	: DIM variable AS tipo ';'
 	;
 	
-/*definicion_proc
-	: PROC IDENT '(' listaParametrosOpcional ')' listaSentencias END PROC ';'
+variable
+	: IDENT array
+	;
+	
+array
+	:
+	| array '['CTE_ENTERA']'
+	
+definicion_proc
+	: PROC IDENT '(' listaParametrosOpcional ')' sentencia END PROC ';'			{$$ = new Procedimiento((String)$2, (Object)$4, (Sentencia)$6); }
+	;
 	
 listaParametrosOpcional
 	:  	 				{ $$ = new ArrayList<Expresion>(); }
 	| listaParametros   { $$ = $1; }
 	;
-	*/
+	
+listaParametros 
+	: listaParametros ',' IDENT AS tipo 			{((List)$1).add((Tipo)$3); $$ = $1; }
+	| IDENT AS tipo 								{$$ = $1;}
+	;
+	
+listaSentencias
+	: listaSentencias sentencia 	 	 			{ ((List<Sentencia>)$1).add((Sentencia)$2); $$ = $1; }
+	| sentencia										{ List<Sentencia> lista = new ArrayList<Sentencia>();
+													  lista.add((Sentencia)$1);
+													  $$ = lista;}
+	;
+	
+sentencia
+	: PRINT IDENT ";"	 							{$$ = new Print((String)$2);}
+		
+
+expresion
+	: IDENT											{$$ = new Variable((String)$1);}
+	| CTE_ENTERA									{$$ = new LiteralEntero((int)$1);}
+	| expresion '*' expresion						{$$ = new Aritmetica((Expresion)$1,"*", (Expresion)$3);}
+	| expresion '+' expresion						{$$ = new Aritmetica((Expresion)$1,"+", (Expresion)$3);}
+	| expresion '-' expresion						{$$ = new Aritmetica((Expresion)$1,"-", (Expresion)$3);}
+	;
+
 tipo
 	: INTEGER										{$$ = TipoEntero.getInstancia();} 
 	| REAL											{$$ = TipoReal.getInstancia();} 
 	| CHARACTER										{$$ = TipoChar.getInstancia();} 
+	| tipoStruct									{$$ = $1;}
 	; 		
 	
-				
+tipoStruct
+	: TYPE IDENT listaCampos END TYPE ';'			{$$ = new TipoStruct((String)$2, (List)$3);}
+	;
+	
+listaCampos:   		{ List<Campo> lista = new ArrayList<Campo>();
+								$$ = lista;
+					}
+				| listaCampos ";" campo
+							{
+								List<Campo> lista = (List<Campo>) $1;
+								lista.add((Campo) $3);
+								$$ = lista;
+							};
+
+campo:  DIM IDENT AS tipo ';'	  {$$ = new Campo((Tipo)$4, (String)$2);}
 	
 %%
 

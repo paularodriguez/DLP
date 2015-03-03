@@ -5,106 +5,471 @@
    2  lista_declaraciones : lista_declaraciones declaracion
    3                      | declaracion
 
-   4  declaracion : DIM IDENT AS tipo ';'
+   4  declaracion : definicion_variable
+   5              | definicion_proc
 
-   5  tipo : INTEGER
-   6       | REAL
-   7       | CHARACTER
+   6  definicion_variable : DIM variable AS tipo ';'
+
+   7  variable : IDENT array
+
+   8  array :
+   9        | array '[' CTE_ENTERA ']'
+
+  10  definicion_proc : PROC IDENT '(' listaParametrosOpcional ')' sentencia END PROC ';'
+
+  11  listaParametrosOpcional :
+  12                          | listaParametros
+
+  13  listaParametros : listaParametros ',' IDENT AS tipo
+  14                  | IDENT AS tipo
+
+  15  listaSentencias : listaSentencias sentencia
+  16                  | sentencia
+
+  17  sentencia : PRINT IDENT ';'
+
+  18  expresion : IDENT
+  19            | CTE_ENTERA
+  20            | expresion '*' expresion
+  21            | expresion '+' expresion
+  22            | expresion '-' expresion
+
+  23  tipo : INTEGER
+  24       | REAL
+  25       | CHARACTER
+  26       | tipoStruct
+
+  27  tipoStruct : TYPE IDENT listaCampos END TYPE ';'
+
+  28  listaCampos :
+  29              | listaCampos ';' campo
+
+  30  campo : DIM IDENT AS tipo ';'
 
 state 0
 	$accept : . programa $end  (0)
 
 	DIM  shift 1
+	PROC  shift 2
 	.  error
 
-	programa  goto 2
-	lista_declaraciones  goto 3
-	declaracion  goto 4
+	programa  goto 3
+	lista_declaraciones  goto 4
+	declaracion  goto 5
+	definicion_variable  goto 6
+	definicion_proc  goto 7
 
 
 state 1
-	declaracion : DIM . IDENT AS tipo ';'  (4)
+	definicion_variable : DIM . variable AS tipo ';'  (6)
 
-	IDENT  shift 5
+	IDENT  shift 8
 	.  error
+
+	variable  goto 9
 
 
 state 2
+	definicion_proc : PROC . IDENT '(' listaParametrosOpcional ')' sentencia END PROC ';'  (10)
+
+	IDENT  shift 10
+	.  error
+
+
+state 3
 	$accept : programa . $end  (0)
 
 	$end  accept
 
 
-state 3
+state 4
 	programa : lista_declaraciones .  (1)
 	lista_declaraciones : lista_declaraciones . declaracion  (2)
 
 	DIM  shift 1
+	PROC  shift 2
 	$end  reduce 1
 
-	declaracion  goto 6
+	declaracion  goto 11
+	definicion_variable  goto 6
+	definicion_proc  goto 7
 
 
-state 4
+state 5
 	lista_declaraciones : declaracion .  (3)
 
 	.  reduce 3
 
 
-state 5
-	declaracion : DIM IDENT . AS tipo ';'  (4)
+state 6
+	declaracion : definicion_variable .  (4)
 
-	AS  shift 7
+	.  reduce 4
+
+
+state 7
+	declaracion : definicion_proc .  (5)
+
+	.  reduce 5
+
+
+state 8
+	variable : IDENT . array  (7)
+	array : .  (8)
+
+	.  reduce 8
+
+	array  goto 12
+
+
+state 9
+	definicion_variable : DIM variable . AS tipo ';'  (6)
+
+	AS  shift 13
 	.  error
 
 
-state 6
+state 10
+	definicion_proc : PROC IDENT . '(' listaParametrosOpcional ')' sentencia END PROC ';'  (10)
+
+	'('  shift 14
+	.  error
+
+
+state 11
 	lista_declaraciones : lista_declaraciones declaracion .  (2)
 
 	.  reduce 2
 
 
-state 7
-	declaracion : DIM IDENT AS . tipo ';'  (4)
+state 12
+	variable : IDENT array .  (7)
+	array : array . '[' CTE_ENTERA ']'  (9)
 
-	INTEGER  shift 8
-	REAL  shift 9
-	CHARACTER  shift 10
+	'['  shift 15
+	AS  reduce 7
+
+
+state 13
+	definicion_variable : DIM variable AS . tipo ';'  (6)
+
+	INTEGER  shift 16
+	REAL  shift 17
+	CHARACTER  shift 18
+	TYPE  shift 19
 	.  error
 
-	tipo  goto 11
+	tipo  goto 20
+	tipoStruct  goto 21
 
 
-state 8
-	tipo : INTEGER .  (5)
+state 14
+	definicion_proc : PROC IDENT '(' . listaParametrosOpcional ')' sentencia END PROC ';'  (10)
+	listaParametrosOpcional : .  (11)
 
-	.  reduce 5
+	IDENT  shift 22
+	')'  reduce 11
+
+	listaParametrosOpcional  goto 23
+	listaParametros  goto 24
 
 
-state 9
-	tipo : REAL .  (6)
+state 15
+	array : array '[' . CTE_ENTERA ']'  (9)
+
+	CTE_ENTERA  shift 25
+	.  error
+
+
+state 16
+	tipo : INTEGER .  (23)
+
+	.  reduce 23
+
+
+state 17
+	tipo : REAL .  (24)
+
+	.  reduce 24
+
+
+state 18
+	tipo : CHARACTER .  (25)
+
+	.  reduce 25
+
+
+state 19
+	tipoStruct : TYPE . IDENT listaCampos END TYPE ';'  (27)
+
+	IDENT  shift 26
+	.  error
+
+
+state 20
+	definicion_variable : DIM variable AS tipo . ';'  (6)
+
+	';'  shift 27
+	.  error
+
+
+state 21
+	tipo : tipoStruct .  (26)
+
+	.  reduce 26
+
+
+state 22
+	listaParametros : IDENT . AS tipo  (14)
+
+	AS  shift 28
+	.  error
+
+
+state 23
+	definicion_proc : PROC IDENT '(' listaParametrosOpcional . ')' sentencia END PROC ';'  (10)
+
+	')'  shift 29
+	.  error
+
+
+state 24
+	listaParametrosOpcional : listaParametros .  (12)
+	listaParametros : listaParametros . ',' IDENT AS tipo  (13)
+
+	','  shift 30
+	')'  reduce 12
+
+
+state 25
+	array : array '[' CTE_ENTERA . ']'  (9)
+
+	']'  shift 31
+	.  error
+
+
+state 26
+	tipoStruct : TYPE IDENT . listaCampos END TYPE ';'  (27)
+	listaCampos : .  (28)
+
+	.  reduce 28
+
+	listaCampos  goto 32
+
+
+state 27
+	definicion_variable : DIM variable AS tipo ';' .  (6)
 
 	.  reduce 6
 
 
-state 10
-	tipo : CHARACTER .  (7)
+state 28
+	listaParametros : IDENT AS . tipo  (14)
 
-	.  reduce 7
+	INTEGER  shift 16
+	REAL  shift 17
+	CHARACTER  shift 18
+	TYPE  shift 19
+	.  error
+
+	tipo  goto 33
+	tipoStruct  goto 21
 
 
-state 11
-	declaracion : DIM IDENT AS tipo . ';'  (4)
+state 29
+	definicion_proc : PROC IDENT '(' listaParametrosOpcional ')' . sentencia END PROC ';'  (10)
 
-	';'  shift 12
+	PRINT  shift 34
+	.  error
+
+	sentencia  goto 35
+
+
+state 30
+	listaParametros : listaParametros ',' . IDENT AS tipo  (13)
+
+	IDENT  shift 36
 	.  error
 
 
-state 12
-	declaracion : DIM IDENT AS tipo ';' .  (4)
+state 31
+	array : array '[' CTE_ENTERA ']' .  (9)
 
-	.  reduce 4
+	.  reduce 9
 
 
-19 terminals, 5 nonterminals
-8 grammar rules, 13 states
+state 32
+	tipoStruct : TYPE IDENT listaCampos . END TYPE ';'  (27)
+	listaCampos : listaCampos . ';' campo  (29)
+
+	END  shift 37
+	';'  shift 38
+	.  error
+
+
+state 33
+	listaParametros : IDENT AS tipo .  (14)
+
+	.  reduce 14
+
+
+state 34
+	sentencia : PRINT . IDENT ';'  (17)
+
+	IDENT  shift 39
+	.  error
+
+
+state 35
+	definicion_proc : PROC IDENT '(' listaParametrosOpcional ')' sentencia . END PROC ';'  (10)
+
+	END  shift 40
+	.  error
+
+
+state 36
+	listaParametros : listaParametros ',' IDENT . AS tipo  (13)
+
+	AS  shift 41
+	.  error
+
+
+state 37
+	tipoStruct : TYPE IDENT listaCampos END . TYPE ';'  (27)
+
+	TYPE  shift 42
+	.  error
+
+
+state 38
+	listaCampos : listaCampos ';' . campo  (29)
+
+	DIM  shift 43
+	.  error
+
+	campo  goto 44
+
+
+state 39
+	sentencia : PRINT IDENT . ';'  (17)
+
+	';'  shift 45
+	.  error
+
+
+state 40
+	definicion_proc : PROC IDENT '(' listaParametrosOpcional ')' sentencia END . PROC ';'  (10)
+
+	PROC  shift 46
+	.  error
+
+
+state 41
+	listaParametros : listaParametros ',' IDENT AS . tipo  (13)
+
+	INTEGER  shift 16
+	REAL  shift 17
+	CHARACTER  shift 18
+	TYPE  shift 19
+	.  error
+
+	tipo  goto 47
+	tipoStruct  goto 21
+
+
+state 42
+	tipoStruct : TYPE IDENT listaCampos END TYPE . ';'  (27)
+
+	';'  shift 48
+	.  error
+
+
+state 43
+	campo : DIM . IDENT AS tipo ';'  (30)
+
+	IDENT  shift 49
+	.  error
+
+
+state 44
+	listaCampos : listaCampos ';' campo .  (29)
+
+	.  reduce 29
+
+
+state 45
+	sentencia : PRINT IDENT ';' .  (17)
+
+	.  reduce 17
+
+
+state 46
+	definicion_proc : PROC IDENT '(' listaParametrosOpcional ')' sentencia END PROC . ';'  (10)
+
+	';'  shift 50
+	.  error
+
+
+state 47
+	listaParametros : listaParametros ',' IDENT AS tipo .  (13)
+
+	.  reduce 13
+
+
+state 48
+	tipoStruct : TYPE IDENT listaCampos END TYPE ';' .  (27)
+
+	.  reduce 27
+
+
+state 49
+	campo : DIM IDENT . AS tipo ';'  (30)
+
+	AS  shift 51
+	.  error
+
+
+state 50
+	definicion_proc : PROC IDENT '(' listaParametrosOpcional ')' sentencia END PROC ';' .  (10)
+
+	.  reduce 10
+
+
+state 51
+	campo : DIM IDENT AS . tipo ';'  (30)
+
+	INTEGER  shift 16
+	REAL  shift 17
+	CHARACTER  shift 18
+	TYPE  shift 19
+	.  error
+
+	tipo  goto 52
+	tipoStruct  goto 21
+
+
+state 52
+	campo : DIM IDENT AS tipo . ';'  (30)
+
+	';'  shift 53
+	.  error
+
+
+state 53
+	campo : DIM IDENT AS tipo ';' .  (30)
+
+	.  reduce 30
+
+
+Rules never reduced:
+	listaSentencias : listaSentencias sentencia  (15)
+	listaSentencias : sentencia  (16)
+	expresion : IDENT  (18)
+	expresion : CTE_ENTERA  (19)
+	expresion : expresion '*' expresion  (20)
+	expresion : expresion '+' expresion  (21)
+	expresion : expresion '-' expresion  (22)
+
+
+29 terminals, 17 nonterminals
+31 grammar rules, 54 states

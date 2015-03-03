@@ -10,3 +10,7 @@ NOTA. Este ejemplo pretende mostrar la sintaxis del lenguaje. No está pensado pa
 
 dim a as integer;
 dim b as character;
+
+
+dim c[20] as integer;
+dim h[30][20] as real;
