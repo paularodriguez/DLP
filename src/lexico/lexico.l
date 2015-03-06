@@ -53,13 +53,27 @@ proc								{return Parser.PROC;}
 type								{return Parser.TYPE;}
 print								{return Parser.PRINT;}
 while 								{return Parser.WHILE;}
+do									{return Parser.DO;}
 if 									{return Parser.IF;}
 else 								{return Parser.ELSE;}
 then 								{return Parser.THEN;}
+function							{return Parser.FUNCTION;}
+read								{return Parser.READ;}
+return								{return Parser.RETURN;}
 {Real}								{parser.setYylval(yytext()); return Parser.REAL;}
+"," 								{parser.setYylval(yytext()); return (int)yycharat(0);}
 ";" 								{parser.setYylval(yytext()); return (int)yycharat(0);}
 [0-9]+								{parser.setYylval(yytext()); return Parser.CTE_ENTERA;}	
 \'[^\']\'   						{parser.setYylval(yytext()); return Parser.CHARACTER;}
+
+"<=" 								{parser.setYylval(yytext()); return Parser.MENORIGUAL;}
+">=" 								{parser.setYylval(yytext()); return Parser.MAYORIGUAL;}
+"==" 								{parser.setYylval(yytext()); return Parser.IGUALDAD;}
+"<>" 								{parser.setYylval(yytext()); return Parser.DISTINTO;}
+"and" 								{return Parser.AND;}
+"or" 								{return Parser.OR;}
+"not" 								{return Parser.NOT;}
+
 
 ")" |
 "(" |

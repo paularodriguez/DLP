@@ -1,8 +1,8 @@
-package ast.sent;
+package ast.def;
 
 import ast.tipos.Tipo;
 
-public class DefinicionVariable implements Sentencia{
+public class DefinicionVariable implements Definicion{
 	
 	private Tipo tipo; 
 	private String nombre;

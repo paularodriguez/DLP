@@ -1,475 +1,2655 @@
    0  $accept : programa $end
 
-   1  programa : lista_declaraciones
+   1  programa : definiciones
 
-   2  lista_declaraciones : lista_declaraciones declaracion
-   3                      | declaracion
+   2  definiciones : definicion
+   3               | definiciones definicion
 
-   4  declaracion : definicion_variable
-   5              | definicion_proc
+   4  definicion : definicion_variable
+   5             | definicion_struct
+   6             | definicion_funcion
+   7             | definicion_procedimiento
 
-   6  definicion_variable : DIM variable AS tipo ';'
+   8  definiciones_variable_opc :
+   9                            | definiciones_variable
 
-   7  variable : IDENT array
+  10  definiciones_variable : definiciones_variable definicion_variable
+  11                        | definicion_variable
 
-   8  array :
-   9        | array '[' CTE_ENTERA ']'
+  12  definicion_variable : DIM IDENT array_opc AS tipo ';'
 
-  10  definicion_proc : PROC IDENT '(' listaParametrosOpcional ')' sentencia END PROC ';'
+  13  array_opc :
+  14            | lista_dimensiones
 
-  11  listaParametrosOpcional :
-  12                          | listaParametros
+  15  lista_dimensiones : '[' CTE_ENTERA ']'
+  16                    | lista_dimensiones '[' CTE_ENTERA ']'
 
-  13  listaParametros : listaParametros ',' IDENT AS tipo
-  14                  | IDENT AS tipo
+  17  definicion_struct : TYPE IDENT lista_campos END TYPE ';'
 
-  15  listaSentencias : listaSentencias sentencia
-  16                  | sentencia
+  18  definicion_funcion : FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'
 
-  17  sentencia : PRINT IDENT ';'
+  19  definicion_procedimiento : PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';'
 
-  18  expresion : IDENT
-  19            | CTE_ENTERA
-  20            | expresion '*' expresion
-  21            | expresion '+' expresion
-  22            | expresion '-' expresion
+  20  listaParametrosOpcional :
+  21                          | listaParametros
 
-  23  tipo : INTEGER
-  24       | REAL
-  25       | CHARACTER
-  26       | tipoStruct
+  22  listaParametros : listaParametros ',' IDENT AS tipo
+  23                  | IDENT AS tipo
 
-  27  tipoStruct : TYPE IDENT listaCampos END TYPE ';'
+  24  sentencias_opc :
+  25                 | sentencias
 
-  28  listaCampos :
-  29              | listaCampos ';' campo
+  26  sentencias : sentencias sentencia
+  27             | sentencia
 
-  30  campo : DIM IDENT AS tipo ';'
+  28  sentencia : PRINT expresion ';'
+  29            | READ expresion ';'
+  30            | expresion '=' expresion ';'
+  31            | RETURN expresion ';'
+  32            | RETURN ';'
+  33            | WHILE expresion DO sentencias END WHILE ';'
+  34            | IF expresion THEN sentencias_opc END IF ';'
+  35            | IF expresion THEN sentencias_opc ELSE sentencias_opc END IF ';'
+  36            | IDENT '(' expresiones_opc ')' ';'
+
+  37  expresiones_opc :
+  38                  | expresiones
+
+  39  expresiones : expresiones ',' expresion
+  40              | expresion
+
+  41  expresion : IDENT
+  42            | CTE_ENTERA
+  43            | CHARACTER
+  44            | REAL
+  45            | expresion '+' expresion
+  46            | expresion '-' expresion
+  47            | expresion '*' expresion
+  48            | expresion '/' expresion
+  49            | expresion '%' expresion
+  50            | expresion '[' expresion ']'
+  51            | expresion '.' expresion
+  52            | expresion '<' expresion
+  53            | expresion '>' expresion
+  54            | expresion MENORIGUAL expresion
+  55            | expresion MAYORIGUAL expresion
+  56            | expresion AND expresion
+  57            | expresion OR expresion
+  58            | NOT expresion
+  59            | expresion IGUALDAD expresion
+  60            | expresion DISTINTO expresion
+  61            | IDENT '(' expresiones_opc ')'
+
+  62  tipo : INTEGER
+  63       | REAL
+  64       | CHARACTER
+  65       | IDENT
+
+  66  lista_campos :
+  67               | lista_campos campo
+
+  68  campo : IDENT array_opc AS tipo ';'
 
 state 0
 	$accept : . programa $end  (0)
 
 	DIM  shift 1
-	PROC  shift 2
+	FUNCTION  shift 2
+	PROC  shift 3
+	TYPE  shift 4
 	.  error
 
-	programa  goto 3
-	lista_declaraciones  goto 4
-	declaracion  goto 5
-	definicion_variable  goto 6
-	definicion_proc  goto 7
+	programa  goto 5
+	definiciones  goto 6
+	definicion  goto 7
+	definicion_variable  goto 8
+	definicion_struct  goto 9
+	definicion_funcion  goto 10
+	definicion_procedimiento  goto 11
 
 
 state 1
-	definicion_variable : DIM . variable AS tipo ';'  (6)
+	definicion_variable : DIM . IDENT array_opc AS tipo ';'  (12)
 
-	IDENT  shift 8
+	IDENT  shift 12
 	.  error
-
-	variable  goto 9
 
 
 state 2
-	definicion_proc : PROC . IDENT '(' listaParametrosOpcional ')' sentencia END PROC ';'  (10)
+	definicion_funcion : FUNCTION . IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'  (18)
 
-	IDENT  shift 10
+	IDENT  shift 13
 	.  error
 
 
 state 3
+	definicion_procedimiento : PROC . IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';'  (19)
+
+	IDENT  shift 14
+	.  error
+
+
+state 4
+	definicion_struct : TYPE . IDENT lista_campos END TYPE ';'  (17)
+
+	IDENT  shift 15
+	.  error
+
+
+state 5
 	$accept : programa . $end  (0)
 
 	$end  accept
 
 
-state 4
-	programa : lista_declaraciones .  (1)
-	lista_declaraciones : lista_declaraciones . declaracion  (2)
+state 6
+	programa : definiciones .  (1)
+	definiciones : definiciones . definicion  (3)
 
 	DIM  shift 1
-	PROC  shift 2
+	FUNCTION  shift 2
+	PROC  shift 3
+	TYPE  shift 4
 	$end  reduce 1
 
-	declaracion  goto 11
-	definicion_variable  goto 6
-	definicion_proc  goto 7
-
-
-state 5
-	lista_declaraciones : declaracion .  (3)
-
-	.  reduce 3
-
-
-state 6
-	declaracion : definicion_variable .  (4)
-
-	.  reduce 4
+	definicion  goto 16
+	definicion_variable  goto 8
+	definicion_struct  goto 9
+	definicion_funcion  goto 10
+	definicion_procedimiento  goto 11
 
 
 state 7
-	declaracion : definicion_proc .  (5)
-
-	.  reduce 5
-
-
-state 8
-	variable : IDENT . array  (7)
-	array : .  (8)
-
-	.  reduce 8
-
-	array  goto 12
-
-
-state 9
-	definicion_variable : DIM variable . AS tipo ';'  (6)
-
-	AS  shift 13
-	.  error
-
-
-state 10
-	definicion_proc : PROC IDENT . '(' listaParametrosOpcional ')' sentencia END PROC ';'  (10)
-
-	'('  shift 14
-	.  error
-
-
-state 11
-	lista_declaraciones : lista_declaraciones declaracion .  (2)
+	definiciones : definicion .  (2)
 
 	.  reduce 2
 
 
-state 12
-	variable : IDENT array .  (7)
-	array : array . '[' CTE_ENTERA ']'  (9)
+state 8
+	definicion : definicion_variable .  (4)
 
-	'['  shift 15
-	AS  reduce 7
+	.  reduce 4
 
 
-state 13
-	definicion_variable : DIM variable AS . tipo ';'  (6)
+state 9
+	definicion : definicion_struct .  (5)
 
-	INTEGER  shift 16
-	REAL  shift 17
-	CHARACTER  shift 18
-	TYPE  shift 19
-	.  error
-
-	tipo  goto 20
-	tipoStruct  goto 21
+	.  reduce 5
 
 
-state 14
-	definicion_proc : PROC IDENT '(' . listaParametrosOpcional ')' sentencia END PROC ';'  (10)
-	listaParametrosOpcional : .  (11)
-
-	IDENT  shift 22
-	')'  reduce 11
-
-	listaParametrosOpcional  goto 23
-	listaParametros  goto 24
-
-
-state 15
-	array : array '[' . CTE_ENTERA ']'  (9)
-
-	CTE_ENTERA  shift 25
-	.  error
-
-
-state 16
-	tipo : INTEGER .  (23)
-
-	.  reduce 23
-
-
-state 17
-	tipo : REAL .  (24)
-
-	.  reduce 24
-
-
-state 18
-	tipo : CHARACTER .  (25)
-
-	.  reduce 25
-
-
-state 19
-	tipoStruct : TYPE . IDENT listaCampos END TYPE ';'  (27)
-
-	IDENT  shift 26
-	.  error
-
-
-state 20
-	definicion_variable : DIM variable AS tipo . ';'  (6)
-
-	';'  shift 27
-	.  error
-
-
-state 21
-	tipo : tipoStruct .  (26)
-
-	.  reduce 26
-
-
-state 22
-	listaParametros : IDENT . AS tipo  (14)
-
-	AS  shift 28
-	.  error
-
-
-state 23
-	definicion_proc : PROC IDENT '(' listaParametrosOpcional . ')' sentencia END PROC ';'  (10)
-
-	')'  shift 29
-	.  error
-
-
-state 24
-	listaParametrosOpcional : listaParametros .  (12)
-	listaParametros : listaParametros . ',' IDENT AS tipo  (13)
-
-	','  shift 30
-	')'  reduce 12
-
-
-state 25
-	array : array '[' CTE_ENTERA . ']'  (9)
-
-	']'  shift 31
-	.  error
-
-
-state 26
-	tipoStruct : TYPE IDENT . listaCampos END TYPE ';'  (27)
-	listaCampos : .  (28)
-
-	.  reduce 28
-
-	listaCampos  goto 32
-
-
-state 27
-	definicion_variable : DIM variable AS tipo ';' .  (6)
+state 10
+	definicion : definicion_funcion .  (6)
 
 	.  reduce 6
 
 
-state 28
-	listaParametros : IDENT AS . tipo  (14)
+state 11
+	definicion : definicion_procedimiento .  (7)
 
-	INTEGER  shift 16
-	REAL  shift 17
-	CHARACTER  shift 18
-	TYPE  shift 19
+	.  reduce 7
+
+
+state 12
+	definicion_variable : DIM IDENT . array_opc AS tipo ';'  (12)
+	array_opc : .  (13)
+
+	'['  shift 17
+	AS  reduce 13
+
+	array_opc  goto 18
+	lista_dimensiones  goto 19
+
+
+state 13
+	definicion_funcion : FUNCTION IDENT . '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'  (18)
+
+	'('  shift 20
 	.  error
 
-	tipo  goto 33
-	tipoStruct  goto 21
+
+state 14
+	definicion_procedimiento : PROC IDENT . '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';'  (19)
+
+	'('  shift 21
+	.  error
+
+
+state 15
+	definicion_struct : TYPE IDENT . lista_campos END TYPE ';'  (17)
+	lista_campos : .  (66)
+
+	.  reduce 66
+
+	lista_campos  goto 22
+
+
+state 16
+	definiciones : definiciones definicion .  (3)
+
+	.  reduce 3
+
+
+state 17
+	lista_dimensiones : '[' . CTE_ENTERA ']'  (15)
+
+	CTE_ENTERA  shift 23
+	.  error
+
+
+state 18
+	definicion_variable : DIM IDENT array_opc . AS tipo ';'  (12)
+
+	AS  shift 24
+	.  error
+
+
+state 19
+	array_opc : lista_dimensiones .  (14)
+	lista_dimensiones : lista_dimensiones . '[' CTE_ENTERA ']'  (16)
+
+	'['  shift 25
+	AS  reduce 14
+
+
+state 20
+	definicion_funcion : FUNCTION IDENT '(' . listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'  (18)
+	listaParametrosOpcional : .  (20)
+
+	IDENT  shift 26
+	')'  reduce 20
+
+	listaParametrosOpcional  goto 27
+	listaParametros  goto 28
+
+
+state 21
+	definicion_procedimiento : PROC IDENT '(' . listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';'  (19)
+	listaParametrosOpcional : .  (20)
+
+	IDENT  shift 26
+	')'  reduce 20
+
+	listaParametrosOpcional  goto 29
+	listaParametros  goto 28
+
+
+state 22
+	definicion_struct : TYPE IDENT lista_campos . END TYPE ';'  (17)
+	lista_campos : lista_campos . campo  (67)
+
+	IDENT  shift 30
+	END  shift 31
+	.  error
+
+	campo  goto 32
+
+
+state 23
+	lista_dimensiones : '[' CTE_ENTERA . ']'  (15)
+
+	']'  shift 33
+	.  error
+
+
+state 24
+	definicion_variable : DIM IDENT array_opc AS . tipo ';'  (12)
+
+	IDENT  shift 34
+	INTEGER  shift 35
+	REAL  shift 36
+	CHARACTER  shift 37
+	.  error
+
+	tipo  goto 38
+
+
+state 25
+	lista_dimensiones : lista_dimensiones '[' . CTE_ENTERA ']'  (16)
+
+	CTE_ENTERA  shift 39
+	.  error
+
+
+state 26
+	listaParametros : IDENT . AS tipo  (23)
+
+	AS  shift 40
+	.  error
+
+
+state 27
+	definicion_funcion : FUNCTION IDENT '(' listaParametrosOpcional . ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'  (18)
+
+	')'  shift 41
+	.  error
+
+
+state 28
+	listaParametrosOpcional : listaParametros .  (21)
+	listaParametros : listaParametros . ',' IDENT AS tipo  (22)
+
+	','  shift 42
+	')'  reduce 21
 
 
 state 29
-	definicion_proc : PROC IDENT '(' listaParametrosOpcional ')' . sentencia END PROC ';'  (10)
+	definicion_procedimiento : PROC IDENT '(' listaParametrosOpcional . ')' definiciones_variable_opc sentencias END PROC ';'  (19)
 
-	PRINT  shift 34
+	')'  shift 43
 	.  error
-
-	sentencia  goto 35
 
 
 state 30
-	listaParametros : listaParametros ',' . IDENT AS tipo  (13)
+	campo : IDENT . array_opc AS tipo ';'  (68)
+	array_opc : .  (13)
 
-	IDENT  shift 36
-	.  error
+	'['  shift 17
+	AS  reduce 13
+
+	array_opc  goto 44
+	lista_dimensiones  goto 19
 
 
 state 31
-	array : array '[' CTE_ENTERA ']' .  (9)
+	definicion_struct : TYPE IDENT lista_campos END . TYPE ';'  (17)
 
-	.  reduce 9
+	TYPE  shift 45
+	.  error
 
 
 state 32
-	tipoStruct : TYPE IDENT listaCampos . END TYPE ';'  (27)
-	listaCampos : listaCampos . ';' campo  (29)
+	lista_campos : lista_campos campo .  (67)
 
-	END  shift 37
-	';'  shift 38
-	.  error
+	.  reduce 67
 
 
 state 33
-	listaParametros : IDENT AS tipo .  (14)
+	lista_dimensiones : '[' CTE_ENTERA ']' .  (15)
 
-	.  reduce 14
+	.  reduce 15
 
 
 state 34
-	sentencia : PRINT . IDENT ';'  (17)
+	tipo : IDENT .  (65)
 
-	IDENT  shift 39
-	.  error
+	.  reduce 65
 
 
 state 35
-	definicion_proc : PROC IDENT '(' listaParametrosOpcional ')' sentencia . END PROC ';'  (10)
+	tipo : INTEGER .  (62)
 
-	END  shift 40
-	.  error
+	.  reduce 62
 
 
 state 36
-	listaParametros : listaParametros ',' IDENT . AS tipo  (13)
+	tipo : REAL .  (63)
 
-	AS  shift 41
-	.  error
+	.  reduce 63
 
 
 state 37
-	tipoStruct : TYPE IDENT listaCampos END . TYPE ';'  (27)
+	tipo : CHARACTER .  (64)
 
-	TYPE  shift 42
-	.  error
+	.  reduce 64
 
 
 state 38
-	listaCampos : listaCampos ';' . campo  (29)
+	definicion_variable : DIM IDENT array_opc AS tipo . ';'  (12)
 
-	DIM  shift 43
+	';'  shift 46
 	.  error
-
-	campo  goto 44
 
 
 state 39
-	sentencia : PRINT IDENT . ';'  (17)
+	lista_dimensiones : lista_dimensiones '[' CTE_ENTERA . ']'  (16)
 
-	';'  shift 45
+	']'  shift 47
 	.  error
 
 
 state 40
-	definicion_proc : PROC IDENT '(' listaParametrosOpcional ')' sentencia END . PROC ';'  (10)
+	listaParametros : IDENT AS . tipo  (23)
 
-	PROC  shift 46
+	IDENT  shift 34
+	INTEGER  shift 35
+	REAL  shift 36
+	CHARACTER  shift 37
 	.  error
+
+	tipo  goto 48
 
 
 state 41
-	listaParametros : listaParametros ',' IDENT AS . tipo  (13)
+	definicion_funcion : FUNCTION IDENT '(' listaParametrosOpcional ')' . AS tipo definiciones_variable_opc sentencias END FUNCTION ';'  (18)
 
-	INTEGER  shift 16
-	REAL  shift 17
-	CHARACTER  shift 18
-	TYPE  shift 19
+	AS  shift 49
 	.  error
-
-	tipo  goto 47
-	tipoStruct  goto 21
 
 
 state 42
-	tipoStruct : TYPE IDENT listaCampos END TYPE . ';'  (27)
+	listaParametros : listaParametros ',' . IDENT AS tipo  (22)
 
-	';'  shift 48
+	IDENT  shift 50
 	.  error
 
 
 state 43
-	campo : DIM . IDENT AS tipo ';'  (30)
+	definicion_procedimiento : PROC IDENT '(' listaParametrosOpcional ')' . definiciones_variable_opc sentencias END PROC ';'  (19)
+	definiciones_variable_opc : .  (8)
 
-	IDENT  shift 49
-	.  error
+	DIM  shift 1
+	IDENT  reduce 8
+	REAL  reduce 8
+	CHARACTER  reduce 8
+	CTE_ENTERA  reduce 8
+	PRINT  reduce 8
+	IF  reduce 8
+	WHILE  reduce 8
+	RETURN  reduce 8
+	READ  reduce 8
+	NOT  reduce 8
+
+	definicion_variable  goto 51
+	definiciones_variable_opc  goto 52
+	definiciones_variable  goto 53
 
 
 state 44
-	listaCampos : listaCampos ';' campo .  (29)
+	campo : IDENT array_opc . AS tipo ';'  (68)
 
-	.  reduce 29
+	AS  shift 54
+	.  error
 
 
 state 45
-	sentencia : PRINT IDENT ';' .  (17)
+	definicion_struct : TYPE IDENT lista_campos END TYPE . ';'  (17)
+
+	';'  shift 55
+	.  error
+
+
+state 46
+	definicion_variable : DIM IDENT array_opc AS tipo ';' .  (12)
+
+	.  reduce 12
+
+
+state 47
+	lista_dimensiones : lista_dimensiones '[' CTE_ENTERA ']' .  (16)
+
+	.  reduce 16
+
+
+state 48
+	listaParametros : IDENT AS tipo .  (23)
+
+	.  reduce 23
+
+
+state 49
+	definicion_funcion : FUNCTION IDENT '(' listaParametrosOpcional ')' AS . tipo definiciones_variable_opc sentencias END FUNCTION ';'  (18)
+
+	IDENT  shift 34
+	INTEGER  shift 35
+	REAL  shift 36
+	CHARACTER  shift 37
+	.  error
+
+	tipo  goto 56
+
+
+state 50
+	listaParametros : listaParametros ',' IDENT . AS tipo  (22)
+
+	AS  shift 57
+	.  error
+
+
+state 51
+	definiciones_variable : definicion_variable .  (11)
+
+	.  reduce 11
+
+
+state 52
+	definicion_procedimiento : PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc . sentencias END PROC ';'  (19)
+
+	IDENT  shift 58
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	PRINT  shift 62
+	IF  shift 63
+	WHILE  shift 64
+	RETURN  shift 65
+	READ  shift 66
+	NOT  shift 67
+	.  error
+
+	sentencias  goto 68
+	sentencia  goto 69
+	expresion  goto 70
+
+
+state 53
+	definiciones_variable_opc : definiciones_variable .  (9)
+	definiciones_variable : definiciones_variable . definicion_variable  (10)
+
+	DIM  shift 1
+	IDENT  reduce 9
+	REAL  reduce 9
+	CHARACTER  reduce 9
+	CTE_ENTERA  reduce 9
+	PRINT  reduce 9
+	IF  reduce 9
+	WHILE  reduce 9
+	RETURN  reduce 9
+	READ  reduce 9
+	NOT  reduce 9
+
+	definicion_variable  goto 71
+
+
+state 54
+	campo : IDENT array_opc AS . tipo ';'  (68)
+
+	IDENT  shift 34
+	INTEGER  shift 35
+	REAL  shift 36
+	CHARACTER  shift 37
+	.  error
+
+	tipo  goto 72
+
+
+state 55
+	definicion_struct : TYPE IDENT lista_campos END TYPE ';' .  (17)
 
 	.  reduce 17
 
 
-state 46
-	definicion_proc : PROC IDENT '(' listaParametrosOpcional ')' sentencia END PROC . ';'  (10)
+state 56
+	definicion_funcion : FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo . definiciones_variable_opc sentencias END FUNCTION ';'  (18)
+	definiciones_variable_opc : .  (8)
 
-	';'  shift 50
+	DIM  shift 1
+	IDENT  reduce 8
+	REAL  reduce 8
+	CHARACTER  reduce 8
+	CTE_ENTERA  reduce 8
+	PRINT  reduce 8
+	IF  reduce 8
+	WHILE  reduce 8
+	RETURN  reduce 8
+	READ  reduce 8
+	NOT  reduce 8
+
+	definicion_variable  goto 51
+	definiciones_variable_opc  goto 73
+	definiciones_variable  goto 53
+
+
+state 57
+	listaParametros : listaParametros ',' IDENT AS . tipo  (22)
+
+	IDENT  shift 34
+	INTEGER  shift 35
+	REAL  shift 36
+	CHARACTER  shift 37
 	.  error
 
-
-state 47
-	listaParametros : listaParametros ',' IDENT AS tipo .  (13)
-
-	.  reduce 13
+	tipo  goto 74
 
 
-state 48
-	tipoStruct : TYPE IDENT listaCampos END TYPE ';' .  (27)
+state 58
+	sentencia : IDENT . '(' expresiones_opc ')' ';'  (36)
+	expresion : IDENT .  (41)
+	expresion : IDENT . '(' expresiones_opc ')'  (61)
+
+	'('  shift 75
+	MAYORIGUAL  reduce 41
+	MENORIGUAL  reduce 41
+	DISTINTO  reduce 41
+	IGUALDAD  reduce 41
+	AND  reduce 41
+	OR  reduce 41
+	'+'  reduce 41
+	'-'  reduce 41
+	'*'  reduce 41
+	'/'  reduce 41
+	'['  reduce 41
+	'='  reduce 41
+	'%'  reduce 41
+	'.'  reduce 41
+	'<'  reduce 41
+	'>'  reduce 41
+
+
+state 59
+	expresion : REAL .  (44)
+
+	.  reduce 44
+
+
+state 60
+	expresion : CHARACTER .  (43)
+
+	.  reduce 43
+
+
+state 61
+	expresion : CTE_ENTERA .  (42)
+
+	.  reduce 42
+
+
+state 62
+	sentencia : PRINT . expresion ';'  (28)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 77
+
+
+state 63
+	sentencia : IF . expresion THEN sentencias_opc END IF ';'  (34)
+	sentencia : IF . expresion THEN sentencias_opc ELSE sentencias_opc END IF ';'  (35)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 78
+
+
+state 64
+	sentencia : WHILE . expresion DO sentencias END WHILE ';'  (33)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 79
+
+
+state 65
+	sentencia : RETURN . expresion ';'  (31)
+	sentencia : RETURN . ';'  (32)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	';'  shift 80
+	.  error
+
+	expresion  goto 81
+
+
+state 66
+	sentencia : READ . expresion ';'  (29)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 82
+
+
+state 67
+	expresion : NOT . expresion  (58)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 83
+
+
+state 68
+	definicion_procedimiento : PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias . END PROC ';'  (19)
+	sentencias : sentencias . sentencia  (26)
+
+	IDENT  shift 58
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	PRINT  shift 62
+	END  shift 84
+	IF  shift 63
+	WHILE  shift 64
+	RETURN  shift 65
+	READ  shift 66
+	NOT  shift 67
+	.  error
+
+	sentencia  goto 85
+	expresion  goto 70
+
+
+state 69
+	sentencias : sentencia .  (27)
 
 	.  reduce 27
 
 
-state 49
-	campo : DIM IDENT . AS tipo ';'  (30)
+state 70
+	sentencia : expresion . '=' expresion ';'  (30)
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
 
-	AS  shift 51
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'='  shift 97
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
 	.  error
 
 
-state 50
-	definicion_proc : PROC IDENT '(' listaParametrosOpcional ')' sentencia END PROC ';' .  (10)
+state 71
+	definiciones_variable : definiciones_variable definicion_variable .  (10)
 
 	.  reduce 10
 
 
-state 51
-	campo : DIM IDENT AS . tipo ';'  (30)
+state 72
+	campo : IDENT array_opc AS tipo . ';'  (68)
 
-	INTEGER  shift 16
-	REAL  shift 17
-	CHARACTER  shift 18
-	TYPE  shift 19
-	.  error
-
-	tipo  goto 52
-	tipoStruct  goto 21
-
-
-state 52
-	campo : DIM IDENT AS tipo . ';'  (30)
-
-	';'  shift 53
+	';'  shift 102
 	.  error
 
 
-state 53
-	campo : DIM IDENT AS tipo ';' .  (30)
+state 73
+	definicion_funcion : FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc . sentencias END FUNCTION ';'  (18)
+
+	IDENT  shift 58
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	PRINT  shift 62
+	IF  shift 63
+	WHILE  shift 64
+	RETURN  shift 65
+	READ  shift 66
+	NOT  shift 67
+	.  error
+
+	sentencias  goto 103
+	sentencia  goto 69
+	expresion  goto 70
+
+
+state 74
+	listaParametros : listaParametros ',' IDENT AS tipo .  (22)
+
+	.  reduce 22
+
+
+state 75
+	sentencia : IDENT '(' . expresiones_opc ')' ';'  (36)
+	expresion : IDENT '(' . expresiones_opc ')'  (61)
+	expresiones_opc : .  (37)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	')'  reduce 37
+
+	expresion  goto 104
+	expresiones_opc  goto 105
+	expresiones  goto 106
+
+
+state 76
+	expresion : IDENT .  (41)
+	expresion : IDENT . '(' expresiones_opc ')'  (61)
+
+	'('  shift 107
+	THEN  reduce 41
+	MAYORIGUAL  reduce 41
+	MENORIGUAL  reduce 41
+	DISTINTO  reduce 41
+	IGUALDAD  reduce 41
+	AND  reduce 41
+	OR  reduce 41
+	DO  reduce 41
+	'+'  reduce 41
+	'-'  reduce 41
+	'*'  reduce 41
+	'/'  reduce 41
+	';'  reduce 41
+	'['  reduce 41
+	']'  reduce 41
+	')'  reduce 41
+	','  reduce 41
+	'='  reduce 41
+	'%'  reduce 41
+	'.'  reduce 41
+	'<'  reduce 41
+	'>'  reduce 41
+
+
+state 77
+	sentencia : PRINT expresion . ';'  (28)
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	';'  shift 108
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	.  error
+
+
+state 78
+	sentencia : IF expresion . THEN sentencias_opc END IF ';'  (34)
+	sentencia : IF expresion . THEN sentencias_opc ELSE sentencias_opc END IF ';'  (35)
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	THEN  shift 109
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	.  error
+
+
+state 79
+	sentencia : WHILE expresion . DO sentencias END WHILE ';'  (33)
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	DO  shift 110
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	.  error
+
+
+state 80
+	sentencia : RETURN ';' .  (32)
+
+	.  reduce 32
+
+
+state 81
+	sentencia : RETURN expresion . ';'  (31)
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	';'  shift 111
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	.  error
+
+
+state 82
+	sentencia : READ expresion . ';'  (29)
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	';'  shift 112
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	.  error
+
+
+83: shift/reduce conflict (shift 86, reduce 58) on MAYORIGUAL
+83: shift/reduce conflict (shift 87, reduce 58) on MENORIGUAL
+83: shift/reduce conflict (shift 88, reduce 58) on DISTINTO
+83: shift/reduce conflict (shift 89, reduce 58) on IGUALDAD
+83: shift/reduce conflict (shift 90, reduce 58) on AND
+83: shift/reduce conflict (shift 91, reduce 58) on OR
+83: shift/reduce conflict (shift 92, reduce 58) on '+'
+83: shift/reduce conflict (shift 93, reduce 58) on '-'
+83: shift/reduce conflict (shift 94, reduce 58) on '*'
+83: shift/reduce conflict (shift 95, reduce 58) on '/'
+83: shift/reduce conflict (shift 96, reduce 58) on '['
+83: shift/reduce conflict (shift 98, reduce 58) on '%'
+83: shift/reduce conflict (shift 99, reduce 58) on '.'
+83: shift/reduce conflict (shift 100, reduce 58) on '<'
+83: shift/reduce conflict (shift 101, reduce 58) on '>'
+state 83
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : NOT expresion .  (58)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 58
+	DO  reduce 58
+	';'  reduce 58
+	']'  reduce 58
+	')'  reduce 58
+	','  reduce 58
+	'='  reduce 58
+
+
+state 84
+	definicion_procedimiento : PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END . PROC ';'  (19)
+
+	PROC  shift 113
+	.  error
+
+
+state 85
+	sentencias : sentencias sentencia .  (26)
+
+	.  reduce 26
+
+
+state 86
+	expresion : expresion MAYORIGUAL . expresion  (55)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 114
+
+
+state 87
+	expresion : expresion MENORIGUAL . expresion  (54)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 115
+
+
+state 88
+	expresion : expresion DISTINTO . expresion  (60)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 116
+
+
+state 89
+	expresion : expresion IGUALDAD . expresion  (59)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 117
+
+
+state 90
+	expresion : expresion AND . expresion  (56)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 118
+
+
+state 91
+	expresion : expresion OR . expresion  (57)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 119
+
+
+state 92
+	expresion : expresion '+' . expresion  (45)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 120
+
+
+state 93
+	expresion : expresion '-' . expresion  (46)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 121
+
+
+state 94
+	expresion : expresion '*' . expresion  (47)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 122
+
+
+state 95
+	expresion : expresion '/' . expresion  (48)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 123
+
+
+state 96
+	expresion : expresion '[' . expresion ']'  (50)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 124
+
+
+state 97
+	sentencia : expresion '=' . expresion ';'  (30)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 125
+
+
+state 98
+	expresion : expresion '%' . expresion  (49)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 126
+
+
+state 99
+	expresion : expresion '.' . expresion  (51)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 127
+
+
+state 100
+	expresion : expresion '<' . expresion  (52)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 128
+
+
+state 101
+	expresion : expresion '>' . expresion  (53)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 129
+
+
+state 102
+	campo : IDENT array_opc AS tipo ';' .  (68)
+
+	.  reduce 68
+
+
+state 103
+	definicion_funcion : FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias . END FUNCTION ';'  (18)
+	sentencias : sentencias . sentencia  (26)
+
+	IDENT  shift 58
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	PRINT  shift 62
+	END  shift 130
+	IF  shift 63
+	WHILE  shift 64
+	RETURN  shift 65
+	READ  shift 66
+	NOT  shift 67
+	.  error
+
+	sentencia  goto 85
+	expresion  goto 70
+
+
+state 104
+	expresiones : expresion .  (40)
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	')'  reduce 40
+	','  reduce 40
+
+
+state 105
+	sentencia : IDENT '(' expresiones_opc . ')' ';'  (36)
+	expresion : IDENT '(' expresiones_opc . ')'  (61)
+
+	')'  shift 131
+	.  error
+
+
+state 106
+	expresiones_opc : expresiones .  (38)
+	expresiones : expresiones . ',' expresion  (39)
+
+	','  shift 132
+	')'  reduce 38
+
+
+state 107
+	expresion : IDENT '(' . expresiones_opc ')'  (61)
+	expresiones_opc : .  (37)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	')'  reduce 37
+
+	expresion  goto 104
+	expresiones_opc  goto 133
+	expresiones  goto 106
+
+
+state 108
+	sentencia : PRINT expresion ';' .  (28)
+
+	.  reduce 28
+
+
+state 109
+	sentencia : IF expresion THEN . sentencias_opc END IF ';'  (34)
+	sentencia : IF expresion THEN . sentencias_opc ELSE sentencias_opc END IF ';'  (35)
+	sentencias_opc : .  (24)
+
+	IDENT  shift 58
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	PRINT  shift 62
+	IF  shift 63
+	WHILE  shift 64
+	RETURN  shift 65
+	READ  shift 66
+	NOT  shift 67
+	END  reduce 24
+	ELSE  reduce 24
+
+	sentencias  goto 134
+	sentencias_opc  goto 135
+	sentencia  goto 69
+	expresion  goto 70
+
+
+state 110
+	sentencia : WHILE expresion DO . sentencias END WHILE ';'  (33)
+
+	IDENT  shift 58
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	PRINT  shift 62
+	IF  shift 63
+	WHILE  shift 64
+	RETURN  shift 65
+	READ  shift 66
+	NOT  shift 67
+	.  error
+
+	sentencias  goto 136
+	sentencia  goto 69
+	expresion  goto 70
+
+
+state 111
+	sentencia : RETURN expresion ';' .  (31)
+
+	.  reduce 31
+
+
+state 112
+	sentencia : READ expresion ';' .  (29)
+
+	.  reduce 29
+
+
+state 113
+	definicion_procedimiento : PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC . ';'  (19)
+
+	';'  shift 137
+	.  error
+
+
+114: shift/reduce conflict (shift 86, reduce 55) on MAYORIGUAL
+114: shift/reduce conflict (shift 87, reduce 55) on MENORIGUAL
+114: shift/reduce conflict (shift 88, reduce 55) on DISTINTO
+114: shift/reduce conflict (shift 89, reduce 55) on IGUALDAD
+114: shift/reduce conflict (shift 90, reduce 55) on AND
+114: shift/reduce conflict (shift 91, reduce 55) on OR
+114: shift/reduce conflict (shift 92, reduce 55) on '+'
+114: shift/reduce conflict (shift 93, reduce 55) on '-'
+114: shift/reduce conflict (shift 94, reduce 55) on '*'
+114: shift/reduce conflict (shift 95, reduce 55) on '/'
+114: shift/reduce conflict (shift 96, reduce 55) on '['
+114: shift/reduce conflict (shift 98, reduce 55) on '%'
+114: shift/reduce conflict (shift 99, reduce 55) on '.'
+114: shift/reduce conflict (shift 100, reduce 55) on '<'
+114: shift/reduce conflict (shift 101, reduce 55) on '>'
+state 114
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion MAYORIGUAL expresion .  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 55
+	DO  reduce 55
+	';'  reduce 55
+	']'  reduce 55
+	')'  reduce 55
+	','  reduce 55
+	'='  reduce 55
+
+
+115: shift/reduce conflict (shift 86, reduce 54) on MAYORIGUAL
+115: shift/reduce conflict (shift 87, reduce 54) on MENORIGUAL
+115: shift/reduce conflict (shift 88, reduce 54) on DISTINTO
+115: shift/reduce conflict (shift 89, reduce 54) on IGUALDAD
+115: shift/reduce conflict (shift 90, reduce 54) on AND
+115: shift/reduce conflict (shift 91, reduce 54) on OR
+115: shift/reduce conflict (shift 92, reduce 54) on '+'
+115: shift/reduce conflict (shift 93, reduce 54) on '-'
+115: shift/reduce conflict (shift 94, reduce 54) on '*'
+115: shift/reduce conflict (shift 95, reduce 54) on '/'
+115: shift/reduce conflict (shift 96, reduce 54) on '['
+115: shift/reduce conflict (shift 98, reduce 54) on '%'
+115: shift/reduce conflict (shift 99, reduce 54) on '.'
+115: shift/reduce conflict (shift 100, reduce 54) on '<'
+115: shift/reduce conflict (shift 101, reduce 54) on '>'
+state 115
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion MENORIGUAL expresion .  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 54
+	DO  reduce 54
+	';'  reduce 54
+	']'  reduce 54
+	')'  reduce 54
+	','  reduce 54
+	'='  reduce 54
+
+
+116: shift/reduce conflict (shift 86, reduce 60) on MAYORIGUAL
+116: shift/reduce conflict (shift 87, reduce 60) on MENORIGUAL
+116: shift/reduce conflict (shift 88, reduce 60) on DISTINTO
+116: shift/reduce conflict (shift 89, reduce 60) on IGUALDAD
+116: shift/reduce conflict (shift 90, reduce 60) on AND
+116: shift/reduce conflict (shift 91, reduce 60) on OR
+116: shift/reduce conflict (shift 92, reduce 60) on '+'
+116: shift/reduce conflict (shift 93, reduce 60) on '-'
+116: shift/reduce conflict (shift 94, reduce 60) on '*'
+116: shift/reduce conflict (shift 95, reduce 60) on '/'
+116: shift/reduce conflict (shift 96, reduce 60) on '['
+116: shift/reduce conflict (shift 98, reduce 60) on '%'
+116: shift/reduce conflict (shift 99, reduce 60) on '.'
+116: shift/reduce conflict (shift 100, reduce 60) on '<'
+116: shift/reduce conflict (shift 101, reduce 60) on '>'
+state 116
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+	expresion : expresion DISTINTO expresion .  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 60
+	DO  reduce 60
+	';'  reduce 60
+	']'  reduce 60
+	')'  reduce 60
+	','  reduce 60
+	'='  reduce 60
+
+
+117: shift/reduce conflict (shift 86, reduce 59) on MAYORIGUAL
+117: shift/reduce conflict (shift 87, reduce 59) on MENORIGUAL
+117: shift/reduce conflict (shift 88, reduce 59) on DISTINTO
+117: shift/reduce conflict (shift 89, reduce 59) on IGUALDAD
+117: shift/reduce conflict (shift 90, reduce 59) on AND
+117: shift/reduce conflict (shift 91, reduce 59) on OR
+117: shift/reduce conflict (shift 92, reduce 59) on '+'
+117: shift/reduce conflict (shift 93, reduce 59) on '-'
+117: shift/reduce conflict (shift 94, reduce 59) on '*'
+117: shift/reduce conflict (shift 95, reduce 59) on '/'
+117: shift/reduce conflict (shift 96, reduce 59) on '['
+117: shift/reduce conflict (shift 98, reduce 59) on '%'
+117: shift/reduce conflict (shift 99, reduce 59) on '.'
+117: shift/reduce conflict (shift 100, reduce 59) on '<'
+117: shift/reduce conflict (shift 101, reduce 59) on '>'
+state 117
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion IGUALDAD expresion .  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 59
+	DO  reduce 59
+	';'  reduce 59
+	']'  reduce 59
+	')'  reduce 59
+	','  reduce 59
+	'='  reduce 59
+
+
+118: shift/reduce conflict (shift 86, reduce 56) on MAYORIGUAL
+118: shift/reduce conflict (shift 87, reduce 56) on MENORIGUAL
+118: shift/reduce conflict (shift 88, reduce 56) on DISTINTO
+118: shift/reduce conflict (shift 89, reduce 56) on IGUALDAD
+118: shift/reduce conflict (shift 90, reduce 56) on AND
+118: shift/reduce conflict (shift 91, reduce 56) on OR
+118: shift/reduce conflict (shift 92, reduce 56) on '+'
+118: shift/reduce conflict (shift 93, reduce 56) on '-'
+118: shift/reduce conflict (shift 94, reduce 56) on '*'
+118: shift/reduce conflict (shift 95, reduce 56) on '/'
+118: shift/reduce conflict (shift 96, reduce 56) on '['
+118: shift/reduce conflict (shift 98, reduce 56) on '%'
+118: shift/reduce conflict (shift 99, reduce 56) on '.'
+118: shift/reduce conflict (shift 100, reduce 56) on '<'
+118: shift/reduce conflict (shift 101, reduce 56) on '>'
+state 118
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion AND expresion .  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 56
+	DO  reduce 56
+	';'  reduce 56
+	']'  reduce 56
+	')'  reduce 56
+	','  reduce 56
+	'='  reduce 56
+
+
+119: shift/reduce conflict (shift 86, reduce 57) on MAYORIGUAL
+119: shift/reduce conflict (shift 87, reduce 57) on MENORIGUAL
+119: shift/reduce conflict (shift 88, reduce 57) on DISTINTO
+119: shift/reduce conflict (shift 89, reduce 57) on IGUALDAD
+119: shift/reduce conflict (shift 90, reduce 57) on AND
+119: shift/reduce conflict (shift 91, reduce 57) on OR
+119: shift/reduce conflict (shift 92, reduce 57) on '+'
+119: shift/reduce conflict (shift 93, reduce 57) on '-'
+119: shift/reduce conflict (shift 94, reduce 57) on '*'
+119: shift/reduce conflict (shift 95, reduce 57) on '/'
+119: shift/reduce conflict (shift 96, reduce 57) on '['
+119: shift/reduce conflict (shift 98, reduce 57) on '%'
+119: shift/reduce conflict (shift 99, reduce 57) on '.'
+119: shift/reduce conflict (shift 100, reduce 57) on '<'
+119: shift/reduce conflict (shift 101, reduce 57) on '>'
+state 119
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion OR expresion .  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 57
+	DO  reduce 57
+	';'  reduce 57
+	']'  reduce 57
+	')'  reduce 57
+	','  reduce 57
+	'='  reduce 57
+
+
+120: shift/reduce conflict (shift 86, reduce 45) on MAYORIGUAL
+120: shift/reduce conflict (shift 87, reduce 45) on MENORIGUAL
+120: shift/reduce conflict (shift 88, reduce 45) on DISTINTO
+120: shift/reduce conflict (shift 89, reduce 45) on IGUALDAD
+120: shift/reduce conflict (shift 90, reduce 45) on AND
+120: shift/reduce conflict (shift 91, reduce 45) on OR
+120: shift/reduce conflict (shift 96, reduce 45) on '['
+120: shift/reduce conflict (shift 98, reduce 45) on '%'
+120: shift/reduce conflict (shift 99, reduce 45) on '.'
+120: shift/reduce conflict (shift 100, reduce 45) on '<'
+120: shift/reduce conflict (shift 101, reduce 45) on '>'
+state 120
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion '+' expresion .  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 45
+	DO  reduce 45
+	'+'  reduce 45
+	'-'  reduce 45
+	';'  reduce 45
+	']'  reduce 45
+	')'  reduce 45
+	','  reduce 45
+	'='  reduce 45
+
+
+121: shift/reduce conflict (shift 86, reduce 46) on MAYORIGUAL
+121: shift/reduce conflict (shift 87, reduce 46) on MENORIGUAL
+121: shift/reduce conflict (shift 88, reduce 46) on DISTINTO
+121: shift/reduce conflict (shift 89, reduce 46) on IGUALDAD
+121: shift/reduce conflict (shift 90, reduce 46) on AND
+121: shift/reduce conflict (shift 91, reduce 46) on OR
+121: shift/reduce conflict (shift 96, reduce 46) on '['
+121: shift/reduce conflict (shift 98, reduce 46) on '%'
+121: shift/reduce conflict (shift 99, reduce 46) on '.'
+121: shift/reduce conflict (shift 100, reduce 46) on '<'
+121: shift/reduce conflict (shift 101, reduce 46) on '>'
+state 121
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion '-' expresion .  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 46
+	DO  reduce 46
+	'+'  reduce 46
+	'-'  reduce 46
+	';'  reduce 46
+	']'  reduce 46
+	')'  reduce 46
+	','  reduce 46
+	'='  reduce 46
+
+
+122: shift/reduce conflict (shift 86, reduce 47) on MAYORIGUAL
+122: shift/reduce conflict (shift 87, reduce 47) on MENORIGUAL
+122: shift/reduce conflict (shift 88, reduce 47) on DISTINTO
+122: shift/reduce conflict (shift 89, reduce 47) on IGUALDAD
+122: shift/reduce conflict (shift 90, reduce 47) on AND
+122: shift/reduce conflict (shift 91, reduce 47) on OR
+122: shift/reduce conflict (shift 96, reduce 47) on '['
+122: shift/reduce conflict (shift 98, reduce 47) on '%'
+122: shift/reduce conflict (shift 99, reduce 47) on '.'
+122: shift/reduce conflict (shift 100, reduce 47) on '<'
+122: shift/reduce conflict (shift 101, reduce 47) on '>'
+state 122
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion '*' expresion .  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 47
+	DO  reduce 47
+	'+'  reduce 47
+	'-'  reduce 47
+	'*'  reduce 47
+	'/'  reduce 47
+	';'  reduce 47
+	']'  reduce 47
+	')'  reduce 47
+	','  reduce 47
+	'='  reduce 47
+
+
+123: shift/reduce conflict (shift 86, reduce 48) on MAYORIGUAL
+123: shift/reduce conflict (shift 87, reduce 48) on MENORIGUAL
+123: shift/reduce conflict (shift 88, reduce 48) on DISTINTO
+123: shift/reduce conflict (shift 89, reduce 48) on IGUALDAD
+123: shift/reduce conflict (shift 90, reduce 48) on AND
+123: shift/reduce conflict (shift 91, reduce 48) on OR
+123: shift/reduce conflict (shift 96, reduce 48) on '['
+123: shift/reduce conflict (shift 98, reduce 48) on '%'
+123: shift/reduce conflict (shift 99, reduce 48) on '.'
+123: shift/reduce conflict (shift 100, reduce 48) on '<'
+123: shift/reduce conflict (shift 101, reduce 48) on '>'
+state 123
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion '/' expresion .  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 48
+	DO  reduce 48
+	'+'  reduce 48
+	'-'  reduce 48
+	'*'  reduce 48
+	'/'  reduce 48
+	';'  reduce 48
+	']'  reduce 48
+	')'  reduce 48
+	','  reduce 48
+	'='  reduce 48
+
+
+state 124
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion '[' expresion . ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	']'  shift 138
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	.  error
+
+
+state 125
+	sentencia : expresion '=' expresion . ';'  (30)
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	';'  shift 139
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	.  error
+
+
+126: shift/reduce conflict (shift 86, reduce 49) on MAYORIGUAL
+126: shift/reduce conflict (shift 87, reduce 49) on MENORIGUAL
+126: shift/reduce conflict (shift 88, reduce 49) on DISTINTO
+126: shift/reduce conflict (shift 89, reduce 49) on IGUALDAD
+126: shift/reduce conflict (shift 90, reduce 49) on AND
+126: shift/reduce conflict (shift 91, reduce 49) on OR
+126: shift/reduce conflict (shift 92, reduce 49) on '+'
+126: shift/reduce conflict (shift 93, reduce 49) on '-'
+126: shift/reduce conflict (shift 94, reduce 49) on '*'
+126: shift/reduce conflict (shift 95, reduce 49) on '/'
+126: shift/reduce conflict (shift 96, reduce 49) on '['
+126: shift/reduce conflict (shift 98, reduce 49) on '%'
+126: shift/reduce conflict (shift 99, reduce 49) on '.'
+126: shift/reduce conflict (shift 100, reduce 49) on '<'
+126: shift/reduce conflict (shift 101, reduce 49) on '>'
+state 126
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion '%' expresion .  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 49
+	DO  reduce 49
+	';'  reduce 49
+	']'  reduce 49
+	')'  reduce 49
+	','  reduce 49
+	'='  reduce 49
+
+
+127: shift/reduce conflict (shift 86, reduce 51) on MAYORIGUAL
+127: shift/reduce conflict (shift 87, reduce 51) on MENORIGUAL
+127: shift/reduce conflict (shift 88, reduce 51) on DISTINTO
+127: shift/reduce conflict (shift 89, reduce 51) on IGUALDAD
+127: shift/reduce conflict (shift 90, reduce 51) on AND
+127: shift/reduce conflict (shift 91, reduce 51) on OR
+127: shift/reduce conflict (shift 92, reduce 51) on '+'
+127: shift/reduce conflict (shift 93, reduce 51) on '-'
+127: shift/reduce conflict (shift 94, reduce 51) on '*'
+127: shift/reduce conflict (shift 95, reduce 51) on '/'
+127: shift/reduce conflict (shift 96, reduce 51) on '['
+127: shift/reduce conflict (shift 98, reduce 51) on '%'
+127: shift/reduce conflict (shift 99, reduce 51) on '.'
+127: shift/reduce conflict (shift 100, reduce 51) on '<'
+127: shift/reduce conflict (shift 101, reduce 51) on '>'
+state 127
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion '.' expresion .  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 51
+	DO  reduce 51
+	';'  reduce 51
+	']'  reduce 51
+	')'  reduce 51
+	','  reduce 51
+	'='  reduce 51
+
+
+128: shift/reduce conflict (shift 86, reduce 52) on MAYORIGUAL
+128: shift/reduce conflict (shift 87, reduce 52) on MENORIGUAL
+128: shift/reduce conflict (shift 88, reduce 52) on DISTINTO
+128: shift/reduce conflict (shift 89, reduce 52) on IGUALDAD
+128: shift/reduce conflict (shift 90, reduce 52) on AND
+128: shift/reduce conflict (shift 91, reduce 52) on OR
+128: shift/reduce conflict (shift 92, reduce 52) on '+'
+128: shift/reduce conflict (shift 93, reduce 52) on '-'
+128: shift/reduce conflict (shift 94, reduce 52) on '*'
+128: shift/reduce conflict (shift 95, reduce 52) on '/'
+128: shift/reduce conflict (shift 96, reduce 52) on '['
+128: shift/reduce conflict (shift 98, reduce 52) on '%'
+128: shift/reduce conflict (shift 99, reduce 52) on '.'
+128: shift/reduce conflict (shift 100, reduce 52) on '<'
+128: shift/reduce conflict (shift 101, reduce 52) on '>'
+state 128
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion '<' expresion .  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 52
+	DO  reduce 52
+	';'  reduce 52
+	']'  reduce 52
+	')'  reduce 52
+	','  reduce 52
+	'='  reduce 52
+
+
+129: shift/reduce conflict (shift 86, reduce 53) on MAYORIGUAL
+129: shift/reduce conflict (shift 87, reduce 53) on MENORIGUAL
+129: shift/reduce conflict (shift 88, reduce 53) on DISTINTO
+129: shift/reduce conflict (shift 89, reduce 53) on IGUALDAD
+129: shift/reduce conflict (shift 90, reduce 53) on AND
+129: shift/reduce conflict (shift 91, reduce 53) on OR
+129: shift/reduce conflict (shift 92, reduce 53) on '+'
+129: shift/reduce conflict (shift 93, reduce 53) on '-'
+129: shift/reduce conflict (shift 94, reduce 53) on '*'
+129: shift/reduce conflict (shift 95, reduce 53) on '/'
+129: shift/reduce conflict (shift 96, reduce 53) on '['
+129: shift/reduce conflict (shift 98, reduce 53) on '%'
+129: shift/reduce conflict (shift 99, reduce 53) on '.'
+129: shift/reduce conflict (shift 100, reduce 53) on '<'
+129: shift/reduce conflict (shift 101, reduce 53) on '>'
+state 129
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion '>' expresion .  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	THEN  reduce 53
+	DO  reduce 53
+	';'  reduce 53
+	']'  reduce 53
+	')'  reduce 53
+	','  reduce 53
+	'='  reduce 53
+
+
+state 130
+	definicion_funcion : FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END . FUNCTION ';'  (18)
+
+	FUNCTION  shift 140
+	.  error
+
+
+state 131
+	sentencia : IDENT '(' expresiones_opc ')' . ';'  (36)
+	expresion : IDENT '(' expresiones_opc ')' .  (61)
+
+	';'  shift 141
+	MAYORIGUAL  reduce 61
+	MENORIGUAL  reduce 61
+	DISTINTO  reduce 61
+	IGUALDAD  reduce 61
+	AND  reduce 61
+	OR  reduce 61
+	'+'  reduce 61
+	'-'  reduce 61
+	'*'  reduce 61
+	'/'  reduce 61
+	'['  reduce 61
+	'='  reduce 61
+	'%'  reduce 61
+	'.'  reduce 61
+	'<'  reduce 61
+	'>'  reduce 61
+
+
+state 132
+	expresiones : expresiones ',' . expresion  (39)
+
+	IDENT  shift 76
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	NOT  shift 67
+	.  error
+
+	expresion  goto 142
+
+
+state 133
+	expresion : IDENT '(' expresiones_opc . ')'  (61)
+
+	')'  shift 143
+	.  error
+
+
+state 134
+	sentencias_opc : sentencias .  (25)
+	sentencias : sentencias . sentencia  (26)
+
+	IDENT  shift 58
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	PRINT  shift 62
+	IF  shift 63
+	WHILE  shift 64
+	RETURN  shift 65
+	READ  shift 66
+	NOT  shift 67
+	END  reduce 25
+	ELSE  reduce 25
+
+	sentencia  goto 85
+	expresion  goto 70
+
+
+state 135
+	sentencia : IF expresion THEN sentencias_opc . END IF ';'  (34)
+	sentencia : IF expresion THEN sentencias_opc . ELSE sentencias_opc END IF ';'  (35)
+
+	END  shift 144
+	ELSE  shift 145
+	.  error
+
+
+state 136
+	sentencias : sentencias . sentencia  (26)
+	sentencia : WHILE expresion DO sentencias . END WHILE ';'  (33)
+
+	IDENT  shift 58
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	PRINT  shift 62
+	END  shift 146
+	IF  shift 63
+	WHILE  shift 64
+	RETURN  shift 65
+	READ  shift 66
+	NOT  shift 67
+	.  error
+
+	sentencia  goto 85
+	expresion  goto 70
+
+
+state 137
+	definicion_procedimiento : PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';' .  (19)
+
+	.  reduce 19
+
+
+state 138
+	expresion : expresion '[' expresion ']' .  (50)
+
+	.  reduce 50
+
+
+state 139
+	sentencia : expresion '=' expresion ';' .  (30)
 
 	.  reduce 30
 
 
-Rules never reduced:
-	listaSentencias : listaSentencias sentencia  (15)
-	listaSentencias : sentencia  (16)
-	expresion : IDENT  (18)
-	expresion : CTE_ENTERA  (19)
-	expresion : expresion '*' expresion  (20)
-	expresion : expresion '+' expresion  (21)
-	expresion : expresion '-' expresion  (22)
+state 140
+	definicion_funcion : FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION . ';'  (18)
+
+	';'  shift 147
+	.  error
 
 
-29 terminals, 17 nonterminals
-31 grammar rules, 54 states
+state 141
+	sentencia : IDENT '(' expresiones_opc ')' ';' .  (36)
+
+	.  reduce 36
+
+
+state 142
+	expresiones : expresiones ',' expresion .  (39)
+	expresion : expresion . '+' expresion  (45)
+	expresion : expresion . '-' expresion  (46)
+	expresion : expresion . '*' expresion  (47)
+	expresion : expresion . '/' expresion  (48)
+	expresion : expresion . '%' expresion  (49)
+	expresion : expresion . '[' expresion ']'  (50)
+	expresion : expresion . '.' expresion  (51)
+	expresion : expresion . '<' expresion  (52)
+	expresion : expresion . '>' expresion  (53)
+	expresion : expresion . MENORIGUAL expresion  (54)
+	expresion : expresion . MAYORIGUAL expresion  (55)
+	expresion : expresion . AND expresion  (56)
+	expresion : expresion . OR expresion  (57)
+	expresion : expresion . IGUALDAD expresion  (59)
+	expresion : expresion . DISTINTO expresion  (60)
+
+	MAYORIGUAL  shift 86
+	MENORIGUAL  shift 87
+	DISTINTO  shift 88
+	IGUALDAD  shift 89
+	AND  shift 90
+	OR  shift 91
+	'+'  shift 92
+	'-'  shift 93
+	'*'  shift 94
+	'/'  shift 95
+	'['  shift 96
+	'%'  shift 98
+	'.'  shift 99
+	'<'  shift 100
+	'>'  shift 101
+	')'  reduce 39
+	','  reduce 39
+
+
+state 143
+	expresion : IDENT '(' expresiones_opc ')' .  (61)
+
+	.  reduce 61
+
+
+state 144
+	sentencia : IF expresion THEN sentencias_opc END . IF ';'  (34)
+
+	IF  shift 148
+	.  error
+
+
+state 145
+	sentencia : IF expresion THEN sentencias_opc ELSE . sentencias_opc END IF ';'  (35)
+	sentencias_opc : .  (24)
+
+	IDENT  shift 58
+	REAL  shift 59
+	CHARACTER  shift 60
+	CTE_ENTERA  shift 61
+	PRINT  shift 62
+	IF  shift 63
+	WHILE  shift 64
+	RETURN  shift 65
+	READ  shift 66
+	NOT  shift 67
+	END  reduce 24
+
+	sentencias  goto 134
+	sentencias_opc  goto 149
+	sentencia  goto 69
+	expresion  goto 70
+
+
+state 146
+	sentencia : WHILE expresion DO sentencias END . WHILE ';'  (33)
+
+	WHILE  shift 150
+	.  error
+
+
+state 147
+	definicion_funcion : FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';' .  (18)
+
+	.  reduce 18
+
+
+state 148
+	sentencia : IF expresion THEN sentencias_opc END IF . ';'  (34)
+
+	';'  shift 151
+	.  error
+
+
+state 149
+	sentencia : IF expresion THEN sentencias_opc ELSE sentencias_opc . END IF ';'  (35)
+
+	END  shift 152
+	.  error
+
+
+state 150
+	sentencia : WHILE expresion DO sentencias END WHILE . ';'  (33)
+
+	';'  shift 153
+	.  error
+
+
+state 151
+	sentencia : IF expresion THEN sentencias_opc END IF ';' .  (34)
+
+	.  reduce 34
+
+
+state 152
+	sentencia : IF expresion THEN sentencias_opc ELSE sentencias_opc END . IF ';'  (35)
+
+	IF  shift 154
+	.  error
+
+
+state 153
+	sentencia : WHILE expresion DO sentencias END WHILE ';' .  (33)
+
+	.  reduce 33
+
+
+state 154
+	sentencia : IF expresion THEN sentencias_opc ELSE sentencias_opc END IF . ';'  (35)
+
+	';'  shift 155
+	.  error
+
+
+state 155
+	sentencia : IF expresion THEN sentencias_opc ELSE sentencias_opc END IF ';' .  (35)
+
+	.  reduce 35
+
+
+State 83 contains 15 shift/reduce conflicts.
+State 114 contains 15 shift/reduce conflicts.
+State 115 contains 15 shift/reduce conflicts.
+State 116 contains 15 shift/reduce conflicts.
+State 117 contains 15 shift/reduce conflicts.
+State 118 contains 15 shift/reduce conflicts.
+State 119 contains 15 shift/reduce conflicts.
+State 120 contains 11 shift/reduce conflicts.
+State 121 contains 11 shift/reduce conflicts.
+State 122 contains 11 shift/reduce conflicts.
+State 123 contains 11 shift/reduce conflicts.
+State 126 contains 15 shift/reduce conflicts.
+State 127 contains 15 shift/reduce conflicts.
+State 128 contains 15 shift/reduce conflicts.
+State 129 contains 15 shift/reduce conflicts.
+
+
+43 terminals, 23 nonterminals
+69 grammar rules, 156 states

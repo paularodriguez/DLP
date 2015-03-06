@@ -1,11 +1,13 @@
 package ast.sent;
 
+import ast.expr.Expresion;
+
 
 public class Print implements Sentencia {
 
-	public String expresiones; 
+	public Expresion expresiones; 
 	
-	public Print(String expresiones){
+	public Print(Expresion expresiones){
 		this.expresiones = expresiones;
 	}
 

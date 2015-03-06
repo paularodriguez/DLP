@@ -32,6 +32,8 @@ public class Main {
 			System.err.println("El archivo "+args[0]+" no se ha podido abrir.");
 			return;
 		}
+		//GestorErrores gestor = new GestorErores();
+		//Lexico lexico = new Lexico (fr, gestor);      ----- Se pasa al léxico no al gestor.
 		
 		Lexico lexico = new Lexico(fr);
 		Parser parser = new Parser(lexico);

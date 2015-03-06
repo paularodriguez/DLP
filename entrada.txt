@@ -11,6 +11,62 @@ NOTA. Este ejemplo pretende mostrar la sintaxis del lenguaje. No está pensado pa
 dim a as integer;
 dim b as character;
 
-
 dim c[20] as integer;
 dim h[30][20] as real;
+
+// ------------- 
+type Persona
+	edad as integer;
+	meses[12] as integer;
+end type;
+
+dim e1 as Persona;
+dim e2 as Persona;
+
+dim f[10] as Persona;
+
+type Empresa
+	cif[20] as character;
+	empleados[25] as Persona;
+end type;
+
+dim microsoft as Empresa;
+
+function dobleSuma (a as integer, b as integer) as integer
+	dim local as integer;
+
+	local = a + b;
+	return local * 2;
+end function;
+
+proc escribeEdad (num as integer)
+	print microsoft.empleados[num].edad;
+end proc;
+
+dim z as integer;
+
+proc main()
+  dim local as integer;
+  dim pepe as Persona;
+  dim v[20] as integer;
+
+  pepe.edad = 20;
+  read pepe.direccion.codigoPostal; 
+
+  local = 0;
+   while local < 10 do
+    v[local] = dobleSuma (ctype (1, 2.0 + h[0][3]), local);
+    local = local + 1;
+  end while;
+ 
+  if a >= 2 and local < 5 then
+    escribeEdad(a+local); 
+	return;
+  else
+    b = 'R';
+  end if;
+
+  if z <> 2 or a==9 then
+    escribe(pepe.meses[2]);
+  end if;
+end proc;

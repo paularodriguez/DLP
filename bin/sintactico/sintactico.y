@@ -11,6 +11,7 @@ import ast.*;
 import ast.sent.*;
 import ast.tipos.*;
 import ast.expr.*;
+import ast.def.*;
 %}
 
 // * Declaraciones Yacc
@@ -18,7 +19,6 @@ import ast.expr.*;
 %token INTEGER
 %token REAL
 %token CHARACTER
-%token VAR
 %token DIM
 %token AS
 %token CTE_ENTERA
@@ -31,91 +31,151 @@ import ast.expr.*;
 %token THEN
 %token ELSE
 %token WHILE
+%token MAYORIGUAL
+%token MENORIGUAL
+%token DISTINTO
+%token IGUALDAD
+%token RETURN
+%token READ
+%token AND
+%token OR
+%token NOT
+%token DO
 %left '+', '-'
 %left '*', '/'
 %%
 // * Gramática y acciones Yacc
 
-programa:  lista_declaraciones						{this.ast = new Programa((List)$1);}	
-	;
+programa
+		: 	definiciones						
+		;
 
-lista_declaraciones
-	: lista_declaraciones declaracion				{ ((List)$1).add($2); $$ = $1;}
-	| declaracion									{$$ = new ArrayList(); ((List)$$).add($1);}
-	;
-	
-declaracion
-	: definicion_variable							{ $$ = $1;}
-	| definicion_proc								{ $$ = $1;}
-	;
+definiciones
+		: 	definicion							
+		|	definiciones definicion				
+		;
+
+definicion
+		:  	definicion_variable					{$$ = $1;}
+		|	definicion_struct					{$$ = $1;}
+		|	definicion_funcion					{$$ = $1;}
+		|	definicion_procedimiento			{$$ = $1;}
+		;
+		
+definiciones_variable_opc
+		:	/*vacio*/
+		|	definiciones_variable;
+		
+definiciones_variable
+		:	definiciones_variable definicion_variable
+		|	definicion_variable
+		;
 
 definicion_variable
-	: DIM variable AS tipo ';'
-	;
+		: 	DIM IDENT array_opc AS tipo ';'						
+		;
 	
-variable
-	: IDENT array
-	;
+array_opc
+		:	/*vacio*/
+		| 	lista_dimensiones
+		;
 	
-array
-	:
-	| array '['CTE_ENTERA']'
+lista_dimensiones
+		: 	'['CTE_ENTERA']'
+		| 	lista_dimensiones'['CTE_ENTERA']'       /*devolver array dimensiones para en definion de variable crear las dimensiones y el tipo array*/
+		;
 	
-definicion_proc
-	: PROC IDENT '(' listaParametrosOpcional ')' sentencia END PROC ';'			{$$ = new Procedimiento((String)$2, (Object)$4, (Sentencia)$6); }
-	;
-	
+definicion_struct
+		:	TYPE IDENT lista_campos END TYPE ';'	
+		;
+		
+definicion_funcion
+		: 	FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'
+		;
+		
+definicion_procedimiento
+		:	PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';'
+		
 listaParametrosOpcional
-	:  	 				{ $$ = new ArrayList<Expresion>(); }
-	| listaParametros   { $$ = $1; }
-	;
+		:  	/*vacío*/ 				
+		| 	listaParametros  
+		;
 	
 listaParametros 
-	: listaParametros ',' IDENT AS tipo 			{((List)$1).add((Tipo)$3); $$ = $1; }
-	| IDENT AS tipo 								{$$ = $1;}
-	;
-	
-listaSentencias
-	: listaSentencias sentencia 	 	 			{ ((List<Sentencia>)$1).add((Sentencia)$2); $$ = $1; }
-	| sentencia										{ List<Sentencia> lista = new ArrayList<Sentencia>();
-													  lista.add((Sentencia)$1);
-													  $$ = lista;}
-	;
-	
-sentencia
-	: PRINT IDENT ";"	 							{$$ = new Print((String)$2);}
+		: 	listaParametros ',' IDENT AS tipo 			
+		| 	IDENT AS tipo 								
+		;
 		
+sentencias_opc
+		:	/*vacio*/
+		| 	sentencias
+		;
+		
+sentencias
+		: 	sentencias sentencia 	 	 			
+		| 	sentencia																						  
+		;
+
+sentencia
+		: 	PRINT expresion ';'
+		|	READ expresion ';'
+		|	expresion '=' expresion ";"
+		|	RETURN expresion ";"
+		|	RETURN ";"
+		|	WHILE expresion DO sentencias END WHILE ';'
+		|	IF expresion THEN sentencias_opc END IF ';'
+		|	IF expresion THEN sentencias_opc ELSE sentencias_opc END IF ';'
+		|  	IDENT '(' expresiones_opc ')' ";"
+		;
+
+expresiones_opc
+		:	/*vacio*/
+		| 	expresiones
+		;
+		
+expresiones
+		:	expresiones ',' expresion
+		|	expresion
+		;
 
 expresion
-	: IDENT											{$$ = new Variable((String)$1);}
-	| CTE_ENTERA									{$$ = new LiteralEntero((int)$1);}
-	| expresion '*' expresion						{$$ = new Aritmetica((Expresion)$1,"*", (Expresion)$3);}
-	| expresion '+' expresion						{$$ = new Aritmetica((Expresion)$1,"+", (Expresion)$3);}
-	| expresion '-' expresion						{$$ = new Aritmetica((Expresion)$1,"-", (Expresion)$3);}
-	;
-
+		: 	IDENT
+		| 	CTE_ENTERA
+		| 	CHARACTER
+		|	REAL
+		|	expresion '+' expresion
+		|	expresion '-' expresion
+		|	expresion '*' expresion
+		|	expresion '/' expresion
+		|	expresion '%' expresion
+		|	expresion '[' expresion ']'
+		|	expresion '.' expresion
+		|	expresion '<' expresion
+		|	expresion '>' expresion
+		|	expresion MENORIGUAL expresion
+		|	expresion MAYORIGUAL expresion
+		|	expresion AND expresion
+		|	expresion OR expresion
+		|	NOT expresion
+		|	expresion IGUALDAD expresion
+		|	expresion DISTINTO expresion
+		| 	IDENT '(' expresiones_opc ')' 
+		;
+		
 tipo
-	: INTEGER										{$$ = TipoEntero.getInstancia();} 
-	| REAL											{$$ = TipoReal.getInstancia();} 
-	| CHARACTER										{$$ = TipoChar.getInstancia();} 
-	| tipoStruct									{$$ = $1;}
-	; 		
-	
-tipoStruct
-	: TYPE IDENT listaCampos END TYPE ';'			{$$ = new TipoStruct((String)$2, (List)$3);}
-	;
-	
-listaCampos:   		{ List<Campo> lista = new ArrayList<Campo>();
-								$$ = lista;
-					}
-				| listaCampos ";" campo
-							{
-								List<Campo> lista = (List<Campo>) $1;
-								lista.add((Campo) $3);
-								$$ = lista;
-							};
+		: 	INTEGER									{$$ = TipoEntero.getInstancia();} 
+		| 	REAL									{$$ = TipoReal.getInstancia();} 
+		| 	CHARACTER								{$$ = TipoChar.getInstancia();} 
+		| 	IDENT											
+		; 		
 
-campo:  DIM IDENT AS tipo ';'	  {$$ = new Campo((Tipo)$4, (String)$2);}
+lista_campos
+		:   /*vacío*/					
+		| 	lista_campos campo
+							
+campo
+		:  	IDENT array_opc AS tipo ';'	  
+		
 	
 %%
 

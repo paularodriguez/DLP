@@ -4,12 +4,16 @@ import java.util.List;
 
 import ast.expr.Expresion;
 
-public class Lectura implements Sentencia {
+public class Read implements Sentencia {
 
 	public List<Expresion> expresiones; 
 		
-	public Lectura(List<Expresion> expresiones){
+	public Read(List<Expresion> expresiones){
 		this.expresiones = expresiones;
+	}
+
+	public Read(Expresion val_peek) {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
