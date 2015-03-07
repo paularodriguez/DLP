@@ -63,7 +63,7 @@ proc main()
     escribeEdad(a+local); 
 	return;
   else
-    b = 'R';
+   // b = 'R';
   end if;
 
   if z <> 2 or a==9 then

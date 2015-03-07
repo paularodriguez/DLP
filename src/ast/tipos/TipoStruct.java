@@ -1,15 +1,18 @@
 package ast.tipos;
 
-import java.util.List;
 
-public class TipoStruct {
+public class TipoStruct implements Tipo{
 
 	String nombre;
-	List campos;
-	
-	public TipoStruct(String nombre, List listaCampos) {
+
+	public TipoStruct(String nombre) {
 		this.nombre = nombre;
-		this.campos = listaCampos;
 	}
 
+	@Override
+	public String toString() {
+		return "TipoStruct [nombre=" + nombre + "]";
+	}
+
+	
 }

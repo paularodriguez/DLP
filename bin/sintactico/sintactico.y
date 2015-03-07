@@ -41,18 +41,29 @@ import ast.def.*;
 %token OR
 %token NOT
 %token DO
+%right '=' 
+%left AND OR DISTINTO
+%left IGUALDAD MAYORIGUAL MENORIGUAL '<' '>' 
 %left '+', '-'
-%left '*', '/'
+%left '*', '/', '%'
+%right NOT	
+%nonassoc '(' ')' '[' ']'
+%left '.'
+
 %%
 // * Gramática y acciones Yacc
 
 programa
-		: 	definiciones						
+		: 	definiciones						{this.ast = new Programa((List<Definicion>)$1);}						
 		;
 
 definiciones
-		: 	definicion							
-		|	definiciones definicion				
+		: 	definicion							{List<Definicion> lista = new ArrayList<Definicion>();
+												lista.add((Definicion)$1);
+												$$ = lista;}	
+		|	definiciones definicion				{List<Definicion> lista = (List<Definicion>) $1;
+												lista.add((Definicion) $2);
+												$$ = lista;};
 		;
 
 definicion
@@ -63,69 +74,86 @@ definicion
 		;
 		
 definiciones_variable_opc
-		:	/*vacio*/
-		|	definiciones_variable;
+		:	/*vacio*/							{$$ = new ArrayList<DefinicionVariable>();}
+		|	definiciones_variable;				{$$ = $1;}
 		
 definiciones_variable
-		:	definiciones_variable definicion_variable
-		|	definicion_variable
+		:	definiciones_variable definicion_variable			{List<DefinicionVariable> lista = (List<DefinicionVariable>) $1;
+																lista.add((DefinicionVariable)$2);
+																$$ = lista;};
+		|	definicion_variable									{List<DefinicionVariable> lista = new ArrayList<DefinicionVariable>();
+																lista.add((DefinicionVariable)$1);
+																$$ = lista;}
 		;
 
 definicion_variable
-		: 	DIM IDENT array_opc AS tipo ';'						
+		: 	DIM IDENT array_opc AS tipo ';'		{$$ = new DefinicionVariable((Tipo)$5, (List<Integer>)$3, (String)$2);}						
 		;
 	
 array_opc
-		:	/*vacio*/
-		| 	lista_dimensiones
+		:	/*vacio*/							{$$ = null;}
+		| 	lista_dimensiones					{$$ = $1;}
 		;
 	
 lista_dimensiones
-		: 	'['CTE_ENTERA']'
-		| 	lista_dimensiones'['CTE_ENTERA']'       /*devolver array dimensiones para en definion de variable crear las dimensiones y el tipo array*/
+		: 	'['CTE_ENTERA']'					{List<Integer> lista = new ArrayList<Integer>();
+												lista.add(Integer.parseInt((String)$2));
+												$$ = lista;}
+		| 	lista_dimensiones'['CTE_ENTERA']'   {List<Integer> lista = (List<Integer>) $1;
+												lista.add(Integer.parseInt((String)$3));
+												$$ = lista;};
 		;
 	
 definicion_struct
-		:	TYPE IDENT lista_campos END TYPE ';'	
+		:	TYPE IDENT lista_campos END TYPE ';'			{$$ = new DefinicionStruct((String)$2, (List<Campo>)$3);}	
 		;
 		
 definicion_funcion
-		: 	FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'
+		: 	FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'		{TipoFuncion tipoFuncion = new TipoFuncion((Tipo)$7, (String)$2, (List<DefinicionVariable>)$4);
+																																$$ = new DefinicionFuncion(tipoFuncion, (List<DefinicionVariable>)$8, (List<Sentencia>)$9);}
 		;
 		
 definicion_procedimiento
-		:	PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';'
+		:	PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';'						{$$ = new DefinicionProcedimiento((String)$2, (List<DefinicionVariable>)$4, (List<DefinicionVariable>)$6, (List<Sentencia>)$7);}
 		
 listaParametrosOpcional
-		:  	/*vacío*/ 				
-		| 	listaParametros  
+		:  	/*vacío*/							{$$ = new ArrayList<DefinicionVariable>();} 				
+		| 	listaParametros  					{$$ = $1;}
 		;
 	
 listaParametros 
-		: 	listaParametros ',' IDENT AS tipo 			
-		| 	IDENT AS tipo 								
+		: 	listaParametros ',' IDENT AS tipo 	{List<DefinicionVariable> lista = (List<DefinicionVariable>) $1;
+												lista.add(new DefinicionVariable((Tipo)$5,null,(String)$3));
+												$$ = lista;};
+		| 	IDENT AS tipo						{List<DefinicionVariable> lista = new ArrayList<DefinicionVariable>();
+												lista.add(new DefinicionVariable((Tipo)$3,null,(String)$1));
+												$$ = lista;}								
 		;
 		
 sentencias_opc
-		:	/*vacio*/
-		| 	sentencias
+		:	/*vacio*/							{$$ = new ArrayList<Sentencia>();}
+		| 	sentencias							{$$ = $1;}
 		;
 		
 sentencias
-		: 	sentencias sentencia 	 	 			
-		| 	sentencia																						  
+		: 	sentencias sentencia 	 	 		{List<Sentencia> lista = (List<Sentencia>) $1;
+												lista.add((Sentencia)$2);
+												$$ = lista;};	
+		| 	sentencia							{List<Sentencia> lista = new ArrayList<Sentencia>();
+												lista.add((Sentencia)$1);
+												$$ = lista;}																						  
 		;
 
 sentencia
-		: 	PRINT expresion ';'
-		|	READ expresion ';'
-		|	expresion '=' expresion ";"
-		|	RETURN expresion ";"
-		|	RETURN ";"
-		|	WHILE expresion DO sentencias END WHILE ';'
-		|	IF expresion THEN sentencias_opc END IF ';'
-		|	IF expresion THEN sentencias_opc ELSE sentencias_opc END IF ';'
-		|  	IDENT '(' expresiones_opc ')' ";"
+		: 	PRINT expresion ';'														{$$ = new Print((Expresion)$2);}
+		|	READ expresion ';'														{$$ = new Read((Expresion)$2);}
+		|	expresion '=' expresion ";"												{$$ = new Asignacion((Expresion)$1,(Expresion)$3);}
+		|	RETURN expresion ";"													{$$ = new Return((Expresion)$2);}
+		|	RETURN ";"																{$$ = new Return(null);}
+		|	WHILE expresion DO sentencias END WHILE ';'								{$$ = new While((Expresion)$2, (List<Sentencia>)$4);}
+		|	IF expresion THEN sentencias_opc END IF ';'								{$$ = new IF((Expresion)$2, (List<Sentencia>)$4);}
+		|	IF expresion THEN sentencias_opc ELSE sentencias_opc END IF ';'			{$$ = new IF((Expresion)$2, (List<Sentencia>)$4, (List<Sentencia>)$6);}
+		|  	IDENT '(' expresiones_opc ')' ";"										{$$ = new InvocacionProcedimiento((String)$1, (List<Expresion>)$3);}
 		;
 
 expresiones_opc
@@ -134,47 +162,55 @@ expresiones_opc
 		;
 		
 expresiones
-		:	expresiones ',' expresion
-		|	expresion
+		:	expresiones ',' expresion			{List<Expresion> lista = (List<Expresion>) $1;
+												lista.add((Expresion)$3);
+												$$ = lista;};
+		|	expresion							{List<Expresion> lista = new ArrayList<Expresion>();
+												lista.add((Expresion)$1);
+												$$ = lista;}
 		;
 
 expresion
-		: 	IDENT
-		| 	CTE_ENTERA
-		| 	CHARACTER
-		|	REAL
-		|	expresion '+' expresion
-		|	expresion '-' expresion
-		|	expresion '*' expresion
-		|	expresion '/' expresion
-		|	expresion '%' expresion
-		|	expresion '[' expresion ']'
-		|	expresion '.' expresion
-		|	expresion '<' expresion
-		|	expresion '>' expresion
-		|	expresion MENORIGUAL expresion
-		|	expresion MAYORIGUAL expresion
-		|	expresion AND expresion
-		|	expresion OR expresion
-		|	NOT expresion
-		|	expresion IGUALDAD expresion
-		|	expresion DISTINTO expresion
-		| 	IDENT '(' expresiones_opc ')' 
+		: 	IDENT								{$$ = new Variable((String)$1);}
+		| 	CTE_ENTERA							{$$ = new LiteralEntero(Integer.parseInt((String)$1));}
+		| 	CHARACTER							{$$ = new LiteralCaracter((Character)$1);}
+		|	REAL								{$$ = new LiteralReal(Double.parseDouble((String)$1));}
+		|	expresion '+' expresion				{$$ = new Aritmetica((Expresion)$1, "+", (Expresion)$3);}
+		|	expresion '-' expresion				{$$ = new Aritmetica((Expresion)$1, "-", (Expresion)$3);}
+		|	expresion '*' expresion				{$$ = new Aritmetica((Expresion)$1, "*", (Expresion)$3);}
+		|	expresion '/' expresion				{$$ = new Aritmetica((Expresion)$1, "/", (Expresion)$3);}	
+		|	expresion '%' expresion				{$$ = new Aritmetica((Expresion)$1, "%", (Expresion)$3);}
+		|	expresion '[' expresion ']'			{$$ = new AccesoArray((Expresion)$1, (Expresion)$3);}
+		|	expresion '.' expresion				{$$ = new AccesoCampo((Expresion)$1, (Expresion)$3);}
+		|	expresion '<' expresion				{$$ = new Comparacion((Expresion)$1, "<", (Expresion)$3);}
+		|	expresion '>' expresion				{$$ = new Comparacion((Expresion)$1, ">", (Expresion)$3);}
+		|	expresion MENORIGUAL expresion		{$$ = new Comparacion((Expresion)$1, "<=", (Expresion)$3);}
+		|	expresion MAYORIGUAL expresion		{$$ = new Comparacion((Expresion)$1, ">=", (Expresion)$3);}
+		|	expresion AND expresion				{$$ = new Logica((Expresion)$1, "and", (Expresion)$3);}
+		|	expresion OR expresion				{$$ = new Logica((Expresion)$1, "or", (Expresion)$3);}
+		|	NOT expresion						{$$ = new Negacion((Expresion)$2);}
+		|	expresion IGUALDAD expresion		{$$ = new Comparacion((Expresion)$1, "==", (Expresion)$3);}
+		|	expresion DISTINTO expresion		{$$ = new Comparacion((Expresion)$1, "<>", (Expresion)$3);}
+		| 	IDENT '(' expresiones_opc ')' 		{$$ = new InvocacionFuncion((String)$1, (List<Expresion>)$3);}
 		;
 		
 tipo
-		: 	INTEGER									{$$ = TipoEntero.getInstancia();} 
-		| 	REAL									{$$ = TipoReal.getInstancia();} 
-		| 	CHARACTER								{$$ = TipoChar.getInstancia();} 
-		| 	IDENT											
+		: 	INTEGER								{$$ = TipoEntero.getInstancia();} 
+		| 	REAL								{$$ = TipoReal.getInstancia();} 
+		| 	CHARACTER							{$$ = TipoChar.getInstancia();} 
+		| 	IDENT								{$$ = new TipoStruct((String)$1);} 		
 		; 		
 
 lista_campos
-		:   /*vacío*/					
-		| 	lista_campos campo
+		:	campo								{List<Campo> lista = new ArrayList<Campo>();
+												lista.add((Campo)$1);
+												$$ = lista;}					
+		| 	lista_campos campo					{List<Campo> lista = (List<Campo>) $1;
+												lista.add((Campo)$2);
+												$$ = lista;};
 							
 campo
-		:  	IDENT array_opc AS tipo ';'	  
+		:  	IDENT array_opc AS tipo ';'			{$$ = new Campo((String)$1, (Tipo)$4);}	  
 		
 	
 %%

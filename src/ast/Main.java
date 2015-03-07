@@ -39,8 +39,8 @@ public class Main {
 		Parser parser = new Parser(lexico);
 		parser.run();
 	
-	//	IntrospectorModel modelo = new IntrospectorModel("Program", parser.ast);
-		//new IntrospectorTree("Instrospector", modelo);		    
+		IntrospectorModel modelo = new IntrospectorModel("Program", parser.ast);
+		new IntrospectorTree("Instrospector", modelo);		    
 	}
 
 }

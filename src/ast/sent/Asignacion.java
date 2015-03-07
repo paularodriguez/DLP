@@ -4,20 +4,20 @@ import ast.expr.Expresion;
 
 public class Asignacion implements Sentencia  {
 	
-	public Expresion derecha; 
 	public Expresion izquierda;
+	public Expresion derecha; 
 	
-	public Asignacion(Expresion derecha, Expresion izquierda){
-		this.derecha = derecha;
+	
+	public Asignacion(Expresion izquierda, Expresion derecha){
 		this.izquierda = izquierda;
+		this.derecha = derecha;
 	}
+
 
 	@Override
 	public String toString() {
-		return "Asignacion [derecha=" + derecha + ", izquierda=" + izquierda
+		return "Asignacion [izquierda=" + izquierda + ", derecha=" + derecha
 				+ "]";
 	}
 	
-	
-
 }
