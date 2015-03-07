@@ -12,6 +12,7 @@ import ast.sent.*;
 import ast.tipos.*;
 import ast.expr.*;
 import ast.def.*;
+import gestorErrores.GestorErrores;
 %}
 
 // * Declaraciones Yacc
@@ -227,16 +228,15 @@ private int yylex () {
     try { 
 	token=lexico.yylex(); 
     } catch(Throwable e) {
-	    System.err.println ("Error Léxico en línea " + lexico.getLinea()+
-		" y columna "+lexico.getColumna()+":\n\t"+e); 
+	   System.err.println ("Error Léxico en línea " + lexico.line()+
+		" y columna "+lexico.column()+":\n\t"+e);
     }
     return token;
 }
 
 // * Manejo de Errores Sintácticos
 public void yyerror (String error) {
-    System.err.println ("Error Sintáctico en línea " + lexico.getLinea()+
-		" y columna "+lexico.getColumna()+":\n\t"+error);
+    gestor.error("Error sintáctico en la línea " + lexico.line() + " y columna " + lexico.column() + ".");
 }
 
 // * El yylval no es un atributo público
@@ -247,8 +247,11 @@ public void setYylval(Object yylval) {
         this.yylval = yylval;
 }
 
+private GestorErrores gestor;
+
 // * Constructor del Sintáctico
-public Parser(Lexico lexico) {
+public Parser(Lexico lexico, GestorErrores gestor) {
 	this.lexico = lexico;
 	lexico.setParser(this);
+	this.gestor = gestor;
 }

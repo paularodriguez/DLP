@@ -2,6 +2,8 @@
 
 package lexico;
 import sintactico.Parser;
+import gestorErrores.GestorErrores;
+import java.io.Reader;
 
 %%
 // ************  Opciones ********************
@@ -17,19 +19,23 @@ import sintactico.Parser;
 // ************  Atributos y métodos ********************
 // * El analizador sintáctico
 private Parser parser;
+private GestorErrores gestor;
+
+public Lexico(Reader in, GestorErrores gestor) {
+	this(in);
+	this.gestor = gestor;
+}
+
+
 public void setParser(Parser parser) {
 	this.parser=parser;
 }
 
-// * Para acceder al número de línea (yyline es package)
-public int getLinea() { 
-	// * Flex empieza en cero
+public int line() { 
 	return yyline+1;
 }
 
-// * Para acceder al número de columna (yycolumn es package)
-public int getColumna() { 
-	// * Flex empieza en cero
+public int column() { 
 	return yycolumn+1;
 }
 
@@ -96,4 +102,4 @@ return								{return Parser.RETURN;}
 
 [ \n\r\t]							{}
 
-. 									{System.out.println("Error: " + yytext());}
+. 									{ gestor.error("Error léxico en la línea " + line() + " y columna " + column() + ".");}
