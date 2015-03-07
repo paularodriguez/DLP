@@ -55,7 +55,7 @@ proc main()
 
   local = 0;
    while local < 10 do
-    v[local] = dobleSuma (ctype (1, 2.0 + h[0][3]), local);
+    v[local] = dobleSuma (ctype (a, 2.0 + h[0][3]), local);
     local = local + 1;
   end while;
  
@@ -63,7 +63,7 @@ proc main()
     escribeEdad(a+local); 
 	return;
   else
-   	//b = 'R';
+   	b = 'R';
   end if;
 
   if z <> 2 or a==9 then

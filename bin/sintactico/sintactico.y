@@ -98,10 +98,10 @@ array_opc
 	
 lista_dimensiones
 		: 	'['CTE_ENTERA']'					{List<Integer> lista = new ArrayList<Integer>();
-												lista.add(Integer.parseInt((String)$2));
+												lista.add((Integer)$2);
 												$$ = lista;}
 		| 	lista_dimensiones'['CTE_ENTERA']'   {List<Integer> lista = (List<Integer>) $1;
-												lista.add(Integer.parseInt((String)$3));
+												lista.add((Integer)$3);
 												$$ = lista;};
 		;
 	
@@ -173,9 +173,9 @@ expresiones
 
 expresion
 		: 	IDENT								{$$ = new Variable((String)$1);}
-		| 	CTE_ENTERA							{$$ = new LiteralEntero(Integer.parseInt((String)$1));}
+		| 	CTE_ENTERA							{$$ = new LiteralEntero((Integer)$1);}
 		| 	CHARACTER							{$$ = new LiteralCaracter((Character)$1);}
-		|	REAL								{$$ = new LiteralReal(Double.parseDouble((String)$1));}
+		|	REAL								{$$ = new LiteralReal((Double)$1);}
 		|	expresion '+' expresion				{$$ = new Aritmetica((Expresion)$1, "+", (Expresion)$3);}
 		|	expresion '-' expresion				{$$ = new Aritmetica((Expresion)$1, "-", (Expresion)$3);}
 		|	expresion '*' expresion				{$$ = new Aritmetica((Expresion)$1, "*", (Expresion)$3);}

@@ -825,13 +825,13 @@ break;
 case 15:
 //#line 100 "../src/sintactico/sintactico.y"
 {List<Integer> lista = new ArrayList<Integer>();
-												lista.add(Integer.parseInt((String)val_peek(1)));
+												lista.add((Integer)val_peek(1));
 												yyval = lista;}
 break;
 case 16:
 //#line 103 "../src/sintactico/sintactico.y"
 {List<Integer> lista = (List<Integer>) val_peek(3);
-												lista.add(Integer.parseInt((String)val_peek(1)));
+												lista.add((Integer)val_peek(1));
 												yyval = lista;}
 break;
 case 17:
@@ -941,7 +941,7 @@ case 41:
 break;
 case 42:
 //#line 176 "../src/sintactico/sintactico.y"
-{yyval = new LiteralEntero(Integer.parseInt((String)val_peek(0)));}
+{yyval = new LiteralEntero((Integer)val_peek(0));}
 break;
 case 43:
 //#line 177 "../src/sintactico/sintactico.y"
@@ -949,7 +949,7 @@ case 43:
 break;
 case 44:
 //#line 178 "../src/sintactico/sintactico.y"
-{yyval = new LiteralReal(Double.parseDouble((String)val_peek(0)));}
+{yyval = new LiteralReal((Double)val_peek(0));}
 break;
 case 45:
 //#line 179 "../src/sintactico/sintactico.y"

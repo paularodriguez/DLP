@@ -66,11 +66,11 @@ then 								{return Parser.THEN;}
 function							{return Parser.FUNCTION;}
 read								{return Parser.READ;}
 return								{return Parser.RETURN;}
-{Real}								{parser.setYylval(yytext()); return Parser.REAL;}
+{Real}								{parser.setYylval(new Double(yytext())); return Parser.REAL;}
 "," 								{parser.setYylval(yytext()); return (int)yycharat(0);}
 ";" 								{parser.setYylval(yytext()); return (int)yycharat(0);}
-[0-9]+								{parser.setYylval(yytext()); return Parser.CTE_ENTERA;}	
-\'[^\']\'   						{parser.setYylval(yytext()); return Parser.CHARACTER;}
+[0-9]+								{parser.setYylval(new Integer(yytext())); return Parser.CTE_ENTERA;}	
+\'[^\']\'   						{parser.setYylval(yytext().charAt(1)); return Parser.CHARACTER;}
 
 "<=" 								{parser.setYylval(yytext()); return Parser.MENORIGUAL;}
 ">=" 								{parser.setYylval(yytext()); return Parser.MAYORIGUAL;}
