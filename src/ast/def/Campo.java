@@ -7,7 +7,7 @@ public class Campo {
 	Tipo tipo;
 	String nombre;
 	
-	public Campo(String nombre, Tipo tipo) {
+	public Campo(Tipo tipo, String nombre) {
 		this.tipo = tipo;
 		this.nombre = nombre;
 	}

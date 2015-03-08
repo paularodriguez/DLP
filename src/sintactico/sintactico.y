@@ -88,11 +88,19 @@ definiciones_variable
 		;
 
 definicion_variable
-		: 	DIM IDENT array_opc AS tipo ';'		{$$ = new DefinicionVariable((Tipo)$5, (List<Integer>)$3, (String)$2);}						
+		: 	DIM IDENT array_opc AS tipo ';'		{DefinicionVariable defVar = null; 
+												if (((List<Integer>)$3).size() == 0){
+													defVar = new DefinicionVariable((Tipo)$5,(String)$2);
+												}
+												else{
+													defVar = new DefinicionVariable(new TipoArray((Tipo)$5, (List<Integer>)$3),(String)$2);
+												}
+												$$ = defVar;
+												}						
 		;
 	
 array_opc
-		:	/*vacio*/							{$$ = null;}
+		:	/*vacio*/							{$$ = new ArrayList<Integer>();}
 		| 	lista_dimensiones					{$$ = $1;}
 		;
 	
@@ -124,10 +132,10 @@ listaParametrosOpcional
 	
 listaParametros 
 		: 	listaParametros ',' IDENT AS tipo 	{List<DefinicionVariable> lista = (List<DefinicionVariable>) $1;
-												lista.add(new DefinicionVariable((Tipo)$5,null,(String)$3));
+												lista.add(new DefinicionVariable((Tipo)$5, (String)$3));
 												$$ = lista;};
 		| 	IDENT AS tipo						{List<DefinicionVariable> lista = new ArrayList<DefinicionVariable>();
-												lista.add(new DefinicionVariable((Tipo)$3,null,(String)$1));
+												lista.add(new DefinicionVariable((Tipo)$3, (String)$1));
 												$$ = lista;}								
 		;
 		
@@ -211,7 +219,15 @@ lista_campos
 												$$ = lista;};
 							
 campo
-		:  	IDENT array_opc AS tipo ';'			{$$ = new Campo((String)$1, (Tipo)$4);}	  
+		:  	IDENT array_opc AS tipo ';'			{Campo campo = null; 
+												if (((List<Integer>)$2).size() == 0){
+													campo = new Campo((Tipo)$4,(String)$1);
+												}
+												else{
+													campo = new Campo(new TipoArray((Tipo)$4, (List<Integer>)$2),(String)$1);
+												}
+												$$ = campo;
+												}			  
 		
 	
 %%
