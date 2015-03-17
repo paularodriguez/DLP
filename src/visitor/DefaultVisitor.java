@@ -243,7 +243,7 @@ public class DefaultVisitor implements Visitor {
 
 	@Override
 	public Object visit(TipoArray node) {
-		//node.getTipo().acepta(this);
+		node.getTipo().acepta(this);
 		return null;
 	}
 

@@ -225,7 +225,7 @@ campo
 													campo = new Campo((Tipo)$4,(String)$1);
 												}
 												else{
-													campo = new Campo(new TipoArray((Tipo)$4, (List<Integer>)$2),(String)$1);
+													campo = new Campo((Tipo)TipoArray.crearArray((Tipo)$4, (List<Integer>)$2),(String)$1);
 												}
 												$$ = campo;
 												}			  

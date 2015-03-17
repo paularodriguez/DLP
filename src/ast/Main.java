@@ -41,8 +41,8 @@ public class Main {
 		Parser parser = new Parser(lexico, gestor);
 		parser.run();
 		
-		//XMLVisitor v= new XMLVisitor();
-		//parser.ast.acepta(v);
+		XMLVisitor v= new XMLVisitor();
+		parser.ast.acepta(v);
 
 		if (!gestor.hayErrores()) {
 			IntrospectorModel modelo = new IntrospectorModel("Program",

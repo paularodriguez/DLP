@@ -1086,7 +1086,7 @@ case 69:
 													campo = new Campo((Tipo)val_peek(1),(String)val_peek(4));
 												}
 												else{
-													campo = new Campo(new TipoArray((Tipo)val_peek(1), (List<Integer>)val_peek(3)),(String)val_peek(4));
+													campo = new Campo((Tipo)TipoArray.crearArray((Tipo)val_peek(1), (List<Integer>)val_peek(3)),(String)val_peek(4));
 												}
 												yyval = campo;
 												}
