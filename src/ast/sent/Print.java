@@ -1,19 +1,33 @@
 package ast.sent;
 
+import visitor.Visitor;
 import ast.expr.Expresion;
 
 
 public class Print implements Sentencia {
 
-	public Expresion expresiones; 
+	private Expresion expresion; 
 	
 	public Print(Expresion expresiones){
-		this.expresiones = expresiones;
+		this.setExpresion(expresiones);
 	}
 
 	@Override
 	public String toString() {
-		return "Print [expresiones=" + expresiones + "]";
+		return "Print [expresiones=" + getExpresion() + "]";
+	}
+
+	@Override
+	public void acepta(Visitor v) {
+		v.visit(this);	
+	}
+
+	public Expresion getExpresion() {
+		return expresion;
+	}
+
+	public void setExpresion(Expresion expresion) {
+		this.expresion = expresion;
 	}
 	
 }

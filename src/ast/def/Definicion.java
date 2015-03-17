@@ -1,5 +1,7 @@
 package ast.def;
 
-public interface Definicion {
+import ast.NodoAST;
+
+public interface Definicion extends NodoAST {
 
 }

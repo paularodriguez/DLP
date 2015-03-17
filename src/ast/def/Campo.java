@@ -1,21 +1,44 @@
 package ast.def;
 
+import visitor.Visitor;
+import ast.NodoAST;
 import ast.tipos.Tipo;
 
-public class Campo {
+public class Campo implements NodoAST {
 
-	Tipo tipo;
-	String nombre;
+	private Tipo tipo;
+	private String nombre;
 	
 	public Campo(Tipo tipo, String nombre) {
-		this.tipo = tipo;
-		this.nombre = nombre;
+		this.setTipo(tipo);
+		this.setNombre(nombre);
 	}
 
 	@Override
 	public String toString() {
-		return "Campo [tipo=" + tipo + ", nombreVariable ="
-				+ nombre + "]";
+		return "Campo [tipo=" + getTipo() + ", nombreVariable ="
+				+ getNombre() + "]";
+	}
+
+	@Override
+	public void acepta(Visitor v) {
+		v.visit(this);
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public Tipo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
 	}
 
 }

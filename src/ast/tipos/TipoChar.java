@@ -1,5 +1,7 @@
 package ast.tipos;
 
+import visitor.Visitor;
+
 
 public class TipoChar  implements Tipo {
 
@@ -18,6 +20,11 @@ public class TipoChar  implements Tipo {
 		if(instancia == null)
 			instancia = new TipoChar();
 		return instancia;
+	}
+
+	@Override
+	public void acepta(Visitor v) {
+		v.visit(this);
 	}
 
 }

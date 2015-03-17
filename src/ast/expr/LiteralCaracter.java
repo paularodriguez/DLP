@@ -1,17 +1,32 @@
 package ast.expr;
 
+import visitor.Visitor;
+
 
 public class LiteralCaracter implements Expresion {
 
 	private Character caracter;
 	
 	public LiteralCaracter(Character caracter) {
-		this.caracter = caracter;
+		this.setCaracter(caracter);
 	}
 
 	@Override
 	public String toString() {
-		return "LiteralCaracter [caracter=" + caracter + "]";
+		return "LiteralCaracter [caracter=" + getCaracter() + "]";
+	}
+
+	@Override
+	public void acepta(Visitor v) {
+		v.visit(this);
+	}
+
+	public Character getCaracter() {
+		return caracter;
+	}
+
+	public void setCaracter(Character caracter) {
+		this.caracter = caracter;
 	}
 
 }

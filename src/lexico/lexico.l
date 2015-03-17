@@ -57,6 +57,7 @@ as									{return Parser.AS;}
 end									{return Parser.END;}
 proc								{return Parser.PROC;}
 type								{return Parser.TYPE;}
+ctype								{return Parser.CTYPE;}
 print								{return Parser.PRINT;}
 while 								{return Parser.WHILE;}
 do									{return Parser.DO;}

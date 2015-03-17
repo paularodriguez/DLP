@@ -1,5 +1,7 @@
 package ast.tipos;
 
+import visitor.Visitor;
+
 
 public class TipoEntero  implements Tipo {
 
@@ -18,5 +20,10 @@ public class TipoEntero  implements Tipo {
 		if(instancia == null)
 			instancia = new TipoEntero();
 		return instancia;
+	}
+
+	@Override
+	public void acepta(Visitor v) {
+		v.visit(this);
 	}
 }

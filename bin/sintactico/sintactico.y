@@ -42,6 +42,7 @@ import gestorErrores.GestorErrores;
 %token OR
 %token NOT
 %token DO
+%token CTYPE
 %right '=' 
 %left AND OR DISTINTO
 %left IGUALDAD MAYORIGUAL MENORIGUAL '<' '>' 
@@ -93,7 +94,7 @@ definicion_variable
 													defVar = new DefinicionVariable((Tipo)$5,(String)$2);
 												}
 												else{
-													defVar = new DefinicionVariable(new TipoArray((Tipo)$5, (List<Integer>)$3),(String)$2);
+													defVar = new DefinicionVariable((Tipo)TipoArray.crearArray((Tipo)$5, (List<Integer>)$3),(String)$2);
 												}
 												$$ = defVar;
 												}						
@@ -118,8 +119,7 @@ definicion_struct
 		;
 		
 definicion_funcion
-		: 	FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'		{TipoFuncion tipoFuncion = new TipoFuncion((Tipo)$7, (String)$2, (List<DefinicionVariable>)$4);
-																																$$ = new DefinicionFuncion(tipoFuncion, (List<DefinicionVariable>)$8, (List<Sentencia>)$9);}
+		: 	FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'		{$$ = new DefinicionFuncion((Tipo)$7, (String)$2, (List<DefinicionVariable>)$4, (List<DefinicionVariable>)$8, (List<Sentencia>)$9);}
 		;
 		
 definicion_procedimiento
@@ -201,6 +201,7 @@ expresion
 		|	expresion IGUALDAD expresion		{$$ = new Comparacion((Expresion)$1, "==", (Expresion)$3);}
 		|	expresion DISTINTO expresion		{$$ = new Comparacion((Expresion)$1, "<>", (Expresion)$3);}
 		| 	IDENT '(' expresiones_opc ')' 		{$$ = new InvocacionFuncion((String)$1, (List<Expresion>)$3);}
+		| 	CTYPE '(' tipo ',' expresion ')'	{$$ = new Cast((Tipo)$3, (Expresion)$5);}
 		;
 		
 tipo

@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import lexico.Lexico;
 import sintactico.Parser;
+import visitor.XMLVisitor;
 
 /**
  * Prueba del analizador léxico.<br/>
@@ -39,6 +40,9 @@ public class Main {
 
 		Parser parser = new Parser(lexico, gestor);
 		parser.run();
+		
+		//XMLVisitor v= new XMLVisitor();
+		//parser.ast.acepta(v);
 
 		if (!gestor.hayErrores()) {
 			IntrospectorModel modelo = new IntrospectorModel("Program",
