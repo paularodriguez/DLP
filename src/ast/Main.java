@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import lexico.Lexico;
+import semantico.IdentificacionVisitor;
 import sintactico.Parser;
 import visitor.XMLVisitor;
 
@@ -41,8 +42,11 @@ public class Main {
 		Parser parser = new Parser(lexico, gestor);
 		parser.run();
 		
-		XMLVisitor v= new XMLVisitor();
-		parser.ast.acepta(v);
+		//XMLVisitor vXML= new XMLVisitor();
+		//parser.ast.acepta(vXML);
+		
+		IdentificacionVisitor vIdentificacion= new IdentificacionVisitor(gestor);
+		parser.ast.acepta(vIdentificacion);
 
 		if (!gestor.hayErrores()) {
 			IntrospectorModel modelo = new IntrospectorModel("Program",

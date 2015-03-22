@@ -3,10 +3,12 @@ package ast.sent;
 import java.util.List;
 
 import visitor.Visitor;
+import ast.def.Definicion;
 import ast.expr.Expresion;
 
 public class InvocacionProcedimiento implements Sentencia {
 
+	private Definicion definicion;
 	private String nombre;
 	private List<Expresion> expresiones;
 
@@ -17,13 +19,13 @@ public class InvocacionProcedimiento implements Sentencia {
 
 	@Override
 	public String toString() {
-		return "InvocacionProcedimiento [nombre=" + getNombre() + ", expresiones="
-				+ getExpresiones() + "]";
+		return "InvocacionProcedimiento [nombre=" + getNombre()
+				+ ", expresiones=" + getExpresiones() + "]";
 	}
 
 	@Override
 	public void acepta(Visitor v) {
-		v.visit(this);	
+		v.visit(this);
 	}
 
 	public String getNombre() {
@@ -41,5 +43,15 @@ public class InvocacionProcedimiento implements Sentencia {
 	public void setExpresiones(List<Expresion> expresiones) {
 		this.expresiones = expresiones;
 	}
+	
+	public Definicion getDefinicion() {
+		return definicion;
+	}
+
+	public void setDefinicion(Definicion definicion) {
+		this.definicion = definicion;
+	}
+
+
 
 }

@@ -1,12 +1,14 @@
 package ast.expr;
 
+import ast.def.Definicion;
 import visitor.Visitor;
 
 
 
 public class Variable implements Expresion {
 
-	private String nombre; 
+	private String nombre;
+	private Definicion definicion;
 	
 	public Variable(String nombre){
 		this.setNombre(nombre);
@@ -28,5 +30,13 @@ public class Variable implements Expresion {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public Definicion getDefinicion() {
+		return definicion;
+	}
+
+	public void setDefinicion(Definicion definicion) {
+		this.definicion = definicion;
 	}
 }

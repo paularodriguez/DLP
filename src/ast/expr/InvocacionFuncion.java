@@ -2,10 +2,12 @@ package ast.expr;
 
 import java.util.List;
 
+import ast.def.Definicion;
 import visitor.Visitor;
 
 public class InvocacionFuncion implements Expresion {
 
+	private Definicion definicion;
 	private String identificador; 
 	private List<Expresion> listaExpresiones;
 	
@@ -39,6 +41,14 @@ public class InvocacionFuncion implements Expresion {
 
 	public void setIdentificador(String identificador) {
 		this.identificador = identificador;
+	}
+
+	public Definicion getDefinicion() {
+		return definicion;
+	}
+
+	public void setDefinicion(Definicion definicion) {
+		this.definicion = definicion;
 	}
 	
 }
