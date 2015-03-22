@@ -15,6 +15,7 @@ import ast.def.DefinicionVariable;
 import ast.expr.InvocacionFuncion;
 import ast.expr.Variable;
 import ast.sent.InvocacionProcedimiento;
+import ast.tipos.TipoStruct;
 
 public class IdentificacionVisitor extends DefaultVisitor {
 
@@ -39,6 +40,11 @@ public class IdentificacionVisitor extends DefaultVisitor {
 					+ " ya está definida.");
 		} else {
 			variables.put(node.getNombre(), node);
+		}
+		
+		if (node.getTipo() instanceof Variable){
+			String tipo = node.getTipo().toString();
+			node.setTipo(new TipoStruct(tipo));
 		}
 
 		return super.visit(node);
