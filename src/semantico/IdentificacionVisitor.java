@@ -100,7 +100,7 @@ public class IdentificacionVisitor extends DefaultVisitor {
 
 	public Object visit(InvocacionProcedimiento node) {
 		if (funciones.get(node.getNombre())!= null){
-			node.setDefinicion(variables.getFromAny(node.getNombre()));
+			node.setDefinicion(funciones.get(node.getNombre()));
 		}
 		else{
 			gestorErrores.error("La función " + node.getNombre()
@@ -111,7 +111,7 @@ public class IdentificacionVisitor extends DefaultVisitor {
 	
 	public Object visit(InvocacionFuncion node) {
 		if (funciones.get(node.getIdentificador())!= null){
-			node.setDefinicion(variables.getFromAny(node.getIdentificador()));
+			node.setDefinicion(funciones.get(node.getIdentificador()));
 		}
 		else{
 			gestorErrores.error("La función " + node.getIdentificador()
