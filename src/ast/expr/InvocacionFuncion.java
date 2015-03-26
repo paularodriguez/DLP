@@ -62,5 +62,17 @@ public class InvocacionFuncion implements Expresion {
 	public Tipo getTipo() {
 		return ((DefinicionFuncion) definicion).getRetorno();
 	}
+
+	@Override
+	public void setLValue(boolean lvalue) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setTipo(Tipo tipo) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

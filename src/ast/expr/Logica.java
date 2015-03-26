@@ -62,4 +62,16 @@ public class Logica implements Expresion {
 	public Tipo getTipo() {
 		return tipo;
 	}
+
+	@Override
+	public void setLValue(boolean lvalue) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setTipo(Tipo tipo) {
+		// TODO Auto-generated method stub
+		
+	}
 }

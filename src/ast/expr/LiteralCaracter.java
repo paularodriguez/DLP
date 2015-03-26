@@ -41,4 +41,16 @@ public class LiteralCaracter implements Expresion {
 		return TipoChar.getInstancia();
 	}
 
+	@Override
+	public void setLValue(boolean lvalue) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setTipo(Tipo tipo) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

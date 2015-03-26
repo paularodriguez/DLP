@@ -52,4 +52,16 @@ public class AccesoCampo implements Expresion {
 		return null;
 	}
 
+	@Override
+	public void setLValue(boolean lvalue) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setTipo(Tipo tipo) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

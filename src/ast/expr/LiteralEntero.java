@@ -40,5 +40,17 @@ public class LiteralEntero implements Expresion {
 	public Tipo getTipo() {
 		return TipoEntero.getInstancia();
 	}
+
+	@Override
+	public void setLValue(boolean lvalue) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setTipo(Tipo tipo) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

@@ -1,5 +1,7 @@
 package ast.def;
 
+import java.util.List;
+
 import visitor.Visitor;
 import ast.tipos.Tipo;
 
@@ -37,6 +39,12 @@ public class DefinicionVariable implements Definicion{
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	@Override
+	public List<DefinicionVariable> getParametros() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -47,4 +47,10 @@ public class DefinicionStruct implements Definicion,Tipo {
 		return false;
 	}
 
+	@Override
+	public List<DefinicionVariable> getParametros() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

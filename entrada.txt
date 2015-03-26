@@ -12,10 +12,24 @@ type Persona
 	meses[12] as integer;
 end type;
 
+dim a[3][1] as integer;
 
-proc escribe(a as integer)
+proc a(c as real)
 	dim juan as Persona;
-	dim pepe as Persona;
-	
-	juan = pepe;
+	dim pepe as Persona;	
+	print 'c';
+	read a[3][2];
 end proc;
+
+function dobleSuma (a as integer, b as integer) as real
+	dim local as integer;
+
+	local = a + b;
+	return local * 2;
+end function;
+
+function main (a as real, b as real, c as real) as integer
+	dim juan as Persona;
+	dim pepe as Persona;	
+	dobleSuma(a,b);
+end function;

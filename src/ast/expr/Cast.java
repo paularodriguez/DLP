@@ -5,27 +5,18 @@ import ast.tipos.Tipo;
 
 public class Cast implements Expresion {
 
-	private Tipo tipoCast; 
-	public Tipo getTipoCast() {
-		return tipoCast;
-	}
+	private Tipo tipoCast;
+	private Expresion expresion;
 
-	public void setTipoCast(Tipo tipoCast) {
-		this.tipoCast = tipoCast;
-	}
-
-
-
-	private Expresion expresion; 
-	
-	public Cast(Tipo tipo, Expresion expresion){
-		this.setTipoCast(tipo); 
+	public Cast(Tipo tipo, Expresion expresion) {
+		this.setTipoCast(tipo);
 		this.setExpresion(expresion);
 	}
 
 	@Override
 	public String toString() {
-		return "Cast [tipo=" + getTipo() + ", expresion=" + getExpresion() + "]";
+		return "Cast [tipo=" + getTipo() + ", expresion=" + getExpresion()
+				+ "]";
 	}
 
 	@Override
@@ -50,7 +41,25 @@ public class Cast implements Expresion {
 	public Tipo getTipo() {
 		return getTipoCast();
 	}
+
+	@Override
+	public void setLValue(boolean lvalue) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setTipo(Tipo tipo) {
+		// TODO Auto-generated method stub
+
+	}
 	
-	
-	
+	public Tipo getTipoCast() {
+		return tipoCast;
+	}
+
+	public void setTipoCast(Tipo tipoCast) {
+		this.tipoCast = tipoCast;
+	}
+
 }

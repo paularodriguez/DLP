@@ -8,7 +8,9 @@ public class Aritmetica implements Expresion {
 
 	private Expresion op1;
 	private Expresion op2;
-	private String operador; 
+	private String operador;
+	private boolean lvalue;
+	private Tipo tipo; 
 	
 	public Aritmetica(Expresion op1, String operador, Expresion op2){
 		this.setOp1(op1);
@@ -59,5 +61,15 @@ public class Aritmetica implements Expresion {
 	@Override
 	public Tipo getTipo() {
 		return op1.getTipo();
+	}
+
+	@Override
+	public void setLValue(boolean lvalue) {
+		this.lvalue = lvalue;
+	}
+
+	@Override
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
 	}
 }

@@ -1,9 +1,7 @@
 package ast.expr;
 
-import ast.tipos.Tipo;
 import visitor.Visitor;
-
-
+import ast.tipos.Tipo;
 
 public class AccesoArray implements Expresion {
 
@@ -44,13 +42,24 @@ public class AccesoArray implements Expresion {
 
 	@Override
 	public boolean getLValue() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public Tipo getTipo() {
+		return derecha.getTipo();
+	}
+
+	@Override
+	public void setLValue(boolean lvalue) {
 		// TODO Auto-generated method stub
-		return null;
+		
+	}
+
+	@Override
+	public void setTipo(Tipo tipo) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
