@@ -41,10 +41,11 @@ public class IdentificacionVisitor extends DefaultVisitor {
 		} else {
 			variables.put(node.getNombre(), node);
 		}
-		
-		if (node.getTipo() instanceof Variable){
-			String tipo = node.getTipo().toString();
-			node.setTipo(new TipoStruct(tipo));
+		/* Cuando es una estructura */
+		if (node.getTipo() instanceof TipoStruct){
+			node.setTipo(estructuras.get(((TipoStruct) node.getTipo())
+					.getNombre()));
+			return null;/*arreglarlo*/
 		}
 
 		return super.visit(node);
@@ -105,21 +106,19 @@ public class IdentificacionVisitor extends DefaultVisitor {
 	}
 
 	public Object visit(InvocacionProcedimiento node) {
-		if (funciones.get(node.getNombre())!= null){
+		if (funciones.get(node.getNombre()) != null) {
 			node.setDefinicion(funciones.get(node.getNombre()));
-		}
-		else{
+		} else {
 			gestorErrores.error("La función " + node.getNombre()
 					+ " no ha sido declarada.");
 		}
 		return super.visit(node);
 	}
-	
+
 	public Object visit(InvocacionFuncion node) {
-		if (funciones.get(node.getIdentificador())!= null){
+		if (funciones.get(node.getIdentificador()) != null) {
 			node.setDefinicion(funciones.get(node.getIdentificador()));
-		}
-		else{
+		} else {
 			gestorErrores.error("La función " + node.getIdentificador()
 					+ " no ha sido declarada.");
 		}

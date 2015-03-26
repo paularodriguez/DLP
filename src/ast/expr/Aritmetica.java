@@ -1,5 +1,6 @@
 package ast.expr;
 
+import ast.tipos.Tipo;
 import visitor.Visitor;
 
 
@@ -48,5 +49,15 @@ public class Aritmetica implements Expresion {
 
 	public void setOperador(String operador) {
 		this.operador = operador;
+	}
+
+	@Override
+	public boolean getLValue() {
+		return false;
+	}
+
+	@Override
+	public Tipo getTipo() {
+		return op1.getTipo();
 	}
 }

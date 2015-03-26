@@ -1,5 +1,7 @@
 package ast.expr;
 
+import ast.tipos.Tipo;
+import ast.tipos.TipoChar;
 import visitor.Visitor;
 
 
@@ -27,6 +29,16 @@ public class LiteralCaracter implements Expresion {
 
 	public void setCaracter(Character caracter) {
 		this.caracter = caracter;
+	}
+
+	@Override
+	public boolean getLValue() {
+		return false;
+	}
+
+	@Override
+	public Tipo getTipo() {
+		return TipoChar.getInstancia();
 	}
 
 }

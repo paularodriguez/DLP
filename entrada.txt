@@ -7,27 +7,15 @@ NOTA. Este ejemplo pretende mostrar la sintaxis del lenguaje. No está pensado pa
 - Tanto las funciones como los procedimientos podrán declarar variables locales solo al inicio de su cuerpo. Por tanto no podrá haber declaración de variables locales en cualquier lugar de la función/procedimiento ni dentro de bloques anidados (por ejemplo el creado por un while)
 - No pueden aparecer expresiones como sentencias
 */
-
-dim a as integer;
-dim b as integer;
-
 type Persona
 	edad as integer;
 	meses[12] as integer;
 end type;
 
-function dobleSuma () as integer
-	dim local as integer;
-
-	local = a + b;
-	return local * 2;
-end function;
-
-proc escribeEdad(a as integer)
-	a = a + 1;
-end proc;
 
 proc escribe(a as integer)
+	dim juan as Persona;
 	dim pepe as Persona;
-	a = a + 1;
+	
+	juan = pepe;
 end proc;

@@ -1,5 +1,7 @@
 package ast.expr;
 
+import ast.tipos.Tipo;
+import ast.tipos.TipoEntero;
 import visitor.Visitor;
 
 
@@ -48,6 +50,16 @@ public class Comparacion implements Expresion {
 
 	public void setOperador(String operador) {
 		this.operador = operador;
+	}
+
+	@Override
+	public boolean getLValue() {
+		return false;
+	}
+
+	@Override
+	public Tipo getTipo() {
+		return TipoEntero.getInstancia();
 	}
 	
 	

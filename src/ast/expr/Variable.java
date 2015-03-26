@@ -1,7 +1,9 @@
 package ast.expr;
 
-import ast.def.Definicion;
 import visitor.Visitor;
+import ast.def.Definicion;
+import ast.def.DefinicionVariable;
+import ast.tipos.Tipo;
 
 
 
@@ -38,5 +40,15 @@ public class Variable implements Expresion {
 
 	public void setDefinicion(Definicion definicion) {
 		this.definicion = definicion;
+	}
+
+	@Override
+	public boolean getLValue() {
+		return true;
+	}
+
+	@Override
+	public Tipo getTipo() {
+		return ((DefinicionVariable) definicion).getTipo();
 	}
 }

@@ -9,8 +9,8 @@ import java.io.IOException;
 
 import lexico.Lexico;
 import semantico.IdentificacionVisitor;
+import semantico.InferenciaVisitor;
 import sintactico.Parser;
-import visitor.XMLVisitor;
 
 /**
  * Prueba del analizador léxico.<br/>
@@ -47,6 +47,9 @@ public class Main {
 		
 		IdentificacionVisitor vIdentificacion= new IdentificacionVisitor(gestor);
 		parser.ast.acepta(vIdentificacion);
+		
+		InferenciaVisitor vInferencia= new InferenciaVisitor(gestor);
+		parser.ast.acepta(vInferencia);
 
 		if (!gestor.hayErrores()) {
 			IntrospectorModel modelo = new IntrospectorModel("Program",

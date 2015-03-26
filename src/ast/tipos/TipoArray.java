@@ -56,4 +56,11 @@ public class TipoArray implements Tipo {
 	public void setTamaño(int tamaño) {
 		this.tamaño = tamaño;
 	}
+
+	@Override
+	public boolean esPrimitivo() {
+		return false;
+	}
+
+	
 }

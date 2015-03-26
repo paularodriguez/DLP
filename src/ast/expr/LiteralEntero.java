@@ -1,5 +1,7 @@
 package ast.expr;
 
+import ast.tipos.Tipo;
+import ast.tipos.TipoEntero;
 import visitor.Visitor;
 
 
@@ -27,6 +29,16 @@ public class LiteralEntero implements Expresion {
 
 	public void setValor(int valor) {
 		this.valor = valor;
+	}
+
+	@Override
+	public boolean getLValue() {
+		return false;
+	}
+
+	@Override
+	public Tipo getTipo() {
+		return TipoEntero.getInstancia();
 	}
 	
 }

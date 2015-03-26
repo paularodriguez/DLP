@@ -1,12 +1,13 @@
 package ast.expr;
 
+import ast.tipos.Tipo;
 import visitor.Visitor;
 
 
 public class Negacion implements Expresion {
 
 	private Expresion expresion; 
-	
+		
 	public Negacion (Expresion expresion){
 		this.setExpresion(expresion);		
 	}
@@ -27,6 +28,16 @@ public class Negacion implements Expresion {
 
 	public void setExpresion(Expresion expresion) {
 		this.expresion = expresion;
+	}
+
+	@Override
+	public boolean getLValue() {
+		return false;
+	}
+
+	@Override
+	public Tipo getTipo() {
+		return expresion.getTipo();
 	}
 	
 	

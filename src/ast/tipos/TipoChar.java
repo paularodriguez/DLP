@@ -27,4 +27,9 @@ public class TipoChar  implements Tipo {
 		v.visit(this);
 	}
 
+	@Override
+	public boolean esPrimitivo() {
+		return true;
+	}
+
 }

@@ -26,4 +26,9 @@ public class TipoReal implements Tipo {
 	public void acepta(Visitor v) {
 		v.visit(this);
 	}
+
+	@Override
+	public boolean esPrimitivo() {
+		return true;
+	}
 }

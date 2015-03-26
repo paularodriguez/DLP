@@ -1,5 +1,6 @@
 package ast.expr;
 
+import ast.tipos.Tipo;
 import visitor.Visitor;
 
 
@@ -39,6 +40,17 @@ public class AccesoArray implements Expresion {
 
 	public void setDerecha(Expresion derecha) {
 		this.derecha = derecha;
+	}
+
+	@Override
+	public boolean getLValue() {
+		return false;
+	}
+
+	@Override
+	public Tipo getTipo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

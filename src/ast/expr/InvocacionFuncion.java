@@ -3,6 +3,8 @@ package ast.expr;
 import java.util.List;
 
 import ast.def.Definicion;
+import ast.def.DefinicionFuncion;
+import ast.tipos.Tipo;
 import visitor.Visitor;
 
 public class InvocacionFuncion implements Expresion {
@@ -49,6 +51,16 @@ public class InvocacionFuncion implements Expresion {
 
 	public void setDefinicion(Definicion definicion) {
 		this.definicion = definicion;
+	}
+
+	@Override
+	public boolean getLValue() {
+		return false;
+	}
+
+	@Override
+	public Tipo getTipo() {
+		return ((DefinicionFuncion) definicion).getRetorno();
 	}
 	
 }

@@ -1,5 +1,6 @@
 package ast.expr;
 
+import ast.tipos.Tipo;
 import visitor.Visitor;
 
 public class AccesoCampo implements Expresion {
@@ -38,6 +39,17 @@ public class AccesoCampo implements Expresion {
 
 	public void setDerecha(Expresion derecha) {
 		this.derecha = derecha;
+	}
+
+	@Override
+	public boolean getLValue() {
+		return true;
+	}
+
+	@Override
+	public Tipo getTipo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -3,8 +3,9 @@ package ast.def;
 import java.util.List;
 
 import visitor.Visitor;
+import ast.tipos.Tipo;
 
-public class DefinicionStruct implements Definicion {
+public class DefinicionStruct implements Definicion,Tipo {
 	
 	private String nombre;
 	private List<Campo> listaCampos;
@@ -39,6 +40,11 @@ public class DefinicionStruct implements Definicion {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	@Override
+	public boolean esPrimitivo() {
+		return false;
 	}
 
 }

@@ -28,4 +28,9 @@ public class TipoStruct implements Tipo {
 		this.nombre = nombre;
 	}
 
+	@Override
+	public boolean esPrimitivo() {
+		return false;
+	}
+
 }

@@ -1,10 +1,9 @@
 package ast.def;
 
 import visitor.Visitor;
-import ast.NodoAST;
 import ast.tipos.Tipo;
 
-public class Campo implements NodoAST {
+public class Campo implements Definicion {
 
 	private Tipo tipo;
 	private String nombre;

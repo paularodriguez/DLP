@@ -5,11 +5,21 @@ import ast.tipos.Tipo;
 
 public class Cast implements Expresion {
 
-	private Tipo tipo; 
+	private Tipo tipoCast; 
+	public Tipo getTipoCast() {
+		return tipoCast;
+	}
+
+	public void setTipoCast(Tipo tipoCast) {
+		this.tipoCast = tipoCast;
+	}
+
+
+
 	private Expresion expresion; 
 	
 	public Cast(Tipo tipo, Expresion expresion){
-		this.setTipo(tipo); 
+		this.setTipoCast(tipo); 
 		this.setExpresion(expresion);
 	}
 
@@ -31,12 +41,16 @@ public class Cast implements Expresion {
 		this.expresion = expresion;
 	}
 
-	public Tipo getTipo() {
-		return tipo;
+	@Override
+	public boolean getLValue() {
+		return false;
 	}
 
-	public void setTipo(Tipo tipo) {
-		this.tipo = tipo;
+	@Override
+	public Tipo getTipo() {
+		return getTipoCast();
 	}
+	
+	
 	
 }
