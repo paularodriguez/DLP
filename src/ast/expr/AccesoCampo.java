@@ -7,6 +7,8 @@ public class AccesoCampo implements Expresion {
 
 	private Expresion izquierda;
 	private Expresion derecha;
+	private boolean lvalue;
+	private Tipo tipo;
 
 	public AccesoCampo(Expresion izquierda, Expresion derecha) {
 
@@ -43,25 +45,22 @@ public class AccesoCampo implements Expresion {
 
 	@Override
 	public boolean getLValue() {
-		return true;
+		return lvalue;
 	}
 
 	@Override
 	public Tipo getTipo() {
-		// TODO Auto-generated method stub
-		return null;
+		return tipo;
 	}
 
 	@Override
 	public void setLValue(boolean lvalue) {
-		// TODO Auto-generated method stub
-		
+		this.lvalue = lvalue;
 	}
 
 	@Override
 	public void setTipo(Tipo tipo) {
-		// TODO Auto-generated method stub
-		
+		this.tipo = tipo;
 	}
 
 }

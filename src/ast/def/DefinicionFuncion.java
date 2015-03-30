@@ -77,4 +77,9 @@ public class DefinicionFuncion implements Definicion {
 		this.parametros = parametros;
 	}
 
+	@Override
+	public Tipo getTipo() {
+		return retorno;
+	}
+
 }

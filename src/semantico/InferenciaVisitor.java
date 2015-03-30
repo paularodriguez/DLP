@@ -17,13 +17,13 @@ public class InferenciaVisitor extends DefaultVisitor {
 	}
 
 	public Object visit(Programa node) {
-		
-		for (Definicion def : node.definiciones){
-			if (def instanceof DefinicionVariable){
+
+		for (Definicion def : node.definiciones) {
+			if (def instanceof DefinicionVariable) {
 				((DefinicionVariable) def).setEsParametro(false);
 			}
 		}
-		
+
 		Object ret = super.visit(node);
 		boolean existeMain = false;
 		for (Definicion d : node.definiciones) {
@@ -94,33 +94,26 @@ public class InferenciaVisitor extends DefaultVisitor {
 		return ret;
 	}
 
-	public Object visit(Asignacion node) {
+	@Override
+	public Object visit(AccesoArray node) {
 		Object ret = super.visit(node);
+		node.setLValue(true);
+		node.setTipo(node.getDerecha().getTipo());
+		return ret;
+	}
 
-		if (!(node.getIzquierda().getLValue())) {
-			gestorErrores
-					.error("Error semántico: La expresión de la izquierda de la asignación no es un LValue.");
-		}
-
-		if (!(node.getIzquierda().getTipo() == node.getDerecha().getTipo())) {
-			gestorErrores
-					.error("Error semántico: Los tipos de la asignación no son compatibles.");
-		}
-		if (!node.getIzquierda().getTipo().esPrimitivo()
-				|| !node.getDerecha().getTipo().esPrimitivo()) {
-			gestorErrores
-					.error("Error semántico: No es posible asignar tipos no primitivos.");
-		}
-
-		/*
-		 * IMPLEMENTAR PREDICADOS: - ¿ExprIzq es un l-value? -
-		 * ¿ExprIzq.Tipo==ExprDer.Tipo? - ¿ExprIzq (o ExprDer) son un tipo
-		 * primitivo?
-		 */
+	@Override
+	public Object visit(AccesoCampo node) {
+		Object ret = super.visit(node);
+		node.setLValue(true);
+		node.setTipo(node.getIzquierda().getTipo());
 		return ret;
 	}
 
 	public Object visit(Aritmetica node) {
+		node.setLValue(false);
+		node.setTipo(node.getOp1().getTipo());
+
 		Object ret = super.visit(node);
 
 		if (!(node.getOp1().getTipo() == node.getOp2().getTipo())) {
@@ -147,6 +140,24 @@ public class InferenciaVisitor extends DefaultVisitor {
 		return ret;
 	}
 
+	@Override
+	public Object visit(Cast node) {
+		node.setLValue(false);
+		Object ret = super.visit(node);
+		return ret;
+	}
+
+	@Override
+	public Object visit(Comparacion node) {
+		node.setLValue(false);
+
+		// ///TIPO
+		node.setTipo(node.getOperando1().getTipo());
+		Object ret = super.visit(node);
+		return ret;
+	}
+
+	@Override
 	public Object visit(InvocacionFuncion node) {
 		Object ret = super.visit(node);
 
@@ -171,6 +182,84 @@ public class InferenciaVisitor extends DefaultVisitor {
 								+ "' no coincide con el tipo definido.");
 			}
 		}
+		return ret;
+	}
+
+	@Override
+	public Object visit(LiteralCaracter node) {
+		Object ret = super.visit(node);
+		node.setLValue(false);
+		node.setTipo(TipoChar.getInstancia());
+		return ret;
+	}
+
+	@Override
+	public Object visit(LiteralEntero node) {
+		Object ret = super.visit(node);
+		node.setLValue(false);
+		node.setTipo(TipoEntero.getInstancia());
+		return ret;
+	}
+
+	@Override
+	public Object visit(LiteralReal node) {
+		Object ret = super.visit(node);
+		node.setLValue(false);
+		node.setTipo(TipoReal.getInstancia());
+		return ret;
+	}
+
+	@Override
+	public Object visit(Logica node) {
+		node.setLValue(false);
+
+		// ///TIPO
+		node.setTipo(node.getOperando1().getTipo());
+		Object ret = super.visit(node);
+		return ret;
+	}
+
+	@Override
+	public Object visit(Negacion node) {
+		Object ret = super.visit(node);
+		node.setLValue(false);
+		node.setTipo(node.getExpresion().getTipo());
+		return ret;
+	}
+
+	@Override
+	public Object visit(Variable node) {
+		node.setLValue(true);
+		node.setTipo(node.getDefinicion().getTipo());
+		Object ret = super.visit(node);
+		return ret;
+	}
+
+	// SENTENCIAS
+
+	public Object visit(Asignacion node) {
+		Object ret = super.visit(node);
+
+		if (!(node.getIzquierda().getLValue())) {
+			gestorErrores
+					.error("Error semántico: La expresión de la izquierda de la asignación no es un LValue.");
+		}
+
+		if (!(node.getIzquierda().getTipo() == node.getDerecha().getTipo())) {
+			gestorErrores
+					.error("Error semántico: Los tipos de la asignación no son compatibles.");
+		}
+		if (!node.getIzquierda().getTipo().esPrimitivo()
+				|| !node.getDerecha().getTipo().esPrimitivo()) {
+			gestorErrores
+					.error("Error semántico: No es posible asignar tipos no primitivos.");
+		}
+
+		/*
+		 * IMPLEMENTAR PREDICADOS: - ¿ExprIzq es un l-value? -
+		 * ¿ExprIzq.Tipo==ExprDer.Tipo? - ¿ExprIzq (o ExprDer) son un tipo
+		 * primitivo?
+		 */
 		return ret;
 	}
 
@@ -247,6 +336,7 @@ public class InferenciaVisitor extends DefaultVisitor {
 		return ret;
 	}
 
+	// TIPOS
 	public Object visit(TipoArray node) {
 		Object ret = super.visit(node);
 		if (!(node.getTamaño() > 0)) {

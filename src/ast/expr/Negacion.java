@@ -1,15 +1,16 @@
 package ast.expr;
 
-import ast.tipos.Tipo;
 import visitor.Visitor;
-
+import ast.tipos.Tipo;
 
 public class Negacion implements Expresion {
 
-	private Expresion expresion; 
-		
-	public Negacion (Expresion expresion){
-		this.setExpresion(expresion);		
+	private Expresion expresion;
+	private boolean lvalue;
+	private Tipo tipo;
+
+	public Negacion(Expresion expresion) {
+		this.setExpresion(expresion);
 	}
 
 	@Override
@@ -32,25 +33,22 @@ public class Negacion implements Expresion {
 
 	@Override
 	public boolean getLValue() {
-		return false;
+		return lvalue;
 	}
 
 	@Override
 	public Tipo getTipo() {
-		return expresion.getTipo();
+		return tipo;
 	}
 
 	@Override
 	public void setLValue(boolean lvalue) {
-		// TODO Auto-generated method stub
-		
+		this.lvalue = lvalue;
 	}
 
 	@Override
 	public void setTipo(Tipo tipo) {
-		// TODO Auto-generated method stub
-		
+		this.tipo = tipo;
 	}
-	
-	
+
 }

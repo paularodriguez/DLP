@@ -53,4 +53,10 @@ public class DefinicionStruct implements Definicion,Tipo {
 		return null;
 	}
 
+	@Override
+	public Tipo getTipo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

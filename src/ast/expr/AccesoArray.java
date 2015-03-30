@@ -7,6 +7,8 @@ public class AccesoArray implements Expresion {
 
 	private Expresion izquierda; 
 	private Expresion derecha;
+	private boolean lvalue;
+	private Tipo tipo;
 	
 	public AccesoArray(Expresion izquierda, Expresion derecha){
 		this.setIzquierda(izquierda); 
@@ -42,24 +44,22 @@ public class AccesoArray implements Expresion {
 
 	@Override
 	public boolean getLValue() {
-		return true;
+		return lvalue;
 	}
 
 	@Override
 	public Tipo getTipo() {
-		return derecha.getTipo();
+		return tipo;
 	}
 
 	@Override
 	public void setLValue(boolean lvalue) {
-		// TODO Auto-generated method stub
-		
+		this.lvalue = lvalue;
 	}
 
 	@Override
 	public void setTipo(Tipo tipo) {
-		// TODO Auto-generated method stub
-		
+		this.tipo = tipo;
 	}
 	
 	

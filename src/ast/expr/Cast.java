@@ -7,6 +7,8 @@ public class Cast implements Expresion {
 
 	private Tipo tipoCast;
 	private Expresion expresion;
+	private Tipo tipo;
+	private boolean lvalue;
 
 	public Cast(Tipo tipo, Expresion expresion) {
 		this.setTipoCast(tipo);
@@ -34,24 +36,22 @@ public class Cast implements Expresion {
 
 	@Override
 	public boolean getLValue() {
-		return false;
+		return lvalue;
 	}
 
 	@Override
 	public Tipo getTipo() {
-		return getTipoCast();
+		return tipo;
 	}
 
 	@Override
 	public void setLValue(boolean lvalue) {
-		// TODO Auto-generated method stub
-
+		this.lvalue = lvalue;
 	}
 
 	@Override
 	public void setTipo(Tipo tipo) {
-		// TODO Auto-generated method stub
-
+		this.tipo = tipo;
 	}
 	
 	public Tipo getTipoCast() {

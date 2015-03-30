@@ -1,13 +1,14 @@
 package ast.expr;
 
-import ast.tipos.Tipo;
-import ast.tipos.TipoReal;
 import visitor.Visitor;
+import ast.tipos.Tipo;
 
 
 public class LiteralReal implements Expresion{
 
 	private double valor;
+	private boolean lvalue;
+	private Tipo tipo;
 	
 	public LiteralReal (Double d){
 		this.setValor(d);
@@ -33,24 +34,22 @@ public class LiteralReal implements Expresion{
 
 	@Override
 	public boolean getLValue() {
-		return false;
+		return lvalue;
 	}
 
 	@Override
 	public Tipo getTipo() {
-		return TipoReal.getInstancia();
+		return tipo;
 	}
 
 	@Override
 	public void setLValue(boolean lvalue) {
-		// TODO Auto-generated method stub
-		
+		this.lvalue = lvalue;
 	}
 
 	@Override
 	public void setTipo(Tipo tipo) {
-		// TODO Auto-generated method stub
-		
+		this.tipo = tipo;
 	}
 	
 }

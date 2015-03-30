@@ -4,6 +4,7 @@ import java.util.List;
 
 import visitor.Visitor;
 import ast.sent.Sentencia;
+import ast.tipos.Tipo;
 
 public class DefinicionProcedimiento implements Definicion {
 	
@@ -61,6 +62,12 @@ public class DefinicionProcedimiento implements Definicion {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	@Override
+	public Tipo getTipo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

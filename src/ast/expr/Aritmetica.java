@@ -55,12 +55,12 @@ public class Aritmetica implements Expresion {
 
 	@Override
 	public boolean getLValue() {
-		return false;
+		return lvalue;
 	}
 
 	@Override
 	public Tipo getTipo() {
-		return op1.getTipo();
+		return tipo;
 	}
 
 	@Override

@@ -19,10 +19,11 @@ proc a(c as real)
 	dim juan as Persona;
 	dim pepe as Persona;	
 	print 'c';
+	3.5 = 3;
 	read a[3][2];
 end proc;
 
-function dobleSuma (a as Persona, b as integer) as real
+function dobleSuma (a as integer, b as integer) as real
 	dim local as Persona;
 
 	return 2 * 2;
@@ -37,9 +38,9 @@ end proc;
 function main (a as integer, b as real, c as real) as integer
 	dim juan as Persona;
 	dim pepe as Persona;	
-	
+	a  = 3;
 	a = 3;
-	
+		
 	if a >= 2 and b < 5 then
     	a = 5; 
 	return;
