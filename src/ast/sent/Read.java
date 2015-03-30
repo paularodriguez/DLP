@@ -1,11 +1,13 @@
 package ast.sent;
 
 import visitor.Visitor;
+import ast.def.Definicion;
 import ast.expr.Expresion;
 
 public class Read implements Sentencia {
 
-	private Expresion expresion; 
+	private Expresion expresion;
+	private Definicion definicionFuncion; 
 		
 	public Read(Expresion expresion){
 		this.setExpresion(expresion);
@@ -27,6 +29,16 @@ public class Read implements Sentencia {
 
 	public void setExpresion(Expresion expresion) {
 		this.expresion = expresion;
+	}
+	
+	@Override
+	public Definicion getDefinicionFuncion() {
+		return definicionFuncion;
+	}
+
+	@Override
+	public void setDefinicionFuncion(Definicion definicion) {
+		this.definicionFuncion = definicion;
 	}
 	
 	

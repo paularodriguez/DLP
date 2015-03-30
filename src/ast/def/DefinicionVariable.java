@@ -9,6 +9,7 @@ public class DefinicionVariable implements Definicion{
 	
 	private Tipo tipo;
 	private String nombre;
+	private boolean esParametro;
 	
 	public DefinicionVariable(Tipo tipo, String nombre) {
 		this.setTipo(tipo);
@@ -39,6 +40,14 @@ public class DefinicionVariable implements Definicion{
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public boolean EsParametro() {
+		return esParametro;
+	}
+
+	public void setEsParametro(boolean esParametro) {
+		this.esParametro = esParametro;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package ast.expr;
 
 import ast.tipos.Tipo;
+import ast.tipos.TipoEntero;
 import visitor.Visitor;
 
 
@@ -60,7 +61,7 @@ public class Logica implements Expresion {
 
 	@Override
 	public Tipo getTipo() {
-		return tipo;
+		return TipoEntero.getInstancia();
 	}
 
 	@Override

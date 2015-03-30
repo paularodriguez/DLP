@@ -11,6 +11,7 @@ public class InvocacionProcedimiento implements Sentencia {
 	private Definicion definicion;
 	private String nombre;
 	private List<Expresion> expresiones;
+	private Definicion definicionFuncion;
 
 	public InvocacionProcedimiento(String nombre, List<Expresion> expresiones) {
 		this.setNombre(nombre);
@@ -52,6 +53,15 @@ public class InvocacionProcedimiento implements Sentencia {
 		this.definicion = definicion;
 	}
 
+	@Override
+	public Definicion getDefinicionFuncion() {
+		return definicionFuncion;
+	}
+
+	@Override
+	public void setDefinicionFuncion(Definicion definicion) {
+		this.definicionFuncion = definicion;
+	}
 
 
 }

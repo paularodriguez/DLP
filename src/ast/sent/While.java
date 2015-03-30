@@ -3,12 +3,14 @@ package ast.sent;
 import java.util.List;
 
 import visitor.Visitor;
+import ast.def.Definicion;
 import ast.expr.Expresion;
 
 public class While implements Sentencia {
 
 	private Expresion expresion;
 	private List<Sentencia> sentencias;
+	private Definicion definicionFuncion;
 
 	public While(Expresion expresion, List<Sentencia> listaSentencias) {
 		this.setExpresion(expresion);
@@ -42,4 +44,13 @@ public class While implements Sentencia {
 		this.sentencias = sentencias;
 	}
 
+	@Override
+	public Definicion getDefinicionFuncion() {
+		return definicionFuncion;
+	}
+
+	@Override
+	public void setDefinicionFuncion(Definicion definicion) {
+		this.definicionFuncion = definicion;
+	}
 }

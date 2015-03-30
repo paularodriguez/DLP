@@ -70,8 +70,7 @@ public class Comparacion implements Expresion {
 
 	@Override
 	public void setTipo(Tipo tipo) {
-		// TODO Auto-generated method stub
-		
+			
 	}
 	
 	

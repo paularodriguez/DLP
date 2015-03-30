@@ -3,17 +3,10 @@ package semantico;
 import gestorErrores.GestorErrores;
 import visitor.DefaultVisitor;
 import ast.Programa;
-import ast.def.Definicion;
-import ast.def.DefinicionFuncion;
-import ast.expr.Aritmetica;
-import ast.expr.InvocacionFuncion;
-import ast.sent.Asignacion;
-import ast.sent.InvocacionProcedimiento;
-import ast.sent.Print;
-import ast.sent.Read;
-import ast.tipos.TipoArray;
-import ast.tipos.TipoEntero;
-import ast.tipos.TipoReal;
+import ast.def.*;
+import ast.expr.*;
+import ast.sent.*;
+import ast.tipos.*;
 
 public class InferenciaVisitor extends DefaultVisitor {
 
@@ -24,6 +17,13 @@ public class InferenciaVisitor extends DefaultVisitor {
 	}
 
 	public Object visit(Programa node) {
+		
+		for (Definicion def : node.definiciones){
+			if (def instanceof DefinicionVariable){
+				((DefinicionVariable) def).setEsParametro(false);
+			}
+		}
+		
 		Object ret = super.visit(node);
 		boolean existeMain = false;
 		for (Definicion d : node.definiciones) {
@@ -39,12 +39,58 @@ public class InferenciaVisitor extends DefaultVisitor {
 		return ret;
 	}
 
-	public Object visit(DefinicionFuncion node) {
+	public Object visit(DefinicionVariable node) {
 		Object ret = super.visit(node);
+
+		if (node.EsParametro() && !node.getTipo().esPrimitivo()) {
+			gestorErrores
+					.error("Error semántico: Los parámetros de la función no son de tipo primitivo.");
+		}
+
+		return ret;
+	}
+
+	public Object visit(DefinicionFuncion node) {
+
+		for (DefinicionVariable param : node.getParametros()) {
+			param.setEsParametro(true);
+		}
+
+		for (DefinicionVariable defVars : node.getDefinicionesVariable()) {
+			defVars.setEsParametro(false);
+		}
+
+		/*
+		 * for (Sentencia sent: node.getSentencias()){
+		 * sent.setDefinicionFuncion(node); }
+		 */
+
+		Object ret = super.visit(node);
+
 		if (!node.getRetorno().esPrimitivo()) {
 			gestorErrores.error("Error semántico: El retorno de la función '"
 					+ node.getNombre() + "' no es un tipo primitivo.");
 		}
+
+		return ret;
+	}
+
+	public Object visit(DefinicionProcedimiento node) {
+
+		for (DefinicionVariable param : node.getParametros()) {
+			param.setEsParametro(true);
+		}
+
+		for (DefinicionVariable defVars : node.getDefinicionesVariable()) {
+			defVars.setEsParametro(false);
+		}
+
+		/*
+		 * for (Sentencia sent: node.getSentencias()){
+		 * sent.setDefinicionFuncion(node); }
+		 */
+
+		Object ret = super.visit(node);
 		return ret;
 	}
 
@@ -128,6 +174,16 @@ public class InferenciaVisitor extends DefaultVisitor {
 		return ret;
 	}
 
+	public Object visit(IF node) {
+		Object ret = super.visit(node);
+		if (node.getExpresion().getTipo() != TipoEntero.getInstancia()) {
+			gestorErrores
+					.error("Error semántico: La condición de la sentencia IF no es válida.");
+		}
+
+		return ret;
+	}
+
 	public Object visit(InvocacionProcedimiento node) {
 		Object ret = super.visit(node);
 
@@ -176,6 +232,16 @@ public class InferenciaVisitor extends DefaultVisitor {
 		if (!node.getExpresion().getLValue()) {
 			gestorErrores
 					.error("Error semántico: No puede realizarse un Read sobre la expresión. La expresión no es un LValue.");
+		}
+
+		return ret;
+	}
+
+	public Object visit(While node) {
+		Object ret = super.visit(node);
+		if (node.getExpresion().getTipo() != TipoEntero.getInstancia()) {
+			gestorErrores
+					.error("Error semántico: La condición de la sentencia While no es válida.");
 		}
 
 		return ret;

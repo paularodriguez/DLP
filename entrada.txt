@@ -12,7 +12,8 @@ type Persona
 	meses[12] as integer;
 end type;
 
-dim a[3][1] as integer;
+dim a[3][1] as real;
+dim b[3][1] as integer;
 
 proc a(c as real)
 	dim juan as Persona;
@@ -21,15 +22,29 @@ proc a(c as real)
 	read a[3][2];
 end proc;
 
-function dobleSuma (a as integer, b as integer) as real
-	dim local as integer;
+function dobleSuma (a as Persona, b as integer) as real
+	dim local as Persona;
 
-	local = a + b;
-	return local * 2;
+	return 2 * 2;
 end function;
 
-function main (a as real, b as real, c as real) as integer
+proc b (a as integer, b as real)
+	dim local as Persona;
+
+	return 2 * 2;
+end proc;
+
+function main (a as integer, b as real, c as real) as integer
 	dim juan as Persona;
 	dim pepe as Persona;	
-	dobleSuma(a,b);
+	
+	a = 3;
+	
+	if a >= 2 and b < 5 then
+    	a = 5; 
+	return;
+  	else
+    	b = 2.3;
+  	end if;
+	
 end function;
