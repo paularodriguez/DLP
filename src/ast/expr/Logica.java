@@ -1,17 +1,13 @@
 package ast.expr;
 
 import visitor.Visitor;
-import ast.tipos.Tipo;
 
 
-public class Logica implements Expresion {
+public class Logica extends AbstractExpresion {
 
 	private Expresion operando1;
 	private Expresion operando2;
 	private String operador;
-	
-	private Tipo tipo;
-	private boolean lvalue;
 	
 	public Logica (Expresion op1, String operador, Expresion op2){
 		this.setOperando1(op1); 
@@ -52,25 +48,5 @@ public class Logica implements Expresion {
 
 	public void setOperador(String operador) {
 		this.operador = operador;
-	}
-
-	@Override
-	public boolean getLValue() {
-		return lvalue;
-	}
-
-	@Override
-	public Tipo getTipo() {
-		return tipo;
-	}
-
-	@Override
-	public void setLValue(boolean lvalue) {
-		this.lvalue = lvalue;
-	}
-
-	@Override
-	public void setTipo(Tipo tipo) {
-		this.tipo = tipo;
 	}
 }

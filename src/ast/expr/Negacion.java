@@ -1,13 +1,11 @@
 package ast.expr;
 
 import visitor.Visitor;
-import ast.tipos.Tipo;
 
-public class Negacion implements Expresion {
+public class Negacion extends AbstractExpresion {
 
 	private Expresion expresion;
-	private boolean lvalue;
-	private Tipo tipo;
+	
 
 	public Negacion(Expresion expresion) {
 		this.setExpresion(expresion);
@@ -29,26 +27,6 @@ public class Negacion implements Expresion {
 
 	public void setExpresion(Expresion expresion) {
 		this.expresion = expresion;
-	}
-
-	@Override
-	public boolean getLValue() {
-		return lvalue;
-	}
-
-	@Override
-	public Tipo getTipo() {
-		return tipo;
-	}
-
-	@Override
-	public void setLValue(boolean lvalue) {
-		this.lvalue = lvalue;
-	}
-
-	@Override
-	public void setTipo(Tipo tipo) {
-		this.tipo = tipo;
 	}
 
 }

@@ -1,14 +1,12 @@
 package ast.sent;
 
 import visitor.Visitor;
-import ast.def.Definicion;
 import ast.expr.Expresion;
 
-public class Asignacion implements Sentencia {
+public class Asignacion extends AbstractSentencia {
 
 	private Expresion izquierda;
 	private Expresion derecha;
-	private Definicion definicionFuncion;
 
 	public Asignacion(Expresion izquierda, Expresion derecha) {
 		this.setIzquierda(izquierda);
@@ -40,16 +38,6 @@ public class Asignacion implements Sentencia {
 
 	public void setDerecha(Expresion derecha) {
 		this.derecha = derecha;
-	}
-
-	@Override
-	public Definicion getDefinicionFuncion() {
-		return definicionFuncion;
-	}
-
-	@Override
-	public void setDefinicionFuncion(Definicion definicion) {
-		this.definicionFuncion = definicion;
 	}
 
 }

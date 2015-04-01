@@ -1,18 +1,14 @@
 package ast.expr;
 
 import visitor.Visitor;
-import ast.tipos.Tipo;
 
+public class Comparacion extends AbstractExpresion {
 
-public class Comparacion implements Expresion {
-	
-	private Expresion operando1; 
-	private Expresion operando2; 
+	private Expresion operando1;
+	private Expresion operando2;
 	private String operador;
-	private boolean lvalue;
-	private Tipo tipo;
-	
-	public Comparacion(Expresion op1, String operador, Expresion op2){
+
+	public Comparacion(Expresion op1, String operador, Expresion op2) {
 		this.setOperando1(op1);
 		this.setOperador(operador);
 		this.setOperando2(op2);
@@ -52,27 +48,5 @@ public class Comparacion implements Expresion {
 	public void setOperador(String operador) {
 		this.operador = operador;
 	}
-
-	@Override
-	public boolean getLValue() {
-		return lvalue;
-	}
-
-	@Override
-	public Tipo getTipo() {
-		return tipo;
-	}
-
-	@Override
-	public void setLValue(boolean lvalue) {
-		this.lvalue = lvalue;
-	}
-
-	@Override
-	public void setTipo(Tipo tipo) {
-		this.tipo = tipo;	
-	}
-	
-	
 
 }

@@ -1,16 +1,12 @@
 package ast.expr;
 
 import visitor.Visitor;
-import ast.tipos.Tipo;
 
-
-public class LiteralEntero implements Expresion {
+public class LiteralEntero extends AbstractExpresion {
 
 	private int valor;
-	private Tipo tipo;
-	private boolean lvalue;
-	
-	public LiteralEntero (int valor){
+
+	public LiteralEntero(int valor) {
 		this.setValor(valor);
 	}
 
@@ -32,24 +28,4 @@ public class LiteralEntero implements Expresion {
 		this.valor = valor;
 	}
 
-	@Override
-	public boolean getLValue() {
-		return lvalue;
-	}
-
-	@Override
-	public Tipo getTipo() {
-		return tipo;
-	}
-
-	@Override
-	public void setLValue(boolean lvalue) {
-		this.lvalue = lvalue;
-	}
-
-	@Override
-	public void setTipo(Tipo tipo) {
-		this.tipo = tipo;
-	}
-	
 }

@@ -2,10 +2,9 @@ package ast.tipos;
 
 import visitor.Visitor;
 
-public class TipoStruct implements Tipo {
+public class TipoStruct extends AbstractTipo {
 
 	private String nombre;
-	private boolean primitivo;
 
 	public TipoStruct(String nombre) {
 		this.setNombre(nombre);
@@ -27,16 +26,6 @@ public class TipoStruct implements Tipo {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	@Override
-	public boolean esPrimitivo() {
-		return primitivo;
-	}
-
-	@Override
-	public void setPrimitivo(boolean primitivo) {
-		this.primitivo = primitivo;
 	}
 
 }

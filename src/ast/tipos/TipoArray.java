@@ -4,21 +4,15 @@ import java.util.List;
 
 import visitor.Visitor;
 
-public class TipoArray implements Tipo {
+public class TipoArray extends AbstractTipo {
 
 	private Tipo tipo;
 	private int tamaño;
-	private boolean primitivo;
-
-	public TipoArray(Tipo tipo, List<Integer> dimensiones) {
-		
-	}
 
 	public static TipoArray crearArray(Tipo tipo, List<Integer> dimensiones) {
-		if (dimensiones.size() == 1){
+		if (dimensiones.size() == 1) {
 			return new TipoArray(tipo, dimensiones.get(0));
-		}
-		else{
+		} else {
 			TipoArray tA = new TipoArray();
 			tA.setTamaño(dimensiones.get(0));
 			dimensiones.remove(0);
@@ -49,7 +43,6 @@ public class TipoArray implements Tipo {
 		this.tipo = tipo;
 	}
 
-
 	public int getTamaño() {
 		return tamaño;
 	}
@@ -58,15 +51,4 @@ public class TipoArray implements Tipo {
 		this.tamaño = tamaño;
 	}
 
-	@Override
-	public boolean esPrimitivo() {
-		return primitivo;
-	}
-
-	@Override
-	public void setPrimitivo(boolean primitivo) {
-		this.primitivo = primitivo;
-	}
-
-	
 }

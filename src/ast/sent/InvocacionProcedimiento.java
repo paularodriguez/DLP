@@ -6,12 +6,11 @@ import visitor.Visitor;
 import ast.def.Definicion;
 import ast.expr.Expresion;
 
-public class InvocacionProcedimiento implements Sentencia {
+public class InvocacionProcedimiento extends AbstractSentencia {
 
 	private Definicion definicion;
 	private String nombre;
 	private List<Expresion> expresiones;
-	private Definicion definicionFuncion;
 
 	public InvocacionProcedimiento(String nombre, List<Expresion> expresiones) {
 		this.setNombre(nombre);
@@ -52,16 +51,5 @@ public class InvocacionProcedimiento implements Sentencia {
 	public void setDefinicion(Definicion definicion) {
 		this.definicion = definicion;
 	}
-
-	@Override
-	public Definicion getDefinicionFuncion() {
-		return definicionFuncion;
-	}
-
-	@Override
-	public void setDefinicionFuncion(Definicion definicion) {
-		this.definicionFuncion = definicion;
-	}
-
 
 }

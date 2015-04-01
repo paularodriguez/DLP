@@ -64,11 +64,14 @@ public class InferenciaVisitor extends DefaultVisitor {
 
 		Object ret = super.visit(node);
 
-		if (!node.getRetorno().esPrimitivo()) {
-			gestorErrores.error("Error semántico: El retorno de la función '"
-					+ node.getNombre() + "' no es un tipo primitivo.");
+		if (node.getRetorno() != null) {
+			if (!node.getRetorno().esPrimitivo()) {
+				gestorErrores
+						.error("Error semántico: El retorno de la función '"
+								+ node.getNombre()
+								+ "' no es un tipo primitivo.");
+			}
 		}
-
 		return ret;
 	}
 
@@ -127,11 +130,11 @@ public class InferenciaVisitor extends DefaultVisitor {
 
 	@Override
 	public Object visit(Comparacion node) {
-		node.setLValue(false);
 
+		Object ret = super.visit(node);
+		node.setLValue(false);
 		// ///TIPO
 		node.setTipo(node.getOperando1().getTipo());
-		Object ret = super.visit(node);
 		return ret;
 	}
 
@@ -189,11 +192,10 @@ public class InferenciaVisitor extends DefaultVisitor {
 
 	@Override
 	public Object visit(Logica node) {
-		node.setLValue(false);
 
-		// ///TIPO
-		node.setTipo(node.getOperando1().getTipo());
 		Object ret = super.visit(node);
+		node.setLValue(false);
+		node.setTipo(node.getOperando1().getTipo());
 		return ret;
 	}
 

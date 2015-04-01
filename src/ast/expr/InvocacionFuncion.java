@@ -2,19 +2,17 @@ package ast.expr;
 
 import java.util.List;
 
-import ast.def.Definicion;
-import ast.def.DefinicionFuncion;
-import ast.tipos.Tipo;
 import visitor.Visitor;
+import ast.def.Definicion;
 
-public class InvocacionFuncion implements Expresion {
+public class InvocacionFuncion extends AbstractExpresion {
 
 	private Definicion definicion;
-	private String identificador; 
+	private String identificador;
 	private List<Expresion> listaExpresiones;
-	
-	public InvocacionFuncion(String identificador, List<Expresion> expresiones){
-		this.setIdentificador(identificador); 
+
+	public InvocacionFuncion(String identificador, List<Expresion> expresiones) {
+		this.setIdentificador(identificador);
 		this.setListaExpresiones(expresiones);
 	}
 
@@ -53,26 +51,4 @@ public class InvocacionFuncion implements Expresion {
 		this.definicion = definicion;
 	}
 
-	@Override
-	public boolean getLValue() {
-		return false;
-	}
-
-	@Override
-	public Tipo getTipo() {
-		return ((DefinicionFuncion) definicion).getRetorno();
-	}
-
-	@Override
-	public void setLValue(boolean lvalue) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setTipo(Tipo tipo) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

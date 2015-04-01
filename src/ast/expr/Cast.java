@@ -3,12 +3,10 @@ package ast.expr;
 import visitor.Visitor;
 import ast.tipos.Tipo;
 
-public class Cast implements Expresion {
+public class Cast extends AbstractExpresion {
 
 	private Tipo tipoCast;
 	private Expresion expresion;
-	private Tipo tipo;
-	private boolean lvalue;
 
 	public Cast(Tipo tipo, Expresion expresion) {
 		this.setTipoCast(tipo);
@@ -34,26 +32,6 @@ public class Cast implements Expresion {
 		this.expresion = expresion;
 	}
 
-	@Override
-	public boolean getLValue() {
-		return lvalue;
-	}
-
-	@Override
-	public Tipo getTipo() {
-		return tipo;
-	}
-
-	@Override
-	public void setLValue(boolean lvalue) {
-		this.lvalue = lvalue;
-	}
-
-	@Override
-	public void setTipo(Tipo tipo) {
-		this.tipo = tipo;
-	}
-	
 	public Tipo getTipoCast() {
 		return tipoCast;
 	}

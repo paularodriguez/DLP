@@ -3,36 +3,36 @@ package ast.sent;
 import java.util.List;
 
 import visitor.Visitor;
-import ast.def.Definicion;
 import ast.expr.Expresion;
 
-public class IF implements Sentencia {
+public class IF extends AbstractSentencia {
 
-	private Expresion expresion; 
+	private Expresion expresion;
 	private List<Sentencia> sentenciasIF;
 	private List<Sentencia> sentenciasElse;
-	private Definicion definicionFuncion;
-	
-	public IF(Expresion expresion, List<Sentencia> sentenciasIf){
-		this.setExpresion(expresion); 
+
+	public IF(Expresion expresion, List<Sentencia> sentenciasIf) {
+		this.setExpresion(expresion);
 		this.setSentenciasIF(sentenciasIf);
 	}
-	
-	public IF(Expresion expresion, List<Sentencia> sentenciasIf, List<Sentencia> sentenciasElse){
-		this.setExpresion(expresion); 
+
+	public IF(Expresion expresion, List<Sentencia> sentenciasIf,
+			List<Sentencia> sentenciasElse) {
+		this.setExpresion(expresion);
 		this.setSentenciasIF(sentenciasIf);
 		this.setSentenciasElse(sentenciasElse);
 	}
 
 	@Override
 	public String toString() {
-		return "IF [expresion=" + getExpresion() + ", sentenciasIF=" + getSentenciasIF()
-				+ ", sentenciasElse=" + getSentenciasElse() + "]";
+		return "IF [expresion=" + getExpresion() + ", sentenciasIF="
+				+ getSentenciasIF() + ", sentenciasElse=" + getSentenciasElse()
+				+ "]";
 	}
 
 	@Override
 	public void acepta(Visitor v) {
-		v.visit(this);	
+		v.visit(this);
 	}
 
 	public Expresion getExpresion() {
@@ -59,14 +59,4 @@ public class IF implements Sentencia {
 		this.sentenciasElse = sentenciasElse;
 	}
 
-	@Override
-	public Definicion getDefinicionFuncion() {
-		return definicionFuncion;
-	}
-
-	@Override
-	public void setDefinicionFuncion(Definicion definicion) {
-		this.definicionFuncion = definicion;
-	}
-	
 }

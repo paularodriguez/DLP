@@ -1,26 +1,24 @@
 package ast.sent;
 
 import visitor.Visitor;
-import ast.def.Definicion;
 import ast.expr.Expresion;
 
-public class Read implements Sentencia {
+public class Read extends AbstractSentencia {
 
 	private Expresion expresion;
-	private Definicion definicionFuncion; 
-		
-	public Read(Expresion expresion){
+
+	public Read(Expresion expresion) {
 		this.setExpresion(expresion);
 	}
 
 	@Override
 	public String toString() {
-		return "Lectura [expresion=" + getExpresion()+ "]";
+		return "Lectura [expresion=" + getExpresion() + "]";
 	}
 
 	@Override
 	public void acepta(Visitor v) {
-		v.visit(this);	
+		v.visit(this);
 	}
 
 	public Expresion getExpresion() {
@@ -30,16 +28,5 @@ public class Read implements Sentencia {
 	public void setExpresion(Expresion expresion) {
 		this.expresion = expresion;
 	}
-	
-	@Override
-	public Definicion getDefinicionFuncion() {
-		return definicionFuncion;
-	}
 
-	@Override
-	public void setDefinicionFuncion(Definicion definicion) {
-		this.definicionFuncion = definicion;
-	}
-	
-	
 }

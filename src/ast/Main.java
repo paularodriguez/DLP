@@ -48,15 +48,15 @@ public class Main {
 		IdentificacionVisitor vIdentificacion= new IdentificacionVisitor(gestor);
 		parser.ast.acepta(vIdentificacion);
 		
-		//InferenciaVisitor vInferencia= new InferenciaVisitor(gestor);
-		//parser.ast.acepta(vInferencia);
+		InferenciaVisitor vInferencia= new InferenciaVisitor(gestor);
+		parser.ast.acepta(vInferencia);
 
 		
-		if (!gestor.hayErrores()) {
+		/*if (!gestor.hayErrores()) {
 			IntrospectorModel modelo = new IntrospectorModel("Program",
 					parser.ast);
 			new IntrospectorTree("Instrospector", modelo);
-		}
+		}*/
 	}
 
 }

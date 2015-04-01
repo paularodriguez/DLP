@@ -2,23 +2,21 @@ package ast.tipos;
 
 import visitor.Visitor;
 
-
-public class TipoEntero  implements Tipo {
+public class TipoEntero extends AbstractTipo {
 
 	private static TipoEntero instancia = null;
-	private boolean primitivo;
-	
-	public TipoEntero(){
-		
+
+	public TipoEntero() {
+
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Tipo Entero";
 	}
 
 	public static Tipo getInstancia() {
-		if(instancia == null)
+		if (instancia == null)
 			instancia = new TipoEntero();
 		return instancia;
 	}
@@ -28,13 +26,4 @@ public class TipoEntero  implements Tipo {
 		v.visit(this);
 	}
 
-	@Override
-	public boolean esPrimitivo() {
-		return primitivo;
-	}
-
-	@Override
-	public void setPrimitivo(boolean primitivo) {
-		this.primitivo = primitivo;
-	}
 }

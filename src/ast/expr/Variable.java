@@ -2,17 +2,13 @@ package ast.expr;
 
 import visitor.Visitor;
 import ast.def.Definicion;
-import ast.def.DefinicionVariable;
-import ast.tipos.Tipo;
 
-
-
-public class Variable implements Expresion {
+public class Variable extends AbstractExpresion {
 
 	private String nombre;
 	private Definicion definicion;
-	
-	public Variable(String nombre){
+
+	public Variable(String nombre) {
 		this.setNombre(nombre);
 	}
 
@@ -40,27 +36,5 @@ public class Variable implements Expresion {
 
 	public void setDefinicion(Definicion definicion) {
 		this.definicion = definicion;
-	}
-
-	@Override
-	public boolean getLValue() {
-		return true;
-	}
-
-	@Override
-	public Tipo getTipo() {
-		return ((DefinicionVariable) definicion).getTipo();
-	}
-
-	@Override
-	public void setLValue(boolean lvalue) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setTipo(Tipo tipo) {
-		// TODO Auto-generated method stub
-		
 	}
 }
