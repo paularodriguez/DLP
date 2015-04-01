@@ -45,7 +45,9 @@ public class DefaultVisitor implements Visitor {
 
 	@Override
 	public Object visit(DefinicionFuncion node) {
-		node.getRetorno().acepta(this);
+		if (node.getRetorno() != null) {
+			node.getRetorno().acepta(this);
+		}
 
 		for (DefinicionVariable param : node.getParametros()) {
 			param.acepta(this);
