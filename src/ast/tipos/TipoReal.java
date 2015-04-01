@@ -6,6 +6,7 @@ import visitor.Visitor;
 public class TipoReal implements Tipo {
 
 	private static TipoReal instancia = null;
+	private boolean primitivo;
 	
 	public TipoReal(){
 		
@@ -29,6 +30,11 @@ public class TipoReal implements Tipo {
 
 	@Override
 	public boolean esPrimitivo() {
-		return true;
+		return primitivo;
+	}
+
+	@Override
+	public void setPrimitivo(boolean primitivo) {
+		this.primitivo = primitivo;
 	}
 }

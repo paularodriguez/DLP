@@ -8,6 +8,7 @@ public class TipoArray implements Tipo {
 
 	private Tipo tipo;
 	private int tamaño;
+	private boolean primitivo;
 
 	public TipoArray(Tipo tipo, List<Integer> dimensiones) {
 		
@@ -59,7 +60,12 @@ public class TipoArray implements Tipo {
 
 	@Override
 	public boolean esPrimitivo() {
-		return false;
+		return primitivo;
+	}
+
+	@Override
+	public void setPrimitivo(boolean primitivo) {
+		this.primitivo = primitivo;
 	}
 
 	

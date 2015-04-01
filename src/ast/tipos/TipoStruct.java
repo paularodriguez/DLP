@@ -5,6 +5,7 @@ import visitor.Visitor;
 public class TipoStruct implements Tipo {
 
 	private String nombre;
+	private boolean primitivo;
 
 	public TipoStruct(String nombre) {
 		this.setNombre(nombre);
@@ -30,7 +31,12 @@ public class TipoStruct implements Tipo {
 
 	@Override
 	public boolean esPrimitivo() {
-		return false;
+		return primitivo;
+	}
+
+	@Override
+	public void setPrimitivo(boolean primitivo) {
+		this.primitivo = primitivo;
 	}
 
 }

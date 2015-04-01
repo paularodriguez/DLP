@@ -9,6 +9,7 @@ public class DefinicionStruct implements Definicion,Tipo {
 	
 	private String nombre;
 	private List<Campo> listaCampos;
+	private boolean primitivo;
 	
 	public DefinicionStruct(String nombre, List<Campo> listaCampos) {
 		this.setNombre(nombre);
@@ -44,7 +45,7 @@ public class DefinicionStruct implements Definicion,Tipo {
 
 	@Override
 	public boolean esPrimitivo() {
-		return false;
+		return primitivo;
 	}
 
 	@Override
@@ -57,6 +58,11 @@ public class DefinicionStruct implements Definicion,Tipo {
 	public Tipo getTipo() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setPrimitivo(boolean primitivo) {
+		this.primitivo = primitivo;
 	}
 
 }

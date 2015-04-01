@@ -873,7 +873,7 @@ case 18:
 break;
 case 19:
 //#line 126 "../src/sintactico/sintactico.y"
-{yyval = new DefinicionProcedimiento((String)val_peek(8), (List<DefinicionVariable>)val_peek(6), (List<DefinicionVariable>)val_peek(4), (List<Sentencia>)val_peek(3));}
+{yyval = new DefinicionFuncion(null,(String)val_peek(8), (List<DefinicionVariable>)val_peek(6), (List<DefinicionVariable>)val_peek(4), (List<Sentencia>)val_peek(3));}
 break;
 case 20:
 //#line 129 "../src/sintactico/sintactico.y"

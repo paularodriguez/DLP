@@ -6,6 +6,7 @@ import visitor.Visitor;
 public class TipoEntero  implements Tipo {
 
 	private static TipoEntero instancia = null;
+	private boolean primitivo;
 	
 	public TipoEntero(){
 		
@@ -29,6 +30,11 @@ public class TipoEntero  implements Tipo {
 
 	@Override
 	public boolean esPrimitivo() {
-		return true;
+		return primitivo;
+	}
+
+	@Override
+	public void setPrimitivo(boolean primitivo) {
+		this.primitivo = primitivo;
 	}
 }

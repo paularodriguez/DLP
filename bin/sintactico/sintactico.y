@@ -123,7 +123,7 @@ definicion_funcion
 		;
 		
 definicion_procedimiento
-		:	PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';'						{$$ = new DefinicionProcedimiento((String)$2, (List<DefinicionVariable>)$4, (List<DefinicionVariable>)$6, (List<Sentencia>)$7);}
+		:	PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';'						{$$ = new DefinicionFuncion(null,(String)$2, (List<DefinicionVariable>)$4, (List<DefinicionVariable>)$6, (List<Sentencia>)$7);}
 		
 listaParametrosOpcional
 		:  	/*vacío*/							{$$ = new ArrayList<DefinicionVariable>();} 				

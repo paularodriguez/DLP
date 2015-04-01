@@ -3,7 +3,6 @@ package visitor;
 import ast.Programa;
 import ast.def.Campo;
 import ast.def.DefinicionFuncion;
-import ast.def.DefinicionProcedimiento;
 import ast.def.DefinicionStruct;
 import ast.def.DefinicionVariable;
 import ast.expr.AccesoArray;
@@ -52,14 +51,6 @@ public class XMLVisitor extends DefaultVisitor {
 		System.out.println("<DefinicionFuncion" + "'>");
 		Object ret = super.visit(node);
 		System.out.println("</DefinicionFuncion>");
-		return ret;
-	}
-
-	public Object visit(DefinicionProcedimiento node) {
-		System.out.println("<DefinicionProcedimiento name='" + node.getNombre()
-				+ ">");
-		Object ret = super.visit(node);
-		System.out.println("</DefinicionProcedimiento>");
 		return ret;
 	}
 

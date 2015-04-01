@@ -6,6 +6,7 @@ import visitor.Visitor;
 public class TipoChar  implements Tipo {
 
 	private static TipoChar instancia = null;
+	private boolean primitivo;
 	
 	public TipoChar() {
 	
@@ -29,7 +30,12 @@ public class TipoChar  implements Tipo {
 
 	@Override
 	public boolean esPrimitivo() {
-		return true;
+		return primitivo;
+	}
+
+	@Override
+	public void setPrimitivo(boolean primitivo) {
+		this.primitivo = primitivo;
 	}
 
 }

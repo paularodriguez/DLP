@@ -4,7 +4,6 @@ import ast.Programa;
 import ast.def.Campo;
 import ast.def.Definicion;
 import ast.def.DefinicionFuncion;
-import ast.def.DefinicionProcedimiento;
 import ast.def.DefinicionStruct;
 import ast.def.DefinicionVariable;
 import ast.expr.AccesoArray;
@@ -48,23 +47,6 @@ public class DefaultVisitor implements Visitor {
 	public Object visit(DefinicionFuncion node) {
 		node.getRetorno().acepta(this);
 
-		for (DefinicionVariable param : node.getParametros()) {
-			param.acepta(this);
-		}
-
-		for (DefinicionVariable defVar : node.getDefinicionesVariable()) {
-			defVar.acepta(this);
-		}
-
-		for (Sentencia s : node.getSentencias()) {
-			s.acepta(this);
-		}
-
-		return null;
-	}
-
-	@Override
-	public Object visit(DefinicionProcedimiento node) {
 		for (DefinicionVariable param : node.getParametros()) {
 			param.acepta(this);
 		}

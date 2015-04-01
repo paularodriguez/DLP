@@ -18,16 +18,14 @@ public class InferenciaVisitor extends DefaultVisitor {
 
 	public Object visit(Programa node) {
 
-		for (Definicion def : node.definiciones) {
-			if (def instanceof DefinicionVariable) {
-				((DefinicionVariable) def).setEsParametro(false);
-			}
-		}
-
-		Object ret = super.visit(node);
 		boolean existeMain = false;
 		for (Definicion d : node.definiciones) {
-			if (d.getNombre().equals("main")) {
+			if (d instanceof DefinicionVariable) {
+				((DefinicionVariable) d).setEsParametro(false);
+			}
+
+			if (d.getNombre().equals("main")
+					&& (d instanceof DefinicionFuncion)) {
 				existeMain = true;
 			}
 		}
@@ -36,7 +34,7 @@ public class InferenciaVisitor extends DefaultVisitor {
 					.error("Error semántico: No se ha definido el main del programa.");
 		}
 
-		return ret;
+		return super.visit(node);
 	}
 
 	public Object visit(DefinicionVariable node) {
@@ -60,10 +58,9 @@ public class InferenciaVisitor extends DefaultVisitor {
 			defVars.setEsParametro(false);
 		}
 
-		/*
-		 * for (Sentencia sent: node.getSentencias()){
-		 * sent.setDefinicionFuncion(node); }
-		 */
+		for (Sentencia sent : node.getSentencias()) {
+			sent.setDefinicionFuncion(node);
+		}
 
 		Object ret = super.visit(node);
 
@@ -72,25 +69,6 @@ public class InferenciaVisitor extends DefaultVisitor {
 					+ node.getNombre() + "' no es un tipo primitivo.");
 		}
 
-		return ret;
-	}
-
-	public Object visit(DefinicionProcedimiento node) {
-
-		for (DefinicionVariable param : node.getParametros()) {
-			param.setEsParametro(true);
-		}
-
-		for (DefinicionVariable defVars : node.getDefinicionesVariable()) {
-			defVars.setEsParametro(false);
-		}
-
-		/*
-		 * for (Sentencia sent: node.getSentencias()){
-		 * sent.setDefinicionFuncion(node); }
-		 */
-
-		Object ret = super.visit(node);
 		return ret;
 	}
 
@@ -264,6 +242,15 @@ public class InferenciaVisitor extends DefaultVisitor {
 	}
 
 	public Object visit(IF node) {
+
+		for (Sentencia s : node.getSentenciasIF()) {
+			s.setDefinicionFuncion(node.getDefinicionFuncion());
+		}
+
+		for (Sentencia s : node.getSentenciasElse()) {
+			s.setDefinicionFuncion(node.getDefinicionFuncion());
+		}
+
 		Object ret = super.visit(node);
 		if (node.getExpresion().getTipo() != TipoEntero.getInstancia()) {
 			gestorErrores
@@ -327,6 +314,10 @@ public class InferenciaVisitor extends DefaultVisitor {
 	}
 
 	public Object visit(While node) {
+		for (Sentencia s : node.getSentencias()) {
+			s.setDefinicionFuncion(node.getDefinicionFuncion());
+		}
+
 		Object ret = super.visit(node);
 		if (node.getExpresion().getTipo() != TipoEntero.getInstancia()) {
 			gestorErrores
@@ -344,7 +335,24 @@ public class InferenciaVisitor extends DefaultVisitor {
 					.error("Error semántico: El tamaño del array no es válido.");
 		}
 
+		node.setPrimitivo(false);
+
 		return ret;
+	}
+
+	public Object visit(TipoChar node) {
+		node.setPrimitivo(true);
+		return super.visit(node);
+	}
+
+	public Object visit(TipoEntero node) {
+		node.setPrimitivo(true);
+		return super.visit(node);
+	}
+
+	public Object visit(TipoReal node) {
+		node.setPrimitivo(true);
+		return super.visit(node);
 	}
 
 }
