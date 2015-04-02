@@ -3,12 +3,12 @@ package ast.sent;
 import java.util.List;
 
 import visitor.Visitor;
-import ast.def.Definicion;
+import ast.def.DefinicionFuncion;
 import ast.expr.Expresion;
 
 public class InvocacionProcedimiento extends AbstractSentencia {
 
-	private Definicion definicion;
+	private DefinicionFuncion definicion;
 	private String nombre;
 	private List<Expresion> expresiones;
 
@@ -43,12 +43,12 @@ public class InvocacionProcedimiento extends AbstractSentencia {
 	public void setExpresiones(List<Expresion> expresiones) {
 		this.expresiones = expresiones;
 	}
-	
-	public Definicion getDefinicion() {
+
+	public DefinicionFuncion getDefinicion() {
 		return definicion;
 	}
 
-	public void setDefinicion(Definicion definicion) {
+	public void setDefinicion(DefinicionFuncion definicion) {
 		this.definicion = definicion;
 	}
 

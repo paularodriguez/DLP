@@ -1,7 +1,5 @@
 package ast.def;
 
-import java.util.List;
-
 import visitor.Visitor;
 import ast.tipos.Tipo;
 
@@ -41,10 +39,4 @@ public class Campo implements Definicion {
 	public void setTipo(Tipo tipo) {
 		this.tipo = tipo;
 	}
-
-	@Override
-	public List<DefinicionVariable> getParametros() {
-		return null;
-	}
-
 }

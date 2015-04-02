@@ -44,7 +44,6 @@ public class InferenciaVisitor extends DefaultVisitor {
 			gestorErrores
 					.error("Error semántico: Los parámetros de la función no son de tipo primitivo.");
 		}
-
 		return ret;
 	}
 
@@ -140,6 +139,9 @@ public class InferenciaVisitor extends DefaultVisitor {
 
 	@Override
 	public Object visit(InvocacionFuncion node) {
+		
+		node.setTipo(node.getDefinicion().getRetorno());
+		
 		Object ret = super.visit(node);
 
 		if (!(node.getListaExpresiones().size() == node.getDefinicion()
@@ -288,6 +290,12 @@ public class InferenciaVisitor extends DefaultVisitor {
 			}
 		}
 
+		if (!(node.getDefinicion().getRetorno() == null)) {
+			gestorErrores
+					.error("Error semántico: No se está recogiendo el retorno de la función '"
+							+ node.getNombre() + "'.");
+		}
+
 		return ret;
 	}
 
@@ -312,6 +320,21 @@ public class InferenciaVisitor extends DefaultVisitor {
 					.error("Error semántico: No puede realizarse un Read sobre la expresión. La expresión no es un LValue.");
 		}
 
+		return ret;
+	}
+
+	public Object visit(Return node) {
+		Object ret = super.visit(node);
+
+		if (node.getExpresion() != null) {
+			if (!(node.getExpresion().getTipo() == node.getDefinicionFuncion()
+					.getRetorno())) {
+				gestorErrores
+						.error("Error semántico: El tipo de retorno de la función '"
+								+ node.getDefinicionFuncion().getNombre()
+								+ "' es incorrecto.");
+			}
+		}
 		return ret;
 	}
 

@@ -3,11 +3,11 @@ package ast.expr;
 import java.util.List;
 
 import visitor.Visitor;
-import ast.def.Definicion;
+import ast.def.DefinicionFuncion;
 
 public class InvocacionFuncion extends AbstractExpresion {
 
-	private Definicion definicion;
+	private DefinicionFuncion definicion;
 	private String identificador;
 	private List<Expresion> listaExpresiones;
 
@@ -43,11 +43,11 @@ public class InvocacionFuncion extends AbstractExpresion {
 		this.identificador = identificador;
 	}
 
-	public Definicion getDefinicion() {
+	public DefinicionFuncion getDefinicion() {
 		return definicion;
 	}
 
-	public void setDefinicion(Definicion definicion) {
+	public void setDefinicion(DefinicionFuncion definicion) {
 		this.definicion = definicion;
 	}
 

@@ -1,18 +1,18 @@
 package ast.sent;
 
-import ast.def.Definicion;
+import ast.def.DefinicionFuncion;
 
 public abstract class AbstractSentencia implements Sentencia {
 
-	private Definicion definicionFuncion;
+	private DefinicionFuncion definicionFuncion;
 	
 	@Override
-	public Definicion getDefinicionFuncion() {
+	public DefinicionFuncion getDefinicionFuncion() {
 		return definicionFuncion;
 	}
 
 	@Override
-	public void setDefinicionFuncion(Definicion definicion) {
+	public void setDefinicionFuncion(DefinicionFuncion definicion) {
 		this.definicionFuncion = definicion;
 	}
 

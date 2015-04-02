@@ -1,12 +1,12 @@
 package ast.sent;
 
 import ast.NodoAST;
-import ast.def.Definicion;
+import ast.def.DefinicionFuncion;
 
 public interface Sentencia extends NodoAST{
 	
-	Definicion getDefinicionFuncion();
+	DefinicionFuncion getDefinicionFuncion();
 	
-	void setDefinicionFuncion(Definicion definicion);
+	void setDefinicionFuncion(DefinicionFuncion definicion);
 
 }

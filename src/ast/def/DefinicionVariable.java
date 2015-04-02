@@ -1,16 +1,14 @@
 package ast.def;
 
-import java.util.List;
-
 import visitor.Visitor;
 import ast.tipos.Tipo;
 
-public class DefinicionVariable implements Definicion{
-	
+public class DefinicionVariable implements Definicion {
+
 	private Tipo tipo;
 	private String nombre;
 	private boolean esParametro;
-	
+
 	public DefinicionVariable(Tipo tipo, String nombre) {
 		this.setTipo(tipo);
 		this.setNombre(nombre);
@@ -18,7 +16,8 @@ public class DefinicionVariable implements Definicion{
 
 	@Override
 	public String toString() {
-		return "DefinicionVariable [tipo=" + getTipo() + ", nombre=" + getNombre() + "]";
+		return "DefinicionVariable [tipo=" + getTipo() + ", nombre="
+				+ getNombre() + "]";
 	}
 
 	@Override
@@ -48,12 +47,6 @@ public class DefinicionVariable implements Definicion{
 
 	public void setEsParametro(boolean esParametro) {
 		this.esParametro = esParametro;
-	}
-
-	@Override
-	public List<DefinicionVariable> getParametros() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

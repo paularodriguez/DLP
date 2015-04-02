@@ -33,13 +33,12 @@ dim microsoft as Empresa;
 
 function dobleSuma (a as integer, b as integer) as integer
 	dim local as integer;
-
-	local = a + b;
 	return local * 2;
 end function;
 
 proc escribeEdad (num as integer)
 	print num;
+	num = dobleSuma(1,2);
 end proc;
 
 dim z as integer;
