@@ -78,7 +78,8 @@ public class InferenciaVisitor extends DefaultVisitor {
 	public Object visit(AccesoArray node) {
 		Object ret = super.visit(node);
 		node.setLValue(true);
-		node.setTipo(node.getDerecha().getTipo());
+		// TIPO
+		node.setTipo(node.getIzquierda().getTipo());
 		return ret;
 	}
 
@@ -86,14 +87,12 @@ public class InferenciaVisitor extends DefaultVisitor {
 	public Object visit(AccesoCampo node) {
 		Object ret = super.visit(node);
 		node.setLValue(true);
+		// TIPO
 		node.setTipo(node.getIzquierda().getTipo());
 		return ret;
 	}
 
 	public Object visit(Aritmetica node) {
-		node.setLValue(false);
-		node.setTipo(node.getOp1().getTipo());
-
 		Object ret = super.visit(node);
 
 		if (!(node.getOp1().getTipo() == node.getOp2().getTipo())) {
@@ -106,44 +105,49 @@ public class InferenciaVisitor extends DefaultVisitor {
 			gestorErrores
 					.error("Error semántico: Tipo no permitido en operaciones aritméticas. Sólo se pueden sumar tipos reales y tipos enteros.");
 		}
-		node.setTipo(node.getOp1().getTipo());
-		node.setLValue(false);
 
-		/*
-		 * IMPLEMENTAR PREDICADOS: - ¿exprIzq.tipo==exprDer.tipo? - ¿exprIzq (o
-		 * exprDer) son valores aceptados para esta operación aritmética?
-		 * [integer y real] CÁLCULO ATRIBUTOS: - node.tipo= exprIzq.tipo (o
-		 * exprDer.tipo -> ambas deben ser de igual tipo) - node.lvalue= false;
-		 * // el resultado de una op aritmética nunca será un l-value en nuestro
-		 * lenguaje
-		 */
+		node.setLValue(false);
+		node.setTipo(node.getOp1().getTipo());
+
 		return ret;
 	}
 
 	@Override
 	public Object visit(Cast node) {
 		node.setLValue(false);
+		node.setTipo(node.getTipoCast());
 		Object ret = super.visit(node);
+
+		if (!(node.getTipo() instanceof TipoEntero
+				|| node.getTipo() instanceof TipoReal || node.getTipo() instanceof TipoChar)) {
+			gestorErrores
+					.error("Error semántico: No se puede hacer un cast a un tipo no simple.");
+		}
+
+		if (node.getTipo().equals(node.getExpresion().getTipo())) {
+			gestorErrores
+					.error("Error semántico: No se puede hacer un cast al mismo tipo de la expresión.");
+		}
+
 		return ret;
 	}
 
 	@Override
 	public Object visit(Comparacion node) {
-
 		Object ret = super.visit(node);
 		node.setLValue(false);
-		// ///TIPO
 		node.setTipo(node.getOperando1().getTipo());
 		return ret;
 	}
 
 	@Override
 	public Object visit(InvocacionFuncion node) {
-		
-		node.setTipo(node.getDefinicion().getRetorno());
-		
+
 		Object ret = super.visit(node);
 
+		node.setTipo(node.getDefinicion().getRetorno());
+		node.setLValue(false);
+		
 		if (!(node.getListaExpresiones().size() == node.getDefinicion()
 				.getParametros().size())) {
 			gestorErrores
@@ -165,6 +169,14 @@ public class InferenciaVisitor extends DefaultVisitor {
 								+ "' no coincide con el tipo definido.");
 			}
 		}
+		
+		if (!(node.getTipo()!=null)){
+			gestorErrores
+			.error("Error semántico: La función '"
+					+ node.getIdentificador()
+					+ "' no tiene definido valor de retorno.");
+		}
+		
 		return ret;
 	}
 
@@ -211,9 +223,9 @@ public class InferenciaVisitor extends DefaultVisitor {
 
 	@Override
 	public Object visit(Variable node) {
+		Object ret = super.visit(node);
 		node.setLValue(true);
 		node.setTipo(node.getDefinicion().getTipo());
-		Object ret = super.visit(node);
 		return ret;
 	}
 

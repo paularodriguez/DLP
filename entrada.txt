@@ -11,7 +11,7 @@ dim a as integer;
 dim b as character;
 
 dim c[20] as integer;
-dim h[30][20] as real;
+dim h[30][20] as integer;
 
 // ------------- 
 type Persona
@@ -48,8 +48,9 @@ proc main()
   dim pepe as Persona;
   dim v[20] as integer;
 
-  local = 0;
+   local = 0;
    while local < 10 do
+   	local = dobleSuma(2,3);
     local = local + 1;
   end while;
  

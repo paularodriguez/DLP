@@ -172,7 +172,7 @@ public class DefaultVisitor implements Visitor {
 
 	@Override
 	public Object visit(Cast node) {
-		node.getTipo().acepta(this);
+		node.getTipoCast().acepta(this);
 		node.getExpresion().acepta(this);
 		return null;
 	}
