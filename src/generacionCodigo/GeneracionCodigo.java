@@ -15,6 +15,8 @@ import ast.expr.AccesoCampo;
 import ast.expr.Aritmetica;
 import ast.expr.Cast;
 import ast.expr.Comparacion;
+import ast.expr.Expresion;
+import ast.expr.InvocacionFuncion;
 import ast.expr.LiteralCaracter;
 import ast.expr.LiteralEntero;
 import ast.expr.LiteralReal;
@@ -30,6 +32,7 @@ import ast.sent.Return;
 import ast.sent.Sentencia;
 import ast.sent.While;
 import ast.tipos.Tipo;
+import ast.tipos.TipoArray;
 import ast.tipos.TipoChar;
 import ast.tipos.TipoEntero;
 import ast.tipos.TipoReal;
@@ -98,7 +101,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 		// load
 		// storef
 
-		return super.visit(node);
+		return null;
 	}
 
 	@Override
@@ -140,7 +143,136 @@ public class GeneracionCodigo extends DefaultVisitor {
 	@Override
 	public Object visit(DefinicionStruct node) {
 		out.println("#TYPE " + node.getNombre());
-		return super.visit(node);
+		return null;
+	}
+
+	// acceso array - izq dirección , indice - valor.
+	@Override
+	public Object visit(AccesoArray node) { // -- ejemplo v[2]
+
+		// DIRECCIÓN
+		// generarDireccionVector -- devuelve dirección de v[]
+		// generarValorIndice -- devuelve el número 2 - índice
+		// push tamaño.tipoBaseArray
+		// mul
+		// add
+
+		// VALOR
+		// LOAD
+
+		//visita nodo izquierdo dirección
+		node.getIzquierda().setVisitaDireccion(true);
+		node.getIzquierda().setVisitaValor(false);
+		node.getIzquierda().acepta(this);
+		
+		//visita nodo derecho valor
+		node.getDerecha().setVisitaDireccion(false);
+		node.getDerecha().setVisitaValor(true);
+		node.getDerecha().acepta(this);
+		
+		out.println("push " + ((TipoArray)node.getIzquierda().getTipo()).getTipo().size());
+		out.println("mul");
+		out.println("add");
+
+		if (node.getVisitaValor()) {
+			out.println("load");
+		}
+
+		return null;
+	}
+
+	@Override
+	public Object visit(AccesoCampo node) {
+		node.getIzquierda().setVisitaDireccion(true);
+		node.getIzquierda().setVisitaValor(false);
+		node.getIzquierda().acepta(this);
+
+		String idCampo = ((Variable) node.getDerecha()).getNombre();
+		int direccionCampo = ((DefinicionStruct)node.getIzquierda().getTipo()).buscarCampoNombre(idCampo).getDireccion();
+
+		out.println("push " + direccionCampo);
+		
+		out.println("add");
+
+		return null;
+	}
+
+	@Override
+	public Object visit(Aritmetica node) {
+		node.getOp1().setVisitaValor(true);
+		node.getOp1().setVisitaDireccion(false);
+		node.getOp1().acepta(this); // valor
+
+		node.getOp2().setVisitaValor(true);
+		node.getOp1().setVisitaDireccion(false);
+		node.getOp2().acepta(this); // valor
+
+		out.println(instruccionAritmetica.get(node.getOperador())
+				+ node.getTipo().sufijo());
+		return null;
+	}
+
+	@Override
+	public Object visit(Cast node) {
+		node.getExpresion().setVisitaValor(true);
+		node.getExpresion().setVisitaDireccion(false);
+		node.getExpresion().acepta(this);
+		cast(node.getExpresion().getTipo(), node.getTipo());
+
+		// si es real a char es: f2i
+		// i2b
+		return null;
+	}
+
+	private void cast(Tipo tipoOrigen, Tipo tipoDestino) {
+		if (tipoOrigen instanceof TipoChar && tipoDestino instanceof TipoReal) {
+			out.println("b2i");
+			out.println("i2f");
+		}
+		if (tipoOrigen instanceof TipoReal && tipoDestino instanceof TipoChar) {
+			out.println("f2i");
+			out.println("i2b");
+		}
+		if (tipoOrigen instanceof TipoReal && tipoDestino instanceof TipoEntero) {
+			out.println("f2i");
+		}
+		if (tipoOrigen instanceof TipoEntero && tipoDestino instanceof TipoReal) {
+			out.println("i2f");
+		}
+		if (tipoOrigen instanceof TipoEntero && tipoDestino instanceof TipoChar) {
+			out.println("i2b");
+		}
+		if (tipoOrigen instanceof TipoChar && tipoDestino instanceof TipoEntero) {
+			out.println("b2i");
+		}
+	}
+
+	@Override
+	public Object visit(Comparacion node) {
+		node.getOperando1().setVisitaValor(true);
+		node.getOperando1().setVisitaDireccion(false);
+		node.getOperando1().acepta(this); // valor
+
+		node.getOperando2().setVisitaValor(true);
+		node.getOperando2().setVisitaDireccion(false);
+		node.getOperando2().acepta(this); // valor
+		out.println(instruccionComparacion.get(node.getOperador())
+				+ node.getTipo().sufijo());
+		return null;
+	}
+
+	@Override
+	public Object visit(InvocacionFuncion node) {
+
+		for (Expresion e : node.getListaExpresiones()) {
+			e.setVisitaDireccion(false);
+			e.setVisitaValor(true);
+			e.acepta(this);
+		}
+
+		out.println(node.getIdentificador() + ":");
+
+		return null;
 	}
 
 	@Override
@@ -190,82 +322,6 @@ public class GeneracionCodigo extends DefaultVisitor {
 	}
 
 	@Override
-	public Object visit(AccesoCampo node) {
-		node.getIzquierda().setVisitaDireccion(true);
-		node.getIzquierda().setVisitaValor(false);
-		node.getIzquierda().acepta(this);
-
-		// calcular desplazamiento
-
-		// out add
-
-		return null;
-	}
-
-	@Override
-	public Object visit(Aritmetica node) {
-		node.getOp1().setVisitaValor(true);
-		node.getOp1().setVisitaDireccion(false);
-		node.getOp1().acepta(this); // valor
-
-		node.getOp2().setVisitaValor(true);
-		node.getOp1().setVisitaDireccion(false);
-		node.getOp2().acepta(this); // valor
-		out.println(instruccionAritmetica.get(node.getOperador())
-				+ node.getTipo().sufijo());
-		return null;
-	}
-
-	@Override
-	public Object visit(Comparacion node) {
-		node.getOperando1().setVisitaValor(true);
-		node.getOperando1().setVisitaDireccion(false);
-		node.getOperando1().acepta(this); // valor
-
-		node.getOperando2().setVisitaValor(true);
-		node.getOperando2().setVisitaDireccion(false);
-		node.getOperando2().acepta(this); // valor
-		out.println(instruccionComparacion.get(node.getOperador())
-				+ node.getTipo().sufijo());
-		return null;
-	}
-
-	@Override
-	public Object visit(Cast node) {
-		node.getExpresion().setVisitaValor(true);
-		node.getExpresion().setVisitaDireccion(false);
-		node.getExpresion().acepta(this);
-		cast(node.getExpresion().getTipo(), node.getTipo());
-
-		// si es real a char es: f2i
-		// i2b
-		return null;
-	}
-
-	private void cast(Tipo tipoOrigen, Tipo tipoDestino) {
-		if (tipoOrigen instanceof TipoChar && tipoDestino instanceof TipoReal) {
-			out.println("b2i");
-			out.println("i2f");
-		}
-		if (tipoOrigen instanceof TipoReal && tipoDestino instanceof TipoChar) {
-			out.println("f2i");
-			out.println("i2b");
-		}
-		if (tipoOrigen instanceof TipoReal && tipoDestino instanceof TipoEntero) {
-			out.println("f2i");
-		}
-		if (tipoOrigen instanceof TipoEntero && tipoDestino instanceof TipoReal) {
-			out.println("i2f");
-		}
-		if (tipoOrigen instanceof TipoEntero && tipoDestino instanceof TipoChar) {
-			out.println("i2b");
-		}
-		if (tipoOrigen instanceof TipoChar && tipoDestino instanceof TipoEntero) {
-			out.println("b2i");
-		}
-	}
-
-	@Override
 	public Object visit(Variable node) {
 
 		if (((DefinicionVariable) node.getDefinicion()).getAmbito() == "GLOBAL") {
@@ -305,19 +361,17 @@ public class GeneracionCodigo extends DefaultVisitor {
 		int contadorIFLocal = contadorIf;
 		contadorIf++;
 
-		// CONDICION --> valor del código de la condición
-		// si no se cumple saltamos al else
+		node.getExpresion().setVisitaDireccion(false);
+		node.getExpresion().setVisitaValor(true);
+		node.getExpresion().acepta(this);
 
-		// jz else_01
 		out.println("jz else_" + contadorIFLocal);
 
 		for (Sentencia s : node.getSentenciasIF()) {
 			s.acepta(this);
 		}
 
-		// jmp fin_if_01
 		out.println("jmp fin_if_" + contadorIFLocal);
-		// else_01:
 		out.println("else_" + contadorIFLocal + ":");
 
 		if (node.getSentenciasElse() != null) {
@@ -326,20 +380,19 @@ public class GeneracionCodigo extends DefaultVisitor {
 			}
 		}
 
-		// fin_if_01:
 		out.println("fin_if_" + contadorIFLocal + ":");
 
-		return super.visit(node);
+		return null;
 	}
 
 	@Override
 	public Object visit(InvocacionProcedimiento node) {
 
-		// valor argumentos
-
-		/*
-		 * for (Expresion e: node.getExpresiones()){ e.acepta(this,valor); }
-		 */
+		for (Expresion e : node.getExpresiones()) {
+			e.setVisitaDireccion(false);
+			e.setVisitaValor(true);
+			e.acepta(this);
+		}
 
 		out.println("call " + node.getNombre());
 
@@ -350,7 +403,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 		 */
 		// hacer un pop que retire los residuos de la pila
 
-		return super.visit(node);
+		return null;
 	}
 
 	@Override
@@ -361,7 +414,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 		out.println("out" + node.getExpresion().getTipo().sufijo());
 		return null;
 	}
-
+	
 	@Override
 	public Object visit(Read node) {
 		node.getExpresion().setVisitaDireccion(true);
@@ -375,9 +428,18 @@ public class GeneracionCodigo extends DefaultVisitor {
 	@Override
 	public Object visit(Return node) {
 		if (node.getExpresion() != null) {
-			// ret tamañoExpre, size(locales), size(params)
+			node.getExpresion().setVisitaDireccion(false);
+			node.getExpresion().setVisitaValor(true);
+			out.println("ret " + node.getExpresion().getTipo().size() + ","
+					+ node.getDefinicionFuncion().getSizeLocales() + ","
+					+ node.getDefinicionFuncion().getSizeParametros());
 		}
-		return super.visit(node);
+		else{
+			out.println("ret 0,"
+					+ node.getDefinicionFuncion().getSizeLocales() + ","
+					+ node.getDefinicionFuncion().getSizeParametros());
+		}
+		return null;
 	}
 
 	@Override
@@ -388,7 +450,9 @@ public class GeneracionCodigo extends DefaultVisitor {
 		// iniWhile_01:
 		out.println("inicioWhile_" + contadorWhileLocal + ":");
 
-		// CONDICION -- hay que visitarla
+		node.getExpresion().setVisitaDireccion(false);
+		node.getExpresion().setVisitaValor(true);
+		node.getExpresion().acepta(this);
 
 		// jz finWhile_01
 		out.println("jz finWhile_" + contadorWhileLocal);
@@ -402,27 +466,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 		// finWhile_01:
 		out.println("jz finWhile_" + contadorWhileLocal + ":");
 
-		// TODO Auto-generated method stub
-		return super.visit(node);
-	}
-
-	// acceso array - izq dirección , indice - valor.
-	@Override
-	public Object visit(AccesoArray node) { // -- ejemplo v[2]
-
-		// DIRECCIÓN
-		// generarDireccionVector -- devuelve dirección de v[]
-		// generarValorIndice -- devuelve el número 2 - índice
-		// push tamaño.tipoBaseArray
-		// mul
-		// add
-
-		// VALOR
-		// direccion(AccesoArray)
-		// LOAD
-
-		// TODO Auto-generated method stub
-		return super.visit(node);
+		return null;
 	}
 
 	// EJEMPLO EXAMEN

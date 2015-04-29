@@ -12,7 +12,7 @@ public class LiteralEntero extends AbstractExpresion {
 
 	@Override
 	public String toString() {
-		return "LiteralEntero [valor=" + getVisitaValor() + "]";
+		return "LiteralEntero [valor=" + getValor() + "]";
 	}
 
 	@Override

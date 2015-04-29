@@ -172,14 +172,14 @@ public class XMLVisitor extends DefaultVisitor {
 	}
 
 	public Object visit(LiteralEntero node) {
-		System.out.println("<LiteralEntero value='" + node.getVisitaValor() + "'>");
+		System.out.println("<LiteralEntero value='" + node.getValor() + "'>");
 		Object ret = super.visit(node);
 		System.out.println("</LiteralEntero>");
 		return ret;
 	}
 
 	public Object visit(LiteralReal node) {
-		System.out.println("<LiteralReal value='" + node.getVisitaValor() + "'>");
+		System.out.println("<LiteralReal value='" + node.getValor() + "'>");
 		Object ret = super.visit(node);
 		System.out.println("</LiteralReal>");
 		return ret;
