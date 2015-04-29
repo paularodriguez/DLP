@@ -8,6 +8,10 @@ public class DefinicionVariable implements Definicion {
 	private Tipo tipo;
 	private String nombre;
 	private boolean esParametro;
+	
+	private int direccion;
+	
+	private String ambito;
 
 	public DefinicionVariable(Tipo tipo, String nombre) {
 		this.setTipo(tipo);
@@ -47,6 +51,24 @@ public class DefinicionVariable implements Definicion {
 
 	public void setEsParametro(boolean esParametro) {
 		this.esParametro = esParametro;
+	}
+
+	@Override
+	public int getDireccion() {
+		return direccion;
+	}
+
+	@Override
+	public void setDireccion(int direccion) {
+		this.direccion = direccion;
+	}
+	
+	public String getAmbito(){
+		return ambito;
+	}
+	
+	public void setAmbito(String ambito){
+		this.ambito = ambito;
 	}
 
 }

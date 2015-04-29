@@ -1,0 +1,10 @@
+#source fichero.txt"
+call main
+halt
+#VAR a:int
+#FUNC main
+main:
+enter 0
+pusha 0
+pushi 0
+storei

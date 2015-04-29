@@ -13,7 +13,7 @@ public class LiteralReal extends AbstractExpresion{
 
 	@Override
 	public String toString() {
-		return "LiteralReal [valor=" + getValor() + "]";
+		return "LiteralReal [valor=" + getVisitaValor() + "]";
 	}
 
 	@Override

@@ -12,7 +12,7 @@ public class LiteralEntero extends AbstractExpresion {
 
 	@Override
 	public String toString() {
-		return "LiteralEntero [valor=" + getValor() + "]";
+		return "LiteralEntero [valor=" + getVisitaValor() + "]";
 	}
 
 	@Override
@@ -20,12 +20,16 @@ public class LiteralEntero extends AbstractExpresion {
 		v.visit(this);
 	}
 
-	public int getValor() {
+	public int valor() {
 		return valor;
 	}
 
 	public void setValor(int valor) {
 		this.valor = valor;
+	}
+	
+	public int getValor(){
+		return valor;
 	}
 
 }

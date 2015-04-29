@@ -7,4 +7,8 @@ public interface Definicion extends NodoAST {
 	String getNombre();
 
 	Tipo getTipo();
+	
+	int getDireccion();
+	
+	void setDireccion(int direccion);
 }

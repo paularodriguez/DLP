@@ -14,4 +14,13 @@ public interface Expresion extends NodoAST{
 	
 
 	public void setTipo(Tipo tipo);
+
+	public void setVisitaValor(boolean b);
+
+	public void setVisitaDireccion(boolean b);
+	
+	public boolean getVisitaValor();
+	
+	public boolean getVisitaDireccion();
+	
 }

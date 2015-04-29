@@ -20,10 +20,13 @@ public class InferenciaVisitor extends DefaultVisitor {
 
 		boolean existeMain = false;
 		for (Definicion d : node.definiciones) {
+
+			// Regla semántica
 			if (d instanceof DefinicionVariable) {
 				((DefinicionVariable) d).setEsParametro(false);
 			}
 
+			// Predicado
 			if (d.getNombre().equals("main")
 					&& (d instanceof DefinicionFuncion)) {
 				existeMain = true;
@@ -40,6 +43,7 @@ public class InferenciaVisitor extends DefaultVisitor {
 	public Object visit(DefinicionVariable node) {
 		Object ret = super.visit(node);
 
+		// Predicado: Parámetro función ha de ser de tipo primitivo.
 		if (node.EsParametro() && !node.getTipo().esPrimitivo()) {
 			gestorErrores
 					.error("Error semántico: Los parámetros de la función no son de tipo primitivo.");
@@ -48,6 +52,8 @@ public class InferenciaVisitor extends DefaultVisitor {
 	}
 
 	public Object visit(DefinicionFuncion node) {
+
+		// Reglas semánticas
 
 		for (DefinicionVariable param : node.getParametros()) {
 			param.setEsParametro(true);
@@ -63,6 +69,7 @@ public class InferenciaVisitor extends DefaultVisitor {
 
 		Object ret = super.visit(node);
 
+		// Predicado: El retorno de la función tiene que ser de tipo primitivo.
 		if (node.getRetorno() != null) {
 			if (!node.getRetorno().esPrimitivo()) {
 				gestorErrores
@@ -74,22 +81,56 @@ public class InferenciaVisitor extends DefaultVisitor {
 		return ret;
 	}
 
+	// EXPRESIONES
+
 	@Override
 	public Object visit(AccesoArray node) {
+
 		Object ret = super.visit(node);
-		node.setLValue(true);
-		// TIPO
-		node.setTipo(node.getIzquierda().getTipo());
+
+		// Predicados
+		if (!(node.getIzquierda().getTipo() instanceof TipoArray))
+			gestorErrores
+					.error("Error semántico: La expresión izquierda no es un TipoArray");
+		else if (!(node.getDerecha().getTipo() instanceof TipoEntero))
+			gestorErrores
+					.error("Error semántico: La expresión derecha no es un TipoEntero");
+		else {
+
+			// Reglas semánticas
+			node.setLValue(true);
+			node.setTipo(((TipoArray) node.getIzquierda().getTipo()).getTipo());
+		}
 		return ret;
 	}
 
 	@Override
 	public Object visit(AccesoCampo node) {
-		Object ret = super.visit(node);
-		node.setLValue(true);
-		// TIPO
-		node.setTipo(node.getIzquierda().getTipo());
-		return ret;
+		node.getIzquierda().acepta(this);
+
+		if (!(node.getIzquierda().getTipo() instanceof DefinicionStruct)) {
+			gestorErrores
+					.error("Error semántico: La expresión de la izquierda '"+ node.getIzquierda() +"' no es una estructura." + " Tipo = " + node.getIzquierda().getTipo() );
+		}
+
+		else if (!(node.getDerecha() instanceof Variable)) {
+			gestorErrores
+					.error("Error semántico: La expresión de la derecha no es una variable.");
+		}
+
+		else {
+			String idCampo = ((Variable) node.getDerecha()).getNombre();
+			Campo c = ((DefinicionStruct) node.getIzquierda().getTipo())
+					.buscarCampoNombre(idCampo);
+
+			if (!(c == null)) {
+				node.setTipo(c.getTipo());
+			} else {
+				gestorErrores.error("Error semántico: El campo no existe.");
+			}
+			node.setLValue(true);
+		}
+		return null;
 	}
 
 	public Object visit(Aritmetica node) {
@@ -132,6 +173,9 @@ public class InferenciaVisitor extends DefaultVisitor {
 		return ret;
 	}
 
+	/**
+	 * Predicados comparación
+	 */
 	@Override
 	public Object visit(Comparacion node) {
 		Object ret = super.visit(node);
@@ -147,7 +191,7 @@ public class InferenciaVisitor extends DefaultVisitor {
 
 		node.setTipo(node.getDefinicion().getRetorno());
 		node.setLValue(false);
-		
+
 		if (!(node.getListaExpresiones().size() == node.getDefinicion()
 				.getParametros().size())) {
 			gestorErrores
@@ -169,14 +213,13 @@ public class InferenciaVisitor extends DefaultVisitor {
 								+ "' no coincide con el tipo definido.");
 			}
 		}
-		
-		if (!(node.getTipo()!=null)){
-			gestorErrores
-			.error("Error semántico: La función '"
+
+		if (!(node.getTipo() != null)) {
+			gestorErrores.error("Error semántico: La función '"
 					+ node.getIdentificador()
 					+ "' no tiene definido valor de retorno.");
 		}
-		
+
 		return ret;
 	}
 
@@ -248,12 +291,6 @@ public class InferenciaVisitor extends DefaultVisitor {
 			gestorErrores
 					.error("Error semántico: No es posible asignar tipos no primitivos.");
 		}
-
-		/*
-		 * IMPLEMENTAR PREDICADOS: - ¿ExprIzq es un l-value? -
-		 * ¿ExprIzq.Tipo==ExprDer.Tipo? - ¿ExprIzq (o ExprDer) son un tipo
-		 * primitivo?
-		 */
 		return ret;
 	}
 
@@ -263,8 +300,10 @@ public class InferenciaVisitor extends DefaultVisitor {
 			s.setDefinicionFuncion(node.getDefinicionFuncion());
 		}
 
-		for (Sentencia s : node.getSentenciasElse()) {
-			s.setDefinicionFuncion(node.getDefinicionFuncion());
+		if (node.getSentenciasElse() != null) {
+			for (Sentencia s : node.getSentenciasElse()) {
+				s.setDefinicionFuncion(node.getDefinicionFuncion());
+			}
 		}
 
 		Object ret = super.visit(node);
@@ -313,7 +352,8 @@ public class InferenciaVisitor extends DefaultVisitor {
 
 	public Object visit(Print node) {
 		Object ret = super.visit(node);
-		if (!(node.getExpresion().getTipo().esPrimitivo())) {
+		Tipo tipo = node.getExpresion().getTipo();
+		if (tipo == null || !tipo.esPrimitivo()) {
 			gestorErrores
 					.error("Error semántico: No puede realizarse un Print sobre la expresión. Tipo no primitivo.");
 		}
@@ -323,7 +363,8 @@ public class InferenciaVisitor extends DefaultVisitor {
 
 	public Object visit(Read node) {
 		Object ret = super.visit(node);
-		if (!(node.getExpresion().getTipo().esPrimitivo())) {
+		if (node.getExpresion().getTipo() == null
+				|| !(node.getExpresion().getTipo().esPrimitivo())) {
 			gestorErrores
 					.error("Error semántico: No puede realizarse un Read sobre la expresión. Tipo no primitivo.");
 		}
@@ -338,15 +379,22 @@ public class InferenciaVisitor extends DefaultVisitor {
 	public Object visit(Return node) {
 		Object ret = super.visit(node);
 
-		if (node.getExpresion() != null) {
-			if (!(node.getExpresion().getTipo() == node.getDefinicionFuncion()
-					.getRetorno())) {
+		if (node.getDefinicionFuncion().getRetorno() == null) {
+			if (!(node.getExpresion() == null)) {
 				gestorErrores
-						.error("Error semántico: El tipo de retorno de la función '"
-								+ node.getDefinicionFuncion().getNombre()
-								+ "' es incorrecto.");
+						.error("Error semántico: La función no tiene definido un valor de retorno.");
 			}
+		} else {
+			if (node.getDefinicionFuncion().getRetorno() != null)
+				if (!(node.getDefinicionFuncion().getRetorno() == node
+						.getExpresion().getTipo())) {
+					gestorErrores
+							.error("Error semántico: El tipo de retorno de la función '"
+									+ node.getDefinicionFuncion().getNombre()
+									+ "' es incorrecto.");
+				}
 		}
+
 		return ret;
 	}
 
@@ -389,6 +437,16 @@ public class InferenciaVisitor extends DefaultVisitor {
 
 	public Object visit(TipoReal node) {
 		node.setPrimitivo(true);
+		return super.visit(node);
+	}
+	
+	public Object visit (DefinicionStruct node){
+		node.setPrimitivo(false);
+		return super.visit(node);
+	}
+	
+	public Object visit (Campo node){
+		
 		return super.visit(node);
 	}
 

@@ -26,4 +26,19 @@ public class TipoChar extends AbstractTipo {
 		v.visit(this);
 	}
 
+	@Override
+	public int size() {
+		return 1;
+	}
+
+	@Override
+	public String sufijo() {
+		return "b";
+	}
+
+	@Override
+	public String getMAPLName() {
+		return "char";
+	}
+
 }

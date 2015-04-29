@@ -26,4 +26,19 @@ public class TipoEntero extends AbstractTipo {
 		v.visit(this);
 	}
 
+	@Override
+	public int size() {
+		return 2;
+	}
+
+	@Override
+	public String sufijo() {
+		return "i";
+	}
+
+	@Override
+	public String getMAPLName() {
+		return "int";
+	}
+
 }

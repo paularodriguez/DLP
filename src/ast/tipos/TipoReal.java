@@ -26,4 +26,19 @@ public class TipoReal extends AbstractTipo {
 		v.visit(this);
 	}
 
+	@Override
+	public int size() {
+		return 4;
+	}
+
+	@Override
+	public String sufijo() {
+		return "f";
+	}
+
+	@Override
+	public String getMAPLName() {
+		return "real";
+	}
+
 }

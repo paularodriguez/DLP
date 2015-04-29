@@ -1,8 +1,8 @@
 package ast;
 
+import generacionCodigo.GeneracionCodigo;
+import gestionMemoria.GestionMemoria;
 import gestorErrores.GestorErrores;
-import introspector.model.IntrospectorModel;
-import introspector.view.IntrospectorTree;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -41,22 +41,30 @@ public class Main {
 
 		Parser parser = new Parser(lexico, gestor);
 		parser.run();
-		
-		//XMLVisitor vXML= new XMLVisitor();
-		//parser.ast.acepta(vXML);
-		
-		IdentificacionVisitor vIdentificacion= new IdentificacionVisitor(gestor);
+
+		// XMLVisitor vXML= new XMLVisitor();
+		// parser.ast.acepta(vXML);
+
+		IdentificacionVisitor vIdentificacion = new IdentificacionVisitor(
+				gestor);
 		parser.ast.acepta(vIdentificacion);
-		
-		InferenciaVisitor vInferencia= new InferenciaVisitor(gestor);
+
+		InferenciaVisitor vInferencia = new InferenciaVisitor(gestor);
 		parser.ast.acepta(vInferencia);
 
+		GestionMemoria vGestionMemoria = new GestionMemoria();
+		parser.ast.acepta(vGestionMemoria);
 		
-		/*if (!gestor.hayErrores()) {
-			IntrospectorModel modelo = new IntrospectorModel("Program",
-					parser.ast);
-			new IntrospectorTree("Instrospector", modelo);
-		}*/
+		if (!gestor.hayErrores()){
+			GeneracionCodigo gCodigo = new GeneracionCodigo();
+			parser.ast.acepta(gCodigo);
+		}
+
+		/*
+		 * if (!gestor.hayErrores()) { IntrospectorModel modelo = new
+		 * IntrospectorModel("Program", parser.ast); new
+		 * IntrospectorTree("Instrospector", modelo); }
+		 */
 	}
 
 }

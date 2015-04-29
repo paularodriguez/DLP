@@ -51,4 +51,21 @@ public class TipoArray extends AbstractTipo {
 		this.tamaño = tamaño;
 	}
 
+	@Override
+	public int size() {
+		return tamaño * tipo.size();
+	}
+
+	@Override
+	public String sufijo() {
+		return tipo.sufijo();
+	}
+
+	@Override
+	public String getMAPLName() {
+		return tamaño + "*" + getTipo().getMAPLName();
+	}
+	
+	
+
 }

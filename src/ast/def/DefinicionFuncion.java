@@ -14,6 +14,8 @@ public class DefinicionFuncion implements Definicion {
 	private List<DefinicionVariable> definicionesVariable;
 	private List<Sentencia> sentencias;
 
+	private int direccion;
+
 	public DefinicionFuncion(Tipo retorno, String nombre,
 			List<DefinicionVariable> parametros,
 			List<DefinicionVariable> defVariables, List<Sentencia> sentencias) {
@@ -80,6 +82,32 @@ public class DefinicionFuncion implements Definicion {
 	@Override
 	public Tipo getTipo() {
 		return retorno;
+	}
+
+	@Override
+	public int getDireccion() {
+		return direccion;
+	}
+
+	@Override
+	public void setDireccion(int direccion) {
+		this.direccion = direccion;
+	}
+	
+	public int getSizeLocales(){
+		int size = 0;
+		for (DefinicionVariable defVar: definicionesVariable){
+			size += defVar.getTipo().size();
+		}
+		return size;
+	}
+
+	public int getSizeParametros() {
+		int size = 0;
+		for (DefinicionVariable defVar: parametros){
+			size += defVar.getTipo().size();
+		}
+		return size;
 	}
 
 }
