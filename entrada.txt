@@ -3,23 +3,16 @@ type Persona
 	meses as integer;
 end type;
 
-dim a as integer;
-dim paula as Persona;
-
-dim c[20] as integer;
-
-
-
 function dobleSuma (a as integer) as integer
 	return a;
 end function;
 
 proc main()
 	
+	dim a as integer;
 	
-	
-	paula.meses = 5;
+	//paula.meses = 5;
 	//c[5] = 10;
-	//a = dobleSuma(2);
+	a = dobleSuma(2);
 
 end proc;

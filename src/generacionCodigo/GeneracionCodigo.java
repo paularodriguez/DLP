@@ -7,6 +7,8 @@ import java.util.Map;
 
 import visitor.DefaultVisitor;
 import ast.Programa;
+import ast.def.Campo;
+import ast.def.Definicion;
 import ast.def.DefinicionFuncion;
 import ast.def.DefinicionStruct;
 import ast.def.DefinicionVariable;
@@ -79,7 +81,11 @@ public class GeneracionCodigo extends DefaultVisitor {
 		out.println("#source " + NombreFicheroFuente + "\"");
 		out.println("call main");
 		out.println("halt");
-		return super.visit(node);
+
+		for (Definicion d : node.definiciones)
+			d.acepta(this);
+
+		return null;
 	}
 
 	@Override
@@ -88,19 +94,6 @@ public class GeneracionCodigo extends DefaultVisitor {
 				+ node.getTipo().getMAPLName());
 
 		node.setAmbito("GLOBAL");
-
-		// DIRECCIÓN
-
-		// si la variable es global -- PUSHA offset
-
-		// si la variable no es global -- PUSHA BP
-		// PUSH offset
-		// ADD
-
-		// VALOR
-		// load
-		// storef
-
 		return null;
 	}
 
@@ -108,7 +101,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 	public Object visit(DefinicionFuncion node) {
 
 		out.println("#FUNC " + node.getNombre());
-
+		
 		for (DefinicionVariable dv : node.getParametros()) {
 			out.println("#PARAM " + dv.getNombre() + ":"
 					+ dv.getTipo().getMAPLName());
@@ -131,9 +124,8 @@ public class GeneracionCodigo extends DefaultVisitor {
 			s.acepta(this);
 		}
 
-		// RET
-		if (node.getRetorno() != null) {
-			out.println("RET 0," + node.getSizeLocales() + ","
+		if (node.getRetorno() == null) {
+			out.println("ret 0," + node.getSizeLocales() + ","
 					+ node.getSizeParametros());
 		}
 
@@ -142,35 +134,37 @@ public class GeneracionCodigo extends DefaultVisitor {
 
 	@Override
 	public Object visit(DefinicionStruct node) {
-		out.println("#TYPE " + node.getNombre());
+		out.println("#TYPE " + node.getNombre() +": {");
+		
+		for (Campo c:node.getListaCampos()){
+			c.acepta(this);
+		}
+		
+		out.println("}");
+		return null;
+	}
+	
+	@Override
+	public Object visit(Campo node) {
+		out.println("\t" + node.getNombre() + ":" + node.getTipo().getMAPLName());
 		return null;
 	}
 
-	// acceso array - izq dirección , indice - valor.
 	@Override
-	public Object visit(AccesoArray node) { // -- ejemplo v[2]
-
-		// DIRECCIÓN
-		// generarDireccionVector -- devuelve dirección de v[]
-		// generarValorIndice -- devuelve el número 2 - índice
-		// push tamaño.tipoBaseArray
-		// mul
-		// add
-
-		// VALOR
-		// LOAD
-
-		//visita nodo izquierdo dirección
+	public Object visit(AccesoArray node) { 
+		
+		// visita nodo izquierdo dirección
 		node.getIzquierda().setVisitaDireccion(true);
 		node.getIzquierda().setVisitaValor(false);
 		node.getIzquierda().acepta(this);
-		
-		//visita nodo derecho valor
+
+		// visita nodo derecho valor
 		node.getDerecha().setVisitaDireccion(false);
 		node.getDerecha().setVisitaValor(true);
 		node.getDerecha().acepta(this);
-		
-		out.println("push " + ((TipoArray)node.getIzquierda().getTipo()).getTipo().size());
+
+		out.println("push "
+				+ ((TipoArray) node.getIzquierda().getTipo()).getTipo().size());
 		out.println("mul");
 		out.println("add");
 
@@ -188,10 +182,11 @@ public class GeneracionCodigo extends DefaultVisitor {
 		node.getIzquierda().acepta(this);
 
 		String idCampo = ((Variable) node.getDerecha()).getNombre();
-		int direccionCampo = ((DefinicionStruct)node.getIzquierda().getTipo()).buscarCampoNombre(idCampo).getDireccion();
+		int direccionCampo = ((DefinicionStruct) node.getIzquierda().getTipo())
+				.buscarCampoNombre(idCampo).getDireccion();
 
 		out.println("push " + direccionCampo);
-		
+
 		out.println("add");
 
 		return null;
@@ -270,7 +265,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 			e.acepta(this);
 		}
 
-		out.println(node.getIdentificador() + ":");
+		out.println("call " + node.getIdentificador());
 
 		return null;
 	}
@@ -414,7 +409,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 		out.println("out" + node.getExpresion().getTipo().sufijo());
 		return null;
 	}
-	
+
 	@Override
 	public Object visit(Read node) {
 		node.getExpresion().setVisitaDireccion(true);
@@ -433,11 +428,9 @@ public class GeneracionCodigo extends DefaultVisitor {
 			out.println("ret " + node.getExpresion().getTipo().size() + ","
 					+ node.getDefinicionFuncion().getSizeLocales() + ","
 					+ node.getDefinicionFuncion().getSizeParametros());
-		}
-		else{
-			out.println("ret 0,"
-					+ node.getDefinicionFuncion().getSizeLocales() + ","
-					+ node.getDefinicionFuncion().getSizeParametros());
+		} else {
+			out.println("ret 0," + node.getDefinicionFuncion().getSizeLocales()
+					+ "," + node.getDefinicionFuncion().getSizeParametros());
 		}
 		return null;
 	}

@@ -1,22 +1,24 @@
 #source fichero.txt"
 call main
 halt
-#TYPE Persona
-#VAR a:int
-#VAR paula:Persona
-#VAR c:20*int
+#TYPE Persona: {
+	edad:int
+	meses:int
+}
 #FUNC dobleSuma
 #PARAM a:int
 #RET int
 dobleSuma:
 enter 0
 ret 2,0,2
-RET 0,0,2
 #FUNC main
+#LOCAL a:int
 main:
-enter 0
-pusha 2
-push 2
+enter 2
+pusha BP
+push -2
 add
-pushi 5
+pushi 2
+call dobleSuma
 storei
+ret 0,2,0
