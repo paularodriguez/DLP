@@ -1,0 +1,39 @@
+type Punto
+	x as integer;
+	y as integer;
+end type;
+
+dim i as integer;
+dim v[3] as integer;
+dim origen as Punto;
+
+proc f1(p as integer, z as real)
+	dim local1 as character;
+	dim local2 as integer;
+	
+	i = 3;
+	p = 3; 
+	local2 = 3;
+	
+end proc;
+
+proc f2()
+	dim w[5] as integer;
+	
+	v[2]= 5555;
+	w[2]= 5555;
+	print w[i-1];
+end proc;
+
+proc f3()
+	dim centro as Punto;
+	
+	origen.y = 10;
+	centro.y = 10;
+end proc;
+
+proc main()
+	f1(1000, 1.618033);
+	//f2();
+	//f3();
+end proc;

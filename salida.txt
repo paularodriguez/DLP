@@ -1,24 +1,95 @@
 #source fichero.txt"
 call main
 halt
-#TYPE Persona: {
-	edad:int
-	meses:int
+#TYPE Punto: {
+	x:int
+	y:int
 }
-#FUNC dobleSuma
-#PARAM a:int
-#RET int
-dobleSuma:
-enter 0
-ret 2,0,2
-#FUNC main
-#LOCAL a:int
-main:
-enter 2
+#VAR i:int
+#VAR v:3*int
+#VAR origen:Punto
+#FUNC f1
+#PARAM p:int
+#PARAM z:real
+#LOCAL local1:char
+#LOCAL local2:int
+f1:
+enter 3
+' ### Line 14
+pusha 0
+pushi 3
+storei
+' ### Line 15
 pusha BP
-push -2
+push 8
+add
+pushi 3
+storei
+' ### Line 16
+pusha BP
+push -3
+add
+pushi 3
+storei
+ret 0,3,6
+#FUNC f2
+#LOCAL w:5*int
+f2:
+enter 10
+' ### Line 23
+pusha 2
+pushi 2
+push 2
+mul
+add
+pushi 5555
+storei
+' ### Line 24
+pusha BP
+push -10
 add
 pushi 2
-call dobleSuma
+push 2
+mul
+add
+pushi 5555
 storei
-ret 0,2,0
+pusha BP
+push -10
+add
+pusha 0
+loadi
+pushi 1
+subi
+push 2
+mul
+add
+load
+outi
+ret 0,10,0
+#FUNC f3
+#LOCAL centro:Punto
+f3:
+enter 4
+' ### Line 31
+pusha 8
+push 2
+add
+pushi 10
+storei
+' ### Line 32
+pusha BP
+push -4
+add
+push 2
+add
+pushi 10
+storei
+ret 0,4,0
+#FUNC main
+main:
+enter 0
+pushi 1000
+pushf 1.618033
+call f1
+ret 0,0,0

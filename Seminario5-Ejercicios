@@ -1,0 +1,54 @@
+//E1
+dim a as integer;
+
+proc main()
+
+read a;
+
+if a>8 then
+	print a + 86;
+else
+	print a * 34;
+end if;	
+
+print 'a';
+
+end proc;
+
+//E2
+dim f as real;
+dim i as integer;
+
+proc main()
+
+read i;
+while i < 10 or i > 10 do
+	read i;
+end while;
+
+f = 2.8;
+f = f + i;
+f = f + ctype (real, i);
+print f;
+
+end proc;
+
+//E3
+dim i as integer;
+
+proc f(i as integer)
+end proc;
+
+function imprime(n as integer) as integer
+	print n;
+	return 1111;
+end function;
+
+proc main()
+	read i;
+	
+	print imprime(i);
+	if i then
+		imprime(i);
+	end if;
+end proc;

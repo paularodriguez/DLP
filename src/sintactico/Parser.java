@@ -925,7 +925,7 @@ case 29:
 break;
 case 30:
 //#line 159 "../src/sintactico/sintactico.y"
-{yyval = new Asignacion((Expresion)val_peek(3),(Expresion)val_peek(1));}
+{yyval = new Asignacion((Expresion)val_peek(3),(Expresion)val_peek(1), lexico.line());}
 break;
 case 31:
 //#line 160 "../src/sintactico/sintactico.y"

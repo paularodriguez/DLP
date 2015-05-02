@@ -188,6 +188,10 @@ public class GeneracionCodigo extends DefaultVisitor {
 		out.println("push " + direccionCampo);
 
 		out.println("add");
+		
+		if (node.getVisitaValor()) {
+			out.println("load");
+		}		
 
 		return null;
 	}
@@ -212,7 +216,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 		node.getExpresion().setVisitaValor(true);
 		node.getExpresion().setVisitaDireccion(false);
 		node.getExpresion().acepta(this);
-		cast(node.getExpresion().getTipo(), node.getTipo());
+		cast(node.getExpresion().getTipo(), node.getTipoCast());
 
 		// si es real a char es: f2i
 		// i2b
@@ -337,6 +341,8 @@ public class GeneracionCodigo extends DefaultVisitor {
 
 	@Override
 	public Object visit(Asignacion node) {
+		
+		out.println("' ### Line " + node.linea);
 
 		node.getIzquierda().setVisitaValor(false);
 		node.getIzquierda().setVisitaDireccion(true);
@@ -457,7 +463,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 		// jmp inicioWhile_01
 		out.println("jmp inicioWhile_" + contadorWhileLocal);
 		// finWhile_01:
-		out.println("jz finWhile_" + contadorWhileLocal + ":");
+		out.println("finWhile_" + contadorWhileLocal + ":");
 
 		return null;
 	}

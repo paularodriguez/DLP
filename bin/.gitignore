@@ -1,8 +1,0 @@
-/ast
-/generacionCodigo
-/gestionMemoria
-/gestorErrores
-/lexico
-/semantico
-/sintactico
-/visitor

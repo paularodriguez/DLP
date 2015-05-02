@@ -1,18 +1,18 @@
-type Persona
-	edad as integer;
-	meses as integer;
-end type;
+dim i as integer;
 
-function dobleSuma (a as integer) as integer
-	return a;
+proc f(i as integer)
+end proc;
+
+function imprime(n as integer) as integer
+	print n;
+	return 1111;
 end function;
 
 proc main()
+	read i;
 	
-	dim a as integer;
-	
-	//paula.meses = 5;
-	//c[5] = 10;
-	a = dobleSuma(2);
-
+	print imprime(i);
+	if i then
+		imprime(i);
+	end if;
 end proc;

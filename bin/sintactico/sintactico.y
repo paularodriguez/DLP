@@ -156,7 +156,7 @@ sentencias
 sentencia
 		: 	PRINT expresion ';'														{$$ = new Print((Expresion)$2);}
 		|	READ expresion ';'														{$$ = new Read((Expresion)$2);}
-		|	expresion '=' expresion ";"												{$$ = new Asignacion((Expresion)$1,(Expresion)$3);}
+		|	expresion '=' expresion ";"												{$$ = new Asignacion((Expresion)$1,(Expresion)$3, lexico.line());}
 		|	RETURN expresion ";"													{$$ = new Return((Expresion)$2);}
 		|	RETURN ";"																{$$ = new Return(null);}
 		|	WHILE expresion DO sentencias END WHILE ';'								{$$ = new While((Expresion)$2, (List<Sentencia>)$4);}
