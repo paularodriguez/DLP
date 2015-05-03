@@ -166,8 +166,8 @@ sentencia
 		;
 
 expresiones_opc
-		:	/*vacio*/
-		| 	expresiones
+		:	/*vacio*/							{$$ = new ArrayList<Expresion>();}
+		| 	expresiones							{$$ = $1;}
 		;
 		
 expresiones

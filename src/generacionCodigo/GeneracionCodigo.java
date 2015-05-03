@@ -77,8 +77,8 @@ public class GeneracionCodigo extends DefaultVisitor {
 
 	@Override
 	public Object visit(Programa node) {
-		String NombreFicheroFuente = "fichero.txt";
-		out.println("#source " + NombreFicheroFuente + "\"");
+		String NombreFicheroFuente = "entrada.txt";
+		out.println("#source \"" + NombreFicheroFuente + "\"");
 		out.println("call main");
 		out.println("halt");
 
@@ -169,7 +169,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 		out.println("add");
 
 		if (node.getVisitaValor()) {
-			out.println("load");
+			out.println("load" + ((TipoArray) node.getIzquierda().getTipo()).getTipo().sufijo());
 		}
 
 		return null;
@@ -431,6 +431,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 		if (node.getExpresion() != null) {
 			node.getExpresion().setVisitaDireccion(false);
 			node.getExpresion().setVisitaValor(true);
+			node.getExpresion().acepta(this);
 			out.println("ret " + node.getExpresion().getTipo().size() + ","
 					+ node.getDefinicionFuncion().getSizeLocales() + ","
 					+ node.getDefinicionFuncion().getSizeParametros());

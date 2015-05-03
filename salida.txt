@@ -1,95 +1,81 @@
-#source fichero.txt"
+#source "entrada.txt"
 call main
 halt
-#TYPE Punto: {
+#TYPE Circulo: {
 	x:int
 	y:int
+	radio:real
 }
+#VAR v:4*real
 #VAR i:int
-#VAR v:3*int
-#VAR origen:Punto
-#FUNC f1
-#PARAM p:int
-#PARAM z:real
-#LOCAL local1:char
-#LOCAL local2:int
-f1:
-enter 3
-' ### Line 14
-pusha 0
-pushi 3
-storei
-' ### Line 15
-pusha BP
-push 8
-add
-pushi 3
-storei
-' ### Line 16
-pusha BP
-push -3
-add
-pushi 3
-storei
-ret 0,3,6
-#FUNC f2
-#LOCAL w:5*int
-f2:
-enter 10
-' ### Line 23
-pusha 2
-pushi 2
-push 2
-mul
-add
-pushi 5555
-storei
-' ### Line 24
-pusha BP
-push -10
-add
-pushi 2
-push 2
-mul
-add
-pushi 5555
-storei
-pusha BP
-push -10
-add
-pusha 0
-loadi
-pushi 1
-subi
-push 2
-mul
-add
-load
-outi
-ret 0,10,0
-#FUNC f3
-#LOCAL centro:Punto
-f3:
-enter 4
-' ### Line 31
-pusha 8
-push 2
-add
-pushi 10
-storei
-' ### Line 32
-pusha BP
-push -4
-add
-push 2
-add
-pushi 10
-storei
-ret 0,4,0
+#VAR diana:Circulo
 #FUNC main
 main:
 enter 0
-pushi 1000
+' ### Line 12
+pusha 16
+pushi 0
+storei
+' ### Line 13
+pusha 18
+push 2
+add
+pushi 7
+storei
+' ### Line 14
+pusha 18
+push 0
+add
+pusha 18
+push 2
+add
+load
+pusha 16
+loadi
+addi
+storei
+' ### Line 15
+pusha 0
+pushi 0
+push 4
+mul
+add
 pushf 1.618033
-call f1
+storef
+' ### Line 16
+pusha 18
+push 4
+add
+pusha 0
+pusha 16
+loadi
+push 4
+mul
+add
+loadf
+pushf 2.0
+addf
+storef
+pusha 0
+pusha 16
+loadi
+pushi 2
+addi
+push 4
+mul
+add
+loadf
+outf
+pusha 0
+pusha 18
+push 2
+add
+load
+pushi 7
+subi
+push 4
+mul
+add
+loadf
+outf
 ret 0,0,0

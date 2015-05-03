@@ -1,0 +1,76 @@
+//Ej1
+proc main()
+	dim a as integer;
+	dim b as integer;
+	
+	a = 37;
+	read b;
+end proc;
+
+//Ej2
+dim a as integer;
+dim b as real;
+dim c as character;
+
+function ejemplo(par1 as real, par2 as integer) as integer	
+	
+	dim local1 as integer;
+	dim local2 as real;
+	b = 3.4;
+	par1 = 3.4;
+	local2 = 3.4;
+	return par2 + a + local1;
+	
+end function;
+
+proc main()
+	print a + ejemplo(1.5, 27);
+end proc;
+
+//Ej3
+type Persona
+	sueldo as real;
+	edad as integer;
+	inicial as character;
+end type;
+
+dim a as character;
+
+dim carlos as Persona;
+dim javi as Persona;
+
+proc main()
+	carlos.edad = 20;
+	javi.edad = 20;
+end proc;
+
+//Ej4
+dim b as character;
+dim i as integer;
+dim v[10] as integer;
+
+proc main()
+	i = 7;
+	v[i] = 1111;
+end proc;
+
+//Ej5
+type Circulo
+	x as integer;
+	y as integer;
+	radio as real;
+end type;
+
+dim v[4] as real;
+dim i as integer;
+dim diana as Circulo;
+
+proc main()
+	i = 0;
+	diana.y = 7;
+	diana.x = diana.y + i;
+	v[0] = 1.618033;
+	diana.radio = v[i] + 2.0;
+	print v[i + 2];
+	print v[diana.y - 7];
+end proc;

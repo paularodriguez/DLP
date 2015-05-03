@@ -951,6 +951,14 @@ case 36:
 //#line 165 "../src/sintactico/sintactico.y"
 {yyval = new InvocacionProcedimiento((String)val_peek(4), (List<Expresion>)val_peek(2));}
 break;
+case 37:
+//#line 169 "../src/sintactico/sintactico.y"
+{yyval = new ArrayList<Expresion>();}
+break;
+case 38:
+//#line 170 "../src/sintactico/sintactico.y"
+{yyval = val_peek(0);}
+break;
 case 39:
 //#line 174 "../src/sintactico/sintactico.y"
 {List<Expresion> lista = (List<Expresion>) val_peek(2);
@@ -1091,7 +1099,7 @@ case 69:
 												yyval = campo;
 												}
 break;
-//#line 1026 "Parser.java"
+//#line 1034 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
