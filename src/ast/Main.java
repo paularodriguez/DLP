@@ -45,17 +45,21 @@ public class Main {
 		// XMLVisitor vXML= new XMLVisitor();
 		// parser.ast.acepta(vXML);
 
-		IdentificacionVisitor vIdentificacion = new IdentificacionVisitor(
-				gestor);
-		parser.ast.acepta(vIdentificacion);
+		if (!gestor.hayErrores()) {
+			IdentificacionVisitor vIdentificacion = new IdentificacionVisitor(
+					gestor);
+			parser.ast.acepta(vIdentificacion);
+		}
 
-		InferenciaVisitor vInferencia = new InferenciaVisitor(gestor);
-		parser.ast.acepta(vInferencia);
+		if (!gestor.hayErrores()) {
+			InferenciaVisitor vInferencia = new InferenciaVisitor(gestor);
+			parser.ast.acepta(vInferencia);
 
-		GestionMemoria vGestionMemoria = new GestionMemoria();
-		parser.ast.acepta(vGestionMemoria);
+			GestionMemoria vGestionMemoria = new GestionMemoria();
+			parser.ast.acepta(vGestionMemoria);
+		}
 		
-		if (!gestor.hayErrores()){
+		if (!gestor.hayErrores()) {
 			GeneracionCodigo gCodigo = new GeneracionCodigo();
 			parser.ast.acepta(gCodigo);
 		}

@@ -38,7 +38,7 @@ public class GestionMemoria extends DefaultVisitor {
 				def.setDireccion(direccionLibre);
 				direccionLibre += def.getTipo().size();
 				
-				System.out.println("La variable " + def.getNombre() +" tiene asignada la dirección " + def.getDireccion()); 
+				//System.out.println("La variable " + def.getNombre() +" tiene asignada la dirección " + def.getDireccion()); 
 
 			}
 		}
@@ -64,7 +64,7 @@ public class GestionMemoria extends DefaultVisitor {
 			//node.setAmbitoVariable("LOCAL"); -- Para distinguir en el futuro qué tipo de variable es.
 		}
 
-		for (int i = 0; i < node.getParametros().size(); i++) {
+		/*for (int i = 0; i < node.getParametros().size(); i++) {
 			System.out.println("Parametro: "
 					+ node.getParametros().get(i).getNombre() + " - Offset: "
 					+ node.getParametros().get(i).getDireccion());
@@ -74,7 +74,7 @@ public class GestionMemoria extends DefaultVisitor {
 					+ node.getDefinicionesVariable().get(i).getNombre()
 					+ " - Offset: "
 					+ node.getDefinicionesVariable().get(i).getDireccion());
-		}
+		}*/
 
 		return null;
 	}
@@ -94,12 +94,12 @@ public class GestionMemoria extends DefaultVisitor {
 			offset += node.getListaCampos().get(i).size();
 		}
 
-		for (int i = 0; i < node.getListaCampos().size(); i++) {
+		/*for (int i = 0; i < node.getListaCampos().size(); i++) {
 			System.out.println("Campo: "
 					+ node.getListaCampos().get(i).getNombre()
 					+ " - Dirección: "
 					+ node.getListaCampos().get(i).getDireccion());
-		}
+		}*/
 
 		return null;
 	}

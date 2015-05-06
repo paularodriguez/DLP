@@ -5,11 +5,12 @@ import java.util.List;
 import visitor.Visitor;
 import ast.def.Definicion;
 
-public class Programa implements NodoAST {
+public class Programa extends AbstractNodoAST {
 
 	public List<Definicion> definiciones;
 	
-	public Programa(List<Definicion> definiciones){
+	public Programa(List<Definicion> definiciones, int linea, int columna){
+		super(linea,columna);
 		this.definiciones = definiciones;
 	}
 

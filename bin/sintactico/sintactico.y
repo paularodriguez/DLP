@@ -56,7 +56,7 @@ import gestorErrores.GestorErrores;
 // * Gramática y acciones Yacc
 
 programa
-		: 	definiciones						{this.ast = new Programa((List<Definicion>)$1);}						
+		: 	definiciones						{this.ast = new Programa((List<Definicion>)$1, lexico.line(), lexico.column());}						
 		;
 
 definiciones
@@ -91,10 +91,10 @@ definiciones_variable
 definicion_variable
 		: 	DIM IDENT array_opc AS tipo ';'		{DefinicionVariable defVar = null; 
 												if (((List<Integer>)$3).size() == 0){
-													defVar = new DefinicionVariable((Tipo)$5,(String)$2);
+													defVar = new DefinicionVariable((Tipo)$5,(String)$2, lexico.line(), lexico.column());
 												}
 												else{
-													defVar = new DefinicionVariable((Tipo)TipoArray.crearArray((Tipo)$5, (List<Integer>)$3),(String)$2);
+													defVar = new DefinicionVariable((Tipo)TipoArray.crearArray((Tipo)$5, (List<Integer>)$3),(String)$2, lexico.line(), lexico.column());
 												}
 												$$ = defVar;
 												}						
@@ -115,15 +115,15 @@ lista_dimensiones
 		;
 	
 definicion_struct
-		:	TYPE IDENT lista_campos END TYPE ';'			{$$ = new DefinicionStruct((String)$2, (List<Campo>)$3);}	
+		:	TYPE IDENT lista_campos END TYPE ';'			{$$ = new DefinicionStruct((String)$2, (List<Campo>)$3, lexico.line(), lexico.column());}	
 		;
 		
 definicion_funcion
-		: 	FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'		{$$ = new DefinicionFuncion((Tipo)$7, (String)$2, (List<DefinicionVariable>)$4, (List<DefinicionVariable>)$8, (List<Sentencia>)$9);}
+		: 	FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'		{$$ = new DefinicionFuncion((Tipo)$7, (String)$2, (List<DefinicionVariable>)$4, (List<DefinicionVariable>)$8, (List<Sentencia>)$9, lexico.line(), lexico.column());}
 		;
 		
 definicion_procedimiento
-		:	PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';'						{$$ = new DefinicionFuncion(null,(String)$2, (List<DefinicionVariable>)$4, (List<DefinicionVariable>)$6, (List<Sentencia>)$7);}
+		:	PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';'						{$$ = new DefinicionFuncion(null,(String)$2, (List<DefinicionVariable>)$4, (List<DefinicionVariable>)$6, (List<Sentencia>)$7, lexico.line(), lexico.column());}
 		
 listaParametrosOpcional
 		:  	/*vacío*/							{$$ = new ArrayList<DefinicionVariable>();} 				
@@ -132,10 +132,10 @@ listaParametrosOpcional
 	
 listaParametros 
 		: 	listaParametros ',' IDENT AS tipo 	{List<DefinicionVariable> lista = (List<DefinicionVariable>) $1;
-												lista.add(new DefinicionVariable((Tipo)$5, (String)$3));
+												lista.add(new DefinicionVariable((Tipo)$5, (String)$3, lexico.line(), lexico.column()));
 												$$ = lista;};
 		| 	IDENT AS tipo						{List<DefinicionVariable> lista = new ArrayList<DefinicionVariable>();
-												lista.add(new DefinicionVariable((Tipo)$3, (String)$1));
+												lista.add(new DefinicionVariable((Tipo)$3, (String)$1, lexico.line(), lexico.column()));
 												$$ = lista;}								
 		;
 		
@@ -154,15 +154,15 @@ sentencias
 		;
 
 sentencia
-		: 	PRINT expresion ';'														{$$ = new Print((Expresion)$2);}
-		|	READ expresion ';'														{$$ = new Read((Expresion)$2);}
-		|	expresion '=' expresion ";"												{$$ = new Asignacion((Expresion)$1,(Expresion)$3, lexico.line());}
-		|	RETURN expresion ";"													{$$ = new Return((Expresion)$2);}
-		|	RETURN ";"																{$$ = new Return(null);}
-		|	WHILE expresion DO sentencias END WHILE ';'								{$$ = new While((Expresion)$2, (List<Sentencia>)$4);}
-		|	IF expresion THEN sentencias_opc END IF ';'								{$$ = new IF((Expresion)$2, (List<Sentencia>)$4);}
-		|	IF expresion THEN sentencias_opc ELSE sentencias_opc END IF ';'			{$$ = new IF((Expresion)$2, (List<Sentencia>)$4, (List<Sentencia>)$6);}
-		|  	IDENT '(' expresiones_opc ')' ";"										{$$ = new InvocacionProcedimiento((String)$1, (List<Expresion>)$3);}
+		: 	PRINT expresion ';'														{$$ = new Print((Expresion)$2, lexico.line(), lexico.column());}
+		|	READ expresion ';'														{$$ = new Read((Expresion)$2, lexico.line(), lexico.column());}
+		|	expresion '=' expresion ";"												{$$ = new Asignacion((Expresion)$1,(Expresion)$3, lexico.line(), lexico.column());}
+		|	RETURN expresion ";"													{$$ = new Return((Expresion)$2, lexico.line(), lexico.column());}
+		|	RETURN ";"																{$$ = new Return(null, lexico.line(), lexico.column());}
+		|	WHILE expresion DO sentencias END WHILE ';'								{$$ = new While((Expresion)$2, (List<Sentencia>)$4, lexico.line(), lexico.column());}
+		|	IF expresion THEN sentencias_opc END IF ';'								{$$ = new IF((Expresion)$2, (List<Sentencia>)$4, lexico.line(), lexico.column());}
+		|	IF expresion THEN sentencias_opc ELSE sentencias_opc END IF ';'			{$$ = new IF((Expresion)$2, (List<Sentencia>)$4, (List<Sentencia>)$6, lexico.line(), lexico.column());}
+		|  	IDENT '(' expresiones_opc ')' ";"										{$$ = new InvocacionProcedimiento((String)$1, (List<Expresion>)$3, lexico.line(), lexico.column());}
 		;
 
 expresiones_opc
@@ -180,28 +180,28 @@ expresiones
 		;
 
 expresion
-		: 	IDENT								{$$ = new Variable((String)$1);}
-		| 	CTE_ENTERA							{$$ = new LiteralEntero((Integer)$1);}
-		| 	CHARACTER							{$$ = new LiteralCaracter((Character)$1);}
-		|	REAL								{$$ = new LiteralReal((Double)$1);}
-		|	expresion '+' expresion				{$$ = new Aritmetica((Expresion)$1, "+", (Expresion)$3);}
-		|	expresion '-' expresion				{$$ = new Aritmetica((Expresion)$1, "-", (Expresion)$3);}
-		|	expresion '*' expresion				{$$ = new Aritmetica((Expresion)$1, "*", (Expresion)$3);}
-		|	expresion '/' expresion				{$$ = new Aritmetica((Expresion)$1, "/", (Expresion)$3);}	
-		|	expresion '%' expresion				{$$ = new Aritmetica((Expresion)$1, "%", (Expresion)$3);}
-		|	expresion '[' expresion ']'			{$$ = new AccesoArray((Expresion)$1, (Expresion)$3);}
-		|	expresion '.' expresion				{$$ = new AccesoCampo((Expresion)$1, (Expresion)$3);}
-		|	expresion '<' expresion				{$$ = new Comparacion((Expresion)$1, "<", (Expresion)$3);}
-		|	expresion '>' expresion				{$$ = new Comparacion((Expresion)$1, ">", (Expresion)$3);}
-		|	expresion MENORIGUAL expresion		{$$ = new Comparacion((Expresion)$1, "<=", (Expresion)$3);}
-		|	expresion MAYORIGUAL expresion		{$$ = new Comparacion((Expresion)$1, ">=", (Expresion)$3);}
-		|	expresion AND expresion				{$$ = new Logica((Expresion)$1, "and", (Expresion)$3);}
-		|	expresion OR expresion				{$$ = new Logica((Expresion)$1, "or", (Expresion)$3);}
-		|	NOT expresion						{$$ = new Negacion((Expresion)$2);}
-		|	expresion IGUALDAD expresion		{$$ = new Comparacion((Expresion)$1, "==", (Expresion)$3);}
-		|	expresion DISTINTO expresion		{$$ = new Comparacion((Expresion)$1, "<>", (Expresion)$3);}
-		| 	IDENT '(' expresiones_opc ')' 		{$$ = new InvocacionFuncion((String)$1, (List<Expresion>)$3);}
-		| 	CTYPE '(' tipo ',' expresion ')'	{$$ = new Cast((Tipo)$3, (Expresion)$5);}
+		: 	IDENT								{$$ = new Variable((String)$1, lexico.line(), lexico.column());}
+		| 	CTE_ENTERA							{$$ = new LiteralEntero((Integer)$1, lexico.line(), lexico.column());}
+		| 	CHARACTER							{$$ = new LiteralCaracter((Character)$1, lexico.line(), lexico.column());}
+		|	REAL								{$$ = new LiteralReal((Double)$1, lexico.line(), lexico.column());}
+		|	expresion '+' expresion				{$$ = new Aritmetica((Expresion)$1, "+", (Expresion)$3, lexico.line(), lexico.column());}
+		|	expresion '-' expresion				{$$ = new Aritmetica((Expresion)$1, "-", (Expresion)$3, lexico.line(), lexico.column());}
+		|	expresion '*' expresion				{$$ = new Aritmetica((Expresion)$1, "*", (Expresion)$3, lexico.line(), lexico.column());}
+		|	expresion '/' expresion				{$$ = new Aritmetica((Expresion)$1, "/", (Expresion)$3, lexico.line(), lexico.column());}	
+		|	expresion '%' expresion				{$$ = new Aritmetica((Expresion)$1, "%", (Expresion)$3, lexico.line(), lexico.column());}
+		|	expresion '[' expresion ']'			{$$ = new AccesoArray((Expresion)$1, (Expresion)$3, lexico.line(), lexico.column());}
+		|	expresion '.' expresion				{$$ = new AccesoCampo((Expresion)$1, (Expresion)$3, lexico.line(), lexico.column());}
+		|	expresion '<' expresion				{$$ = new Comparacion((Expresion)$1, "<", (Expresion)$3, lexico.line(), lexico.column());}
+		|	expresion '>' expresion				{$$ = new Comparacion((Expresion)$1, ">", (Expresion)$3, lexico.line(), lexico.column());}
+		|	expresion MENORIGUAL expresion		{$$ = new Comparacion((Expresion)$1, "<=", (Expresion)$3, lexico.line(), lexico.column());}
+		|	expresion MAYORIGUAL expresion		{$$ = new Comparacion((Expresion)$1, ">=", (Expresion)$3, lexico.line(), lexico.column());}
+		|	expresion AND expresion				{$$ = new Logica((Expresion)$1, "and", (Expresion)$3, lexico.line(), lexico.column());}
+		|	expresion OR expresion				{$$ = new Logica((Expresion)$1, "or", (Expresion)$3, lexico.line(), lexico.column());}
+		|	NOT expresion						{$$ = new Negacion((Expresion)$2, lexico.line(), lexico.column());}
+		|	expresion IGUALDAD expresion		{$$ = new Comparacion((Expresion)$1, "==", (Expresion)$3, lexico.line(), lexico.column());}
+		|	expresion DISTINTO expresion		{$$ = new Comparacion((Expresion)$1, "<>", (Expresion)$3, lexico.line(), lexico.column());}
+		| 	IDENT '(' expresiones_opc ')' 		{$$ = new InvocacionFuncion((String)$1, (List<Expresion>)$3, lexico.line(), lexico.column());}
+		| 	CTYPE '(' tipo ',' expresion ')'	{$$ = new Cast((Tipo)$3, (Expresion)$5, lexico.line(), lexico.column());}
 		;
 		
 tipo
@@ -222,10 +222,10 @@ lista_campos
 campo
 		:  	IDENT array_opc AS tipo ';'			{Campo campo = null; 
 												if (((List<Integer>)$2).size() == 0){
-													campo = new Campo((Tipo)$4,(String)$1);
+													campo = new Campo((Tipo)$4,(String)$1, lexico.line(), lexico.column());
 												}
 												else{
-													campo = new Campo((Tipo)TipoArray.crearArray((Tipo)$4, (List<Integer>)$2),(String)$1);
+													campo = new Campo((Tipo)TipoArray.crearArray((Tipo)$4, (List<Integer>)$2),(String)$1, lexico.line(), lexico.column());
 												}
 												$$ = campo;
 												}			  

@@ -1,81 +1,60 @@
 #source "entrada.txt"
 call main
 halt
-#TYPE Circulo: {
-	x:int
-	y:int
-	radio:real
+#VAR a:int
+#TYPE Persona: {
+	edad:int
+	meses:12*int
 }
-#VAR v:4*real
-#VAR i:int
-#VAR diana:Circulo
-#FUNC main
-main:
+#TYPE Empresa: {
+	cif:20*char
+	empleados:25*Persona
+}
+#VAR microsoft:Empresa
+#FUNC escribeEdad
+#PARAM num:int
+escribeEdad:
 enter 0
-' ### Line 12
-pusha 16
-pushi 0
-storei
-' ### Line 13
-pusha 18
-push 2
+#Line 28
+pusha 2
+push 20
 add
-pushi 7
-storei
-' ### Line 14
-pusha 18
+pusha BP
+push 4
+add
+loadi
+push 26
+mul
+add
 push 0
 add
-pusha 18
-push 2
-add
 load
-pusha 16
-loadi
-addi
-storei
-' ### Line 15
-pusha 0
-pushi 0
-push 4
-mul
-add
-pushf 1.618033
-storef
-' ### Line 16
-pusha 18
-push 4
-add
-pusha 0
-pusha 16
-loadi
-push 4
-mul
-add
-loadf
-pushf 2.0
-addf
-storef
-pusha 0
-pusha 16
+outi
+ret 0,0,2
+#VAR z:int
+#FUNC main
+#LOCAL pepe:Persona
+main:
+enter 26
+#Line 39
+pusha 672
 loadi
 pushi 2
-addi
-push 4
-mul
+nei
+jz else_0
+#Line 38
+pusha BP
+push -26
 add
-loadf
-outf
-pusha 0
-pusha 18
 push 2
 add
-load
-pushi 7
-subi
-push 4
+pushi 2
+push 2
 mul
 add
-loadf
-outf
-ret 0,0,0
+loadi
+call escribeEdad
+jmp fin_if_0
+else_0:
+fin_if_0:
+ret 0,26,0

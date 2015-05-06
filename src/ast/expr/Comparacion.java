@@ -8,7 +8,8 @@ public class Comparacion extends AbstractExpresion {
 	private Expresion operando2;
 	private String operador;
 
-	public Comparacion(Expresion op1, String operador, Expresion op2) {
+	public Comparacion(Expresion op1, String operador, Expresion op2, int linea, int columna) {
+		super(linea, columna);
 		this.setOperando1(op1);
 		this.setOperador(operador);
 		this.setOperando2(op2);

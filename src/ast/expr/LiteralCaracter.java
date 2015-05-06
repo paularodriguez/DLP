@@ -8,7 +8,8 @@ public class LiteralCaracter extends AbstractExpresion {
 	private Character caracter;
 	
 	
-	public LiteralCaracter(Character caracter) {
+	public LiteralCaracter(Character caracter, int linea, int columna) {
+		super(linea, columna);
 		this.setCaracter(caracter);
 	}
 

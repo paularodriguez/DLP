@@ -6,7 +6,8 @@ public class LiteralEntero extends AbstractExpresion {
 
 	private int valor;
 
-	public LiteralEntero(int valor) {
+	public LiteralEntero(int valor, int linea, int columna) {
+		super(linea, columna);
 		this.setValor(valor);
 	}
 

@@ -1,9 +1,10 @@
 package ast.def;
 
 import visitor.Visitor;
+import ast.AbstractNodoAST;
 import ast.tipos.Tipo;
 
-public class DefinicionVariable implements Definicion {
+public class DefinicionVariable extends AbstractNodoAST implements Definicion {
 
 	private Tipo tipo;
 	private String nombre;
@@ -13,7 +14,8 @@ public class DefinicionVariable implements Definicion {
 	
 	private String ambito;
 
-	public DefinicionVariable(Tipo tipo, String nombre) {
+	public DefinicionVariable(Tipo tipo, String nombre, int linea, int columna) {
+		super(linea, columna);
 		this.setTipo(tipo);
 		this.setNombre(nombre);
 	}

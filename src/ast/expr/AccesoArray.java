@@ -7,7 +7,8 @@ public class AccesoArray extends AbstractExpresion {
 	private Expresion izquierda;
 	private Expresion derecha;
 
-	public AccesoArray(Expresion izquierda, Expresion derecha) {
+	public AccesoArray(Expresion izquierda, Expresion derecha, int linea, int columna) {
+		super(linea, columna);
 		this.setIzquierda(izquierda);
 		this.setDerecha(derecha);
 	}

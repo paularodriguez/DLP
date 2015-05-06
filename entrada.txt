@@ -1,19 +1,40 @@
-type Circulo
-	x as integer;
-	y as integer;
-	radio as real;
+/*
+NOTA. Este ejemplo pretende mostrar la sintaxis del lenguaje. No está pensado para ser compilado sin errores.
+
+- La sintaxis tiene que ser obligatoriamente la que se muestra en este ejemplo
+- Las declaraciones de funciones, procedimientos y variables globales pueden venir en cualquier orden.
+- Las funciones y procedimientos deben tener paréntesis aunque no tengan parámetros
+- Tanto las funciones como los procedimientos podrán declarar variables locales solo al inicio de su cuerpo. Por tanto no podrá haber declaración de variables locales en cualquier lugar de la función/procedimiento ni dentro de bloques anidados (por ejemplo el creado por un while)
+- No pueden aparecer expresiones como sentencias
+*/
+
+dim a as integer;
+
+// ------------- 
+type Persona
+	edad as integer;
+	meses[12] as integer;
 end type;
 
-dim v[4] as real;
-dim i as integer;
-dim diana as Circulo;
+
+type Empresa
+	cif[20] as character;
+	empleados[25] as Persona;
+end type;
+
+dim microsoft as Empresa;
+
+proc escribeEdad (num as integer)
+	print microsoft.empleados[num].edad;
+end proc;
+
+dim z as integer;
 
 proc main()
-	i = 0;
-	diana.y = 7;
-	diana.x = diana.y + i;
-	v[0] = 1.618033;
-	diana.radio = v[i] + 2.0;
-	print v[i + 2];
-	print v[diana.y - 7];
+
+  dim pepe as Persona;
+
+  if z <> 2 then
+    escribeEdad(pepe.meses[2]);
+  end if;
 end proc;

@@ -2,12 +2,12 @@ package ast.tipos;
 
 import visitor.Visitor;
 
-public class TipoReal extends AbstractTipo {
+public class TipoReal implements Tipo {
 
 	private static TipoReal instancia = null;
 
 	public TipoReal() {
-
+		
 	}
 
 	@Override
@@ -39,6 +39,23 @@ public class TipoReal extends AbstractTipo {
 	@Override
 	public String getMAPLName() {
 		return "real";
+	}
+	
+	@Override
+	public boolean esPrimitivo() {
+		return true;
+	}
+
+	@Override
+	public int getLinea() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getColumna() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

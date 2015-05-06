@@ -7,7 +7,8 @@ public class Print extends AbstractSentencia {
 
 	private Expresion expresion;
 
-	public Print(Expresion expresiones) {
+	public Print(Expresion expresiones, int linea, int columna) {
+		super(linea,columna);
 		this.setExpresion(expresiones);
 	}
 

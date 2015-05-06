@@ -7,7 +7,8 @@ public class Negacion extends AbstractExpresion {
 	private Expresion expresion;
 	
 
-	public Negacion(Expresion expresion) {
+	public Negacion(Expresion expresion, int linea, int columna) {
+		super(linea, columna);
 		this.setExpresion(expresion);
 	}
 

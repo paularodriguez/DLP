@@ -10,7 +10,8 @@ public class While extends AbstractSentencia {
 	private Expresion expresion;
 	private List<Sentencia> sentencias;
 
-	public While(Expresion expresion, List<Sentencia> listaSentencias) {
+	public While(Expresion expresion, List<Sentencia> listaSentencias, int linea, int columna) {
+		super(linea,columna);
 		this.setExpresion(expresion);
 		this.setSentencias(listaSentencias);
 	}

@@ -1,11 +1,17 @@
 package ast.sent;
 
+import ast.AbstractNodoAST;
 import ast.def.DefinicionFuncion;
 
-public abstract class AbstractSentencia implements Sentencia {
+public abstract class AbstractSentencia extends AbstractNodoAST implements
+		Sentencia {
+
+	public AbstractSentencia(int linea, int columna) {
+		super(linea, columna);
+	}
 
 	private DefinicionFuncion definicionFuncion;
-	
+
 	@Override
 	public DefinicionFuncion getDefinicionFuncion() {
 		return definicionFuncion;

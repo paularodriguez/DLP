@@ -179,6 +179,18 @@ public class InferenciaVisitor extends DefaultVisitor {
 	@Override
 	public Object visit(Comparacion node) {
 		Object ret = super.visit(node);
+		
+		if (!(node.getOperando1().getTipo() == node.getOperando2().getTipo())) {
+			gestorErrores
+					.error("Error semántico: Los tipos de la operación aritmética no son compatibles.");
+		}
+		if (!((node.getOperando1().getTipo() instanceof TipoEntero || node.getOperando1()
+				.getTipo() instanceof TipoReal || node.getOperando1() instanceof TipoChar) && (node.getOperando2().getTipo() instanceof TipoEntero || node
+				.getOperando2().getTipo() instanceof TipoReal || node.getOperando1() instanceof TipoChar))) {
+			gestorErrores
+					.error("Error semántico: Tipo no permitido en operaciones aritméticas. Sólo se pueden sumar tipos reales y tipos enteros.");
+		}
+		
 		node.setLValue(false);
 		node.setTipo(node.getOperando1().getTipo());
 		return ret;
@@ -251,7 +263,10 @@ public class InferenciaVisitor extends DefaultVisitor {
 	public Object visit(Logica node) {
 
 		Object ret = super.visit(node);
-		node.setLValue(false);
+
+		if (!(node.getOperando1().getTipo() instanceof TipoEntero) || !(node.getOperando2().getTipo() instanceof TipoEntero))
+			gestorErrores.error("Error semántico: La operación lógica tiene un operador de tipo no entero.");
+		
 		node.setTipo(node.getOperando1().getTipo());
 		return ret;
 	}
@@ -353,6 +368,7 @@ public class InferenciaVisitor extends DefaultVisitor {
 	public Object visit(Print node) {
 		Object ret = super.visit(node);
 		Tipo tipo = node.getExpresion().getTipo();
+		
 		if (tipo == null || !tipo.esPrimitivo()) {
 			gestorErrores
 					.error("Error semántico: No puede realizarse un Print sobre la expresión. Tipo no primitivo.");
@@ -420,28 +436,11 @@ public class InferenciaVisitor extends DefaultVisitor {
 					.error("Error semántico: El tamaño del array no es válido.");
 		}
 
-		node.setPrimitivo(false);
-
 		return ret;
 	}
 
-	public Object visit(TipoChar node) {
-		node.setPrimitivo(true);
-		return super.visit(node);
-	}
-
-	public Object visit(TipoEntero node) {
-		node.setPrimitivo(true);
-		return super.visit(node);
-	}
-
-	public Object visit(TipoReal node) {
-		node.setPrimitivo(true);
-		return super.visit(node);
-	}
 	
 	public Object visit (DefinicionStruct node){
-		node.setPrimitivo(false);
 		return super.visit(node);
 	}
 	

@@ -11,13 +11,15 @@ public class IF extends AbstractSentencia {
 	private List<Sentencia> sentenciasIF;
 	private List<Sentencia> sentenciasElse;
 
-	public IF(Expresion expresion, List<Sentencia> sentenciasIf) {
+	public IF(Expresion expresion, List<Sentencia> sentenciasIf, int linea, int columna) {
+		super(linea,columna);
 		this.setExpresion(expresion);
 		this.setSentenciasIF(sentenciasIf);
 	}
 
 	public IF(Expresion expresion, List<Sentencia> sentenciasIf,
-			List<Sentencia> sentenciasElse) {
+			List<Sentencia> sentenciasElse, int linea, int columna) {
+		super(linea,columna);
 		this.setExpresion(expresion);
 		this.setSentenciasIF(sentenciasIf);
 		this.setSentenciasElse(sentenciasElse);

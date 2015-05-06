@@ -40,15 +40,14 @@ public class IdentificacionVisitor extends DefaultVisitor {
 		} else {
 			variables.put(node.getNombre(), node);
 		}
+		Object r = super.visit(node);
 		/* Cuando es una estructura */
 		if (node.getTipo() instanceof TipoStruct) {
 			node.setTipo(estructuras.get(((TipoStruct) node.getTipo())
 					.getNombre()));
-			return null;
-
 			// Otra opción es añadirle al TipoStruct el campo Definicion*/
 		}
-		return super.visit(node);
+		return r;
 	}
 
 	public Object visit(DefinicionFuncion node) {
@@ -146,6 +145,14 @@ public class IdentificacionVisitor extends DefaultVisitor {
 		}
 		return super.visit(node);	
 	}
-	
+
+	@Override
+	public Object visit(TipoStruct node) {
+		if (!estructuras.containsKey(node.getNombre())) {
+			gestorErrores.error("La estructura " + node.getNombre()
+					+ " no ha sido declarada.");
+		}
+		return super.visit(node);
+	}
 
 }

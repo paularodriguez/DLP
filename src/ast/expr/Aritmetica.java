@@ -9,7 +9,8 @@ public class Aritmetica extends AbstractExpresion {
 	private Expresion op2;
 	private String operador;
 	
-	public Aritmetica(Expresion op1, String operador, Expresion op2){
+	public Aritmetica(Expresion op1, String operador, Expresion op2, int linea, int columna){
+		super(linea, columna);
 		this.setOp1(op1);
 		this.setOp2(op2);
 		this.setOperador(operador);

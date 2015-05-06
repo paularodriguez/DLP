@@ -72,7 +72,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 		instruccionComparacion.put(">=", "ge");
 		instruccionComparacion.put("<=", "le");
 		instruccionComparacion.put("==", "eq");
-		instruccionComparacion.put("!=", "ne");
+		instruccionComparacion.put("<>", "ne");
 	}
 
 	@Override
@@ -276,7 +276,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 
 	@Override
 	public Object visit(LiteralCaracter node) {
-		out.println("push" + node.getTipo().sufijo() + " " + node.getCaracter());
+		out.println("push" + node.getTipo().sufijo() + " " + (int)node.getCaracter());
 		return null;
 	}
 
@@ -342,7 +342,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 	@Override
 	public Object visit(Asignacion node) {
 		
-		out.println("' ### Line " + node.linea);
+		out.println("#Line " + node.getLinea());
 
 		node.getIzquierda().setVisitaValor(false);
 		node.getIzquierda().setVisitaDireccion(true);
@@ -359,6 +359,8 @@ public class GeneracionCodigo extends DefaultVisitor {
 
 	@Override
 	public Object visit(IF node) {
+		
+		out.println("#Line " + node.getLinea());		
 		int contadorIFLocal = contadorIf;
 		contadorIf++;
 
@@ -388,7 +390,8 @@ public class GeneracionCodigo extends DefaultVisitor {
 
 	@Override
 	public Object visit(InvocacionProcedimiento node) {
-
+		out.println("#Line " + node.getLinea());
+		
 		for (Expresion e : node.getExpresiones()) {
 			e.setVisitaDireccion(false);
 			e.setVisitaValor(true);
@@ -409,6 +412,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 
 	@Override
 	public Object visit(Print node) {
+		out.println("#Line " + node.getLinea());
 		node.getExpresion().setVisitaDireccion(false);
 		node.getExpresion().setVisitaValor(true);
 		node.getExpresion().acepta(this);
@@ -418,6 +422,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 
 	@Override
 	public Object visit(Read node) {
+		out.println("#Line " + node.getLinea());
 		node.getExpresion().setVisitaDireccion(true);
 		node.getExpresion().setVisitaValor(false);
 		node.getExpresion().acepta(this);
@@ -428,6 +433,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 
 	@Override
 	public Object visit(Return node) {
+		out.println("#Line " + node.getLinea());
 		if (node.getExpresion() != null) {
 			node.getExpresion().setVisitaDireccion(false);
 			node.getExpresion().setVisitaValor(true);
@@ -444,6 +450,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 
 	@Override
 	public Object visit(While node) {
+		out.println("#Line " + node.getLinea());
 		int contadorWhileLocal = contadorWhile;
 		contadorWhile++;
 

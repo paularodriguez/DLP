@@ -7,7 +7,8 @@ public class Return extends AbstractSentencia {
 
 	private Expresion expresion;
 
-	public Return(Expresion expresion) {
+	public Return(Expresion expresion, int linea, int columna) {
+		super(linea, columna);
 		this.setExpresion(expresion);
 
 	}

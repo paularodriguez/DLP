@@ -1,24 +1,26 @@
 package ast.def;
 
 import visitor.Visitor;
+import ast.AbstractNodoAST;
 import ast.tipos.Tipo;
 
-public class Campo implements Definicion,Tipo {
+public class Campo extends AbstractNodoAST implements Definicion, Tipo {
 
 	private Tipo tipo;
 	private String nombre;
-	
+
 	private int direccion;
-	
-	public Campo(Tipo tipo, String nombre) {
+
+	public Campo(Tipo tipo, String nombre, int linea, int columna) {
+		super(linea, columna);
 		this.setTipo(tipo);
 		this.setNombre(nombre);
 	}
 
 	@Override
 	public String toString() {
-		return "Campo [tipo=" + getTipo() + ", nombreVariable ="
-				+ getNombre() + "]";
+		return "Campo [tipo=" + getTipo() + ", nombreVariable =" + getNombre()
+				+ "]";
 	}
 
 	@Override
@@ -45,10 +47,6 @@ public class Campo implements Definicion,Tipo {
 	@Override
 	public boolean esPrimitivo() {
 		return false;
-	}
-
-	@Override
-	public void setPrimitivo(boolean primitivo) {
 	}
 
 	@Override

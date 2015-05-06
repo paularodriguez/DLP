@@ -12,7 +12,8 @@ public class InvocacionProcedimiento extends AbstractSentencia {
 	private String nombre;
 	private List<Expresion> expresiones;
 
-	public InvocacionProcedimiento(String nombre, List<Expresion> expresiones) {
+	public InvocacionProcedimiento(String nombre, List<Expresion> expresiones, int linea, int columna) {
+		super(linea,columna);
 		this.setNombre(nombre);
 		this.setExpresiones(expresiones);
 	}

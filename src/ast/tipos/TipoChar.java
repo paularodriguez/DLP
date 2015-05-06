@@ -1,8 +1,9 @@
 package ast.tipos;
 
+import ast.AbstractNodoAST;
 import visitor.Visitor;
 
-public class TipoChar extends AbstractTipo {
+public class TipoChar implements Tipo {
 
 	private static TipoChar instancia = null;
 
@@ -39,6 +40,24 @@ public class TipoChar extends AbstractTipo {
 	@Override
 	public String getMAPLName() {
 		return "char";
+	}
+
+
+	@Override
+	public boolean esPrimitivo() {
+		return true;
+	}
+
+	@Override
+	public int getLinea() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getColumna() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

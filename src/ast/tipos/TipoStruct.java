@@ -7,7 +7,7 @@ import visitor.Visitor;
  * @author uo224071
  *
  */
-public class TipoStruct extends AbstractTipo {
+public class TipoStruct  implements Tipo {
 
 	private String nombre;
 
@@ -48,6 +48,23 @@ public class TipoStruct extends AbstractTipo {
 	public String getMAPLName() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public boolean esPrimitivo() {
+		return false;
+	}
+
+	@Override
+	public int getLinea() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getColumna() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

@@ -7,12 +7,11 @@ public class Asignacion extends AbstractSentencia {
 
 	private Expresion izquierda;
 	private Expresion derecha;
-	public int linea;
 
-	public Asignacion(Expresion izquierda, Expresion derecha, int linea) {
+	public Asignacion(Expresion izquierda, Expresion derecha, int linea, int columna) {
+		super(linea, columna);
 		this.setIzquierda(izquierda);
 		this.setDerecha(derecha);
-		this.linea = linea;
 	}
 
 	@Override

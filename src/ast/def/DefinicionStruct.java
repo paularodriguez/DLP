@@ -3,17 +3,18 @@ package ast.def;
 import java.util.List;
 
 import visitor.Visitor;
+import ast.AbstractNodoAST;
 import ast.tipos.Tipo;
 
-public class DefinicionStruct implements Definicion, Tipo {
+public class DefinicionStruct extends AbstractNodoAST implements Definicion, Tipo {
 
 	private String nombre;
 	private List<Campo> listaCampos;
-	private boolean primitivo;
 
 	private int direccion;
 
-	public DefinicionStruct(String nombre, List<Campo> listaCampos) {
+	public DefinicionStruct(String nombre, List<Campo> listaCampos, int linea, int columna) {
+		super(linea, columna);
 		this.setNombre(nombre);
 		this.setListaCampos(listaCampos);
 	}
@@ -45,20 +46,12 @@ public class DefinicionStruct implements Definicion, Tipo {
 		this.nombre = nombre;
 	}
 
-	@Override
-	public boolean esPrimitivo() {
-		return primitivo;
-	}
 
 	@Override
 	public Tipo getTipo() {
 		return this;
 	}
 
-	@Override
-	public void setPrimitivo(boolean primitivo) {
-		this.primitivo = primitivo;
-	}
 
 	@Override
 	public int size() {
@@ -96,6 +89,11 @@ public class DefinicionStruct implements Definicion, Tipo {
 	@Override
 	public String getMAPLName() {
 		return getNombre();
+	}
+	
+	@Override
+	public boolean esPrimitivo() {
+		return false;
 	}
 
 }

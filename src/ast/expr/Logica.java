@@ -9,7 +9,8 @@ public class Logica extends AbstractExpresion {
 	private Expresion operando2;
 	private String operador;
 	
-	public Logica (Expresion op1, String operador, Expresion op2){
+	public Logica (Expresion op1, String operador, Expresion op2, int linea, int columna){
+		super(linea, columna);
 		this.setOperando1(op1); 
 		this.setOperando2(op2);
 		this.setOperador(operador);

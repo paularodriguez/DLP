@@ -781,7 +781,7 @@ boolean doaction;
 //########## USER-SUPPLIED ACTIONS ##########
 case 1:
 //#line 59 "../src/sintactico/sintactico.y"
-{this.ast = new Programa((List<Definicion>)val_peek(0));}
+{this.ast = new Programa((List<Definicion>)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 2:
 //#line 63 "../src/sintactico/sintactico.y"
@@ -835,10 +835,10 @@ case 12:
 //#line 92 "../src/sintactico/sintactico.y"
 {DefinicionVariable defVar = null; 
 												if (((List<Integer>)val_peek(3)).size() == 0){
-													defVar = new DefinicionVariable((Tipo)val_peek(1),(String)val_peek(4));
+													defVar = new DefinicionVariable((Tipo)val_peek(1),(String)val_peek(4), lexico.line(), lexico.column());
 												}
 												else{
-													defVar = new DefinicionVariable((Tipo)TipoArray.crearArray((Tipo)val_peek(1), (List<Integer>)val_peek(3)),(String)val_peek(4));
+													defVar = new DefinicionVariable((Tipo)TipoArray.crearArray((Tipo)val_peek(1), (List<Integer>)val_peek(3)),(String)val_peek(4), lexico.line(), lexico.column());
 												}
 												yyval = defVar;
 												}
@@ -865,15 +865,15 @@ case 16:
 break;
 case 17:
 //#line 118 "../src/sintactico/sintactico.y"
-{yyval = new DefinicionStruct((String)val_peek(4), (List<Campo>)val_peek(3));}
+{yyval = new DefinicionStruct((String)val_peek(4), (List<Campo>)val_peek(3), lexico.line(), lexico.column());}
 break;
 case 18:
 //#line 122 "../src/sintactico/sintactico.y"
-{yyval = new DefinicionFuncion((Tipo)val_peek(5), (String)val_peek(10), (List<DefinicionVariable>)val_peek(8), (List<DefinicionVariable>)val_peek(4), (List<Sentencia>)val_peek(3));}
+{yyval = new DefinicionFuncion((Tipo)val_peek(5), (String)val_peek(10), (List<DefinicionVariable>)val_peek(8), (List<DefinicionVariable>)val_peek(4), (List<Sentencia>)val_peek(3), lexico.line(), lexico.column());}
 break;
 case 19:
 //#line 126 "../src/sintactico/sintactico.y"
-{yyval = new DefinicionFuncion(null,(String)val_peek(8), (List<DefinicionVariable>)val_peek(6), (List<DefinicionVariable>)val_peek(4), (List<Sentencia>)val_peek(3));}
+{yyval = new DefinicionFuncion(null,(String)val_peek(8), (List<DefinicionVariable>)val_peek(6), (List<DefinicionVariable>)val_peek(4), (List<Sentencia>)val_peek(3), lexico.line(), lexico.column());}
 break;
 case 20:
 //#line 129 "../src/sintactico/sintactico.y"
@@ -886,13 +886,13 @@ break;
 case 22:
 //#line 134 "../src/sintactico/sintactico.y"
 {List<DefinicionVariable> lista = (List<DefinicionVariable>) val_peek(4);
-												lista.add(new DefinicionVariable((Tipo)val_peek(0), (String)val_peek(2)));
+												lista.add(new DefinicionVariable((Tipo)val_peek(0), (String)val_peek(2), lexico.line(), lexico.column()));
 												yyval = lista;}
 break;
 case 23:
 //#line 137 "../src/sintactico/sintactico.y"
 {List<DefinicionVariable> lista = new ArrayList<DefinicionVariable>();
-												lista.add(new DefinicionVariable((Tipo)val_peek(0), (String)val_peek(2)));
+												lista.add(new DefinicionVariable((Tipo)val_peek(0), (String)val_peek(2), lexico.line(), lexico.column()));
 												yyval = lista;}
 break;
 case 24:
@@ -917,39 +917,39 @@ case 27:
 break;
 case 28:
 //#line 157 "../src/sintactico/sintactico.y"
-{yyval = new Print((Expresion)val_peek(1));}
+{yyval = new Print((Expresion)val_peek(1), lexico.line(), lexico.column());}
 break;
 case 29:
 //#line 158 "../src/sintactico/sintactico.y"
-{yyval = new Read((Expresion)val_peek(1));}
+{yyval = new Read((Expresion)val_peek(1), lexico.line(), lexico.column());}
 break;
 case 30:
 //#line 159 "../src/sintactico/sintactico.y"
-{yyval = new Asignacion((Expresion)val_peek(3),(Expresion)val_peek(1), lexico.line());}
+{yyval = new Asignacion((Expresion)val_peek(3),(Expresion)val_peek(1), lexico.line(), lexico.column());}
 break;
 case 31:
 //#line 160 "../src/sintactico/sintactico.y"
-{yyval = new Return((Expresion)val_peek(1));}
+{yyval = new Return((Expresion)val_peek(1), lexico.line(), lexico.column());}
 break;
 case 32:
 //#line 161 "../src/sintactico/sintactico.y"
-{yyval = new Return(null);}
+{yyval = new Return(null, lexico.line(), lexico.column());}
 break;
 case 33:
 //#line 162 "../src/sintactico/sintactico.y"
-{yyval = new While((Expresion)val_peek(5), (List<Sentencia>)val_peek(3));}
+{yyval = new While((Expresion)val_peek(5), (List<Sentencia>)val_peek(3), lexico.line(), lexico.column());}
 break;
 case 34:
 //#line 163 "../src/sintactico/sintactico.y"
-{yyval = new IF((Expresion)val_peek(5), (List<Sentencia>)val_peek(3));}
+{yyval = new IF((Expresion)val_peek(5), (List<Sentencia>)val_peek(3), lexico.line(), lexico.column());}
 break;
 case 35:
 //#line 164 "../src/sintactico/sintactico.y"
-{yyval = new IF((Expresion)val_peek(7), (List<Sentencia>)val_peek(5), (List<Sentencia>)val_peek(3));}
+{yyval = new IF((Expresion)val_peek(7), (List<Sentencia>)val_peek(5), (List<Sentencia>)val_peek(3), lexico.line(), lexico.column());}
 break;
 case 36:
 //#line 165 "../src/sintactico/sintactico.y"
-{yyval = new InvocacionProcedimiento((String)val_peek(4), (List<Expresion>)val_peek(2));}
+{yyval = new InvocacionProcedimiento((String)val_peek(4), (List<Expresion>)val_peek(2), lexico.line(), lexico.column());}
 break;
 case 37:
 //#line 169 "../src/sintactico/sintactico.y"
@@ -973,91 +973,91 @@ case 40:
 break;
 case 41:
 //#line 183 "../src/sintactico/sintactico.y"
-{yyval = new Variable((String)val_peek(0));}
+{yyval = new Variable((String)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 42:
 //#line 184 "../src/sintactico/sintactico.y"
-{yyval = new LiteralEntero((Integer)val_peek(0));}
+{yyval = new LiteralEntero((Integer)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 43:
 //#line 185 "../src/sintactico/sintactico.y"
-{yyval = new LiteralCaracter((Character)val_peek(0));}
+{yyval = new LiteralCaracter((Character)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 44:
 //#line 186 "../src/sintactico/sintactico.y"
-{yyval = new LiteralReal((Double)val_peek(0));}
+{yyval = new LiteralReal((Double)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 45:
 //#line 187 "../src/sintactico/sintactico.y"
-{yyval = new Aritmetica((Expresion)val_peek(2), "+", (Expresion)val_peek(0));}
+{yyval = new Aritmetica((Expresion)val_peek(2), "+", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 46:
 //#line 188 "../src/sintactico/sintactico.y"
-{yyval = new Aritmetica((Expresion)val_peek(2), "-", (Expresion)val_peek(0));}
+{yyval = new Aritmetica((Expresion)val_peek(2), "-", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 47:
 //#line 189 "../src/sintactico/sintactico.y"
-{yyval = new Aritmetica((Expresion)val_peek(2), "*", (Expresion)val_peek(0));}
+{yyval = new Aritmetica((Expresion)val_peek(2), "*", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 48:
 //#line 190 "../src/sintactico/sintactico.y"
-{yyval = new Aritmetica((Expresion)val_peek(2), "/", (Expresion)val_peek(0));}
+{yyval = new Aritmetica((Expresion)val_peek(2), "/", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 49:
 //#line 191 "../src/sintactico/sintactico.y"
-{yyval = new Aritmetica((Expresion)val_peek(2), "%", (Expresion)val_peek(0));}
+{yyval = new Aritmetica((Expresion)val_peek(2), "%", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 50:
 //#line 192 "../src/sintactico/sintactico.y"
-{yyval = new AccesoArray((Expresion)val_peek(3), (Expresion)val_peek(1));}
+{yyval = new AccesoArray((Expresion)val_peek(3), (Expresion)val_peek(1), lexico.line(), lexico.column());}
 break;
 case 51:
 //#line 193 "../src/sintactico/sintactico.y"
-{yyval = new AccesoCampo((Expresion)val_peek(2), (Expresion)val_peek(0));}
+{yyval = new AccesoCampo((Expresion)val_peek(2), (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 52:
 //#line 194 "../src/sintactico/sintactico.y"
-{yyval = new Comparacion((Expresion)val_peek(2), "<", (Expresion)val_peek(0));}
+{yyval = new Comparacion((Expresion)val_peek(2), "<", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 53:
 //#line 195 "../src/sintactico/sintactico.y"
-{yyval = new Comparacion((Expresion)val_peek(2), ">", (Expresion)val_peek(0));}
+{yyval = new Comparacion((Expresion)val_peek(2), ">", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 54:
 //#line 196 "../src/sintactico/sintactico.y"
-{yyval = new Comparacion((Expresion)val_peek(2), "<=", (Expresion)val_peek(0));}
+{yyval = new Comparacion((Expresion)val_peek(2), "<=", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 55:
 //#line 197 "../src/sintactico/sintactico.y"
-{yyval = new Comparacion((Expresion)val_peek(2), ">=", (Expresion)val_peek(0));}
+{yyval = new Comparacion((Expresion)val_peek(2), ">=", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 56:
 //#line 198 "../src/sintactico/sintactico.y"
-{yyval = new Logica((Expresion)val_peek(2), "and", (Expresion)val_peek(0));}
+{yyval = new Logica((Expresion)val_peek(2), "and", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 57:
 //#line 199 "../src/sintactico/sintactico.y"
-{yyval = new Logica((Expresion)val_peek(2), "or", (Expresion)val_peek(0));}
+{yyval = new Logica((Expresion)val_peek(2), "or", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 58:
 //#line 200 "../src/sintactico/sintactico.y"
-{yyval = new Negacion((Expresion)val_peek(0));}
+{yyval = new Negacion((Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 59:
 //#line 201 "../src/sintactico/sintactico.y"
-{yyval = new Comparacion((Expresion)val_peek(2), "==", (Expresion)val_peek(0));}
+{yyval = new Comparacion((Expresion)val_peek(2), "==", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 60:
 //#line 202 "../src/sintactico/sintactico.y"
-{yyval = new Comparacion((Expresion)val_peek(2), "<>", (Expresion)val_peek(0));}
+{yyval = new Comparacion((Expresion)val_peek(2), "<>", (Expresion)val_peek(0), lexico.line(), lexico.column());}
 break;
 case 61:
 //#line 203 "../src/sintactico/sintactico.y"
-{yyval = new InvocacionFuncion((String)val_peek(3), (List<Expresion>)val_peek(1));}
+{yyval = new InvocacionFuncion((String)val_peek(3), (List<Expresion>)val_peek(1), lexico.line(), lexico.column());}
 break;
 case 62:
 //#line 204 "../src/sintactico/sintactico.y"
-{yyval = new Cast((Tipo)val_peek(3), (Expresion)val_peek(1));}
+{yyval = new Cast((Tipo)val_peek(3), (Expresion)val_peek(1), lexico.line(), lexico.column());}
 break;
 case 63:
 //#line 208 "../src/sintactico/sintactico.y"
@@ -1091,10 +1091,10 @@ case 69:
 //#line 223 "../src/sintactico/sintactico.y"
 {Campo campo = null; 
 												if (((List<Integer>)val_peek(3)).size() == 0){
-													campo = new Campo((Tipo)val_peek(1),(String)val_peek(4));
+													campo = new Campo((Tipo)val_peek(1),(String)val_peek(4), lexico.line(), lexico.column());
 												}
 												else{
-													campo = new Campo((Tipo)TipoArray.crearArray((Tipo)val_peek(1), (List<Integer>)val_peek(3)),(String)val_peek(4));
+													campo = new Campo((Tipo)TipoArray.crearArray((Tipo)val_peek(1), (List<Integer>)val_peek(3)),(String)val_peek(4), lexico.line(), lexico.column());
 												}
 												yyval = campo;
 												}

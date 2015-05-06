@@ -2,7 +2,7 @@ package ast.tipos;
 
 import visitor.Visitor;
 
-public class TipoEntero extends AbstractTipo {
+public class TipoEntero  implements Tipo {
 
 	private static TipoEntero instancia = null;
 
@@ -41,4 +41,20 @@ public class TipoEntero extends AbstractTipo {
 		return "int";
 	}
 
+	@Override
+	public boolean esPrimitivo() {
+		return true;
+	}
+
+	@Override
+	public int getLinea() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getColumna() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

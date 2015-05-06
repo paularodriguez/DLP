@@ -7,7 +7,8 @@ public class Read extends AbstractSentencia {
 
 	private Expresion expresion;
 
-	public Read(Expresion expresion) {
+	public Read(Expresion expresion, int linea, int columna) {
+		super(linea,columna);
 		this.setExpresion(expresion);
 	}
 

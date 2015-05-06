@@ -8,7 +8,8 @@ public class Variable extends AbstractExpresion {
 	private String nombre;
 	private Definicion definicion;
 
-	public Variable(String nombre) {
+	public Variable(String nombre, int linea, int columna) {
+		super(linea, columna);
 		this.setNombre(nombre);
 	}
 

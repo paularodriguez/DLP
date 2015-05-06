@@ -2,9 +2,10 @@ package ast.tipos;
 
 import java.util.List;
 
+import ast.AbstractNodoAST;
 import visitor.Visitor;
 
-public class TipoArray extends AbstractTipo {
+public class TipoArray implements Tipo {
 
 	private Tipo tipo;
 	private int tamaño;
@@ -22,12 +23,13 @@ public class TipoArray extends AbstractTipo {
 	}
 
 	public TipoArray(Tipo tipo, Integer tamaño) {
+		
 		this.setTipo(tipo);
 		this.setTamaño(tamaño);
 	}
 
 	public TipoArray() {
-
+		
 	}
 
 	@Override
@@ -66,6 +68,22 @@ public class TipoArray extends AbstractTipo {
 		return tamaño + "*" + getTipo().getMAPLName();
 	}
 	
+	@Override
+	public boolean esPrimitivo() {
+		return false;
+	}
+
+	@Override
+	public int getLinea() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getColumna() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 
 }

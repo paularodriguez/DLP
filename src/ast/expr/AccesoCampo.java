@@ -7,8 +7,8 @@ public class AccesoCampo extends AbstractExpresion {
 	private Expresion izquierda;
 	private Expresion derecha;
 
-	public AccesoCampo(Expresion izquierda, Expresion derecha) {
-
+	public AccesoCampo(Expresion izquierda, Expresion derecha, int linea, int columna) {
+		super(linea, columna);
 		this.setIzquierda(izquierda);
 		this.setDerecha(derecha);
 	}

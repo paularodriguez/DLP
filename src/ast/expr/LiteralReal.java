@@ -7,7 +7,8 @@ public class LiteralReal extends AbstractExpresion{
 
 	private double valor;
 	
-	public LiteralReal (Double d){
+	public LiteralReal (Double d, int linea, int columna){
+		super(linea, columna);
 		this.setValor(d);
 	}
 

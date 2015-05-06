@@ -8,7 +8,8 @@ public class Cast extends AbstractExpresion {
 	private Tipo tipoCast;
 	private Expresion expresion;
 
-	public Cast(Tipo tipo, Expresion expresion) {
+	public Cast(Tipo tipo, Expresion expresion, int linea, int columna) {
+		super(linea, columna);
 		this.setTipoCast(tipo);
 		this.setExpresion(expresion);
 	}

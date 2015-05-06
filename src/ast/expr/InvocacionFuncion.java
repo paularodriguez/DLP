@@ -11,7 +11,8 @@ public class InvocacionFuncion extends AbstractExpresion {
 	private String identificador;
 	private List<Expresion> listaExpresiones;
 
-	public InvocacionFuncion(String identificador, List<Expresion> expresiones) {
+	public InvocacionFuncion(String identificador, List<Expresion> expresiones, int linea, int columna) {
+		super(linea, columna);
 		this.setIdentificador(identificador);
 		this.setListaExpresiones(expresiones);
 	}

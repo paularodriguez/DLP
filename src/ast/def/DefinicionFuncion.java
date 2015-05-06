@@ -3,10 +3,11 @@ package ast.def;
 import java.util.List;
 
 import visitor.Visitor;
+import ast.AbstractNodoAST;
 import ast.sent.Sentencia;
 import ast.tipos.Tipo;
 
-public class DefinicionFuncion implements Definicion {
+public class DefinicionFuncion extends AbstractNodoAST implements Definicion {
 
 	private Tipo retorno;
 	private String nombre;
@@ -18,7 +19,8 @@ public class DefinicionFuncion implements Definicion {
 
 	public DefinicionFuncion(Tipo retorno, String nombre,
 			List<DefinicionVariable> parametros,
-			List<DefinicionVariable> defVariables, List<Sentencia> sentencias) {
+			List<DefinicionVariable> defVariables, List<Sentencia> sentencias, int linea, int columna) {
+		super(linea,columna);
 		this.setRetorno(retorno);
 		this.setNombre(nombre);
 		this.setParametros(parametros);

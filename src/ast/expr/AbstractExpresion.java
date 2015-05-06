@@ -1,8 +1,13 @@
 package ast.expr;
 
+import ast.AbstractNodoAST;
 import ast.tipos.Tipo;
 
-public abstract class AbstractExpresion implements Expresion {
+public abstract class AbstractExpresion extends AbstractNodoAST implements Expresion {
+
+	public AbstractExpresion(int linea, int columna) {
+		super(linea, columna);
+	}
 
 	private Tipo tipo;
 	private boolean lvalue;
