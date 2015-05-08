@@ -190,7 +190,8 @@ public class GeneracionCodigo extends DefaultVisitor {
 		out.println("add");
 		
 		if (node.getVisitaValor()) {
-			out.println("load");
+			out.println("load" + ((DefinicionStruct) node.getIzquierda().getTipo())
+					.buscarCampoNombre(idCampo).getTipo().sufijo());
 		}		
 
 		return null;
@@ -256,7 +257,7 @@ public class GeneracionCodigo extends DefaultVisitor {
 		node.getOperando2().setVisitaDireccion(false);
 		node.getOperando2().acepta(this); // valor
 		out.println(instruccionComparacion.get(node.getOperador())
-				+ node.getTipo().sufijo());
+				+ node.getOperando1().getTipo().sufijo());
 		return null;
 	}
 

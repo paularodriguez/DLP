@@ -1,0 +1,59 @@
+/*
+Este ejemplo tiene varios errores semánticos que el compilador debe detectar en la
+fase de identificación y otros que no deben ser detectados aún.
+
+NOTA: Es posible que el alumno deba adaptar ligeramente la sintaxis del lenguaje si no coincide
+con la del lenguaje que le corresponde.
+*/
+
+dim a as integer;
+dim b as character;
+dim d as real;
+dim e as real;
+
+dim a[20] as integer; // Variable global repetida 
+
+// ------------- 
+type Persona
+	edad as integer;
+	meses[12] as integer;
+	edad as real;  // Campo repetido 
+end type;
+
+dim k[10] as Window; // Estructura no definida 
+
+type Persona 	// Estructura repetida 
+	j as integer;
+end type;
+
+// ------------- 
+function dobleSuma(z as integer, b as integer, z as real) as integer// Parámetro 'z' repetido ('b' no colisiona con global)
+	dim local1 as integer;
+	dim local2 as integer;
+	dim local1 as integer;	// Local repetida (con otra local) 
+	dim b as real;		// Local repetida (con un parámetro) 
+	dim d as integer;	// Esta no debía dar error, ya que la otra 'd' es global 
+	
+	print a;	
+	print d;
+	print b;	
+	print c;		// variable no definida 
+	print local2;	
+end function;
+
+type Punto
+	x as integer;
+end type;
+
+dim centro as Punto;
+
+proc main() 
+	print f();	// Función no definida 
+	g(2);		// Procedimiento no definido 
+	
+	dobleSuma(5.6);	// No error en esta fase aunque no coincidan parámetros 
+	print centro.y; // No error en esta fase aunque aunque el campo no está en la struct 
+end proc;
+
+function dobleSuma() as integer
+end function;

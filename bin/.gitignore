@@ -1,7 +1,6 @@
+/gestionMemoria
+/semantico
+/ast
+/generacionCodigo
 /sintactico
 /lexico
-/generacionCodigo
-/semantico
-/gestionMemoria
-/ast
-/visitor

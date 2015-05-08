@@ -1,60 +1,199 @@
 #source "entrada.txt"
 call main
 halt
-#VAR a:int
-#TYPE Persona: {
-	edad:int
-	meses:12*int
-}
-#TYPE Empresa: {
-	cif:20*char
-	empleados:25*Persona
-}
-#VAR microsoft:Empresa
-#FUNC escribeEdad
-#PARAM num:int
-escribeEdad:
-enter 0
+#FUNC potencia
+#PARAM base:real
+#PARAM exponente:int
+#LOCAL total:real
+#RET real
+potencia:
+enter 4
+#Line 32
+pusha BP
+push 4
+add
+loadi
+pushi 0
+eqi
+jz else_0
+#Line 21
+pusha BP
+push -4
+add
+pushf 1.0
+storef
+jmp fin_if_0
+else_0:
+#Line 31
+pusha BP
+push 4
+add
+loadi
+pushi 0
+lti
+jz else_1
+#Line 24
+pusha BP
+push -4
+add
+pushf 1.0
+pusha BP
+push 6
+add
+loadf
+pushi 0
+pusha BP
+push 4
+add
+loadi
+subi
+call potencia
+divf
+storef
+jmp fin_if_1
+else_1:
+#Line 26
+pusha BP
+push -4
+add
+pusha BP
+push 6
+add
+loadf
+storef
+#Line 30
+inicioWhile_0:
+pusha BP
+push 4
+add
+loadi
+pushi 1
+gti
+jz finWhile_0
 #Line 28
-pusha 2
-push 20
+pusha BP
+push -4
+add
+pusha BP
+push -4
+add
+loadf
+pusha BP
+push 6
+add
+loadf
+mulf
+storef
+#Line 29
+pusha BP
+push 4
 add
 pusha BP
 push 4
 add
 loadi
-push 26
-mul
-add
-push 0
-add
-load
-outi
-ret 0,0,2
-#VAR z:int
-#FUNC main
-#LOCAL pepe:Persona
-main:
-enter 26
-#Line 39
-pusha 672
-loadi
-pushi 2
-nei
-jz else_0
-#Line 38
-pusha BP
-push -26
-add
-push 2
-add
-pushi 2
-push 2
-mul
-add
-loadi
-call escribeEdad
-jmp fin_if_0
-else_0:
+pushi 1
+subi
+storei
+jmp inicioWhile_0
+finWhile_0:
+fin_if_1:
 fin_if_0:
-ret 0,26,0
+#Line 33
+pusha BP
+push -4
+add
+loadf
+ret 4,4,6
+#FUNC letraHipoteca
+#PARAM capital:real
+#PARAM años:int
+#PARAM interes:real
+#LOCAL mensual:real
+#RET real
+letraHipoteca:
+enter 4
+#Line 39
+pusha BP
+push -4
+add
+pusha BP
+push 4
+add
+loadf
+pushf 12.0
+divf
+storef
+#Line 40
+pusha BP
+push 10
+add
+loadf
+pusha BP
+push -4
+add
+loadf
+mulf
+pushf 100.0
+pushf 1.0
+pushf 1.0
+pusha BP
+push -4
+add
+loadf
+pushf 100.0
+divf
+addf
+pushi 0
+pusha BP
+push 8
+add
+loadi
+pushi 12
+muli
+subi
+call potencia
+subf
+mulf
+divf
+ret 4,4,10
+#FUNC main
+#LOCAL precioVivienda:real
+#LOCAL añosHipoteca:int
+#LOCAL interes:real
+main:
+enter 10
+#Line 48
+pusha BP
+push -4
+add
+pushf 200000.0
+storef
+#Line 49
+pusha BP
+push -6
+add
+pushi 30
+storei
+#Line 50
+pusha BP
+push -10
+add
+pushf 2.04
+storef
+#Line 57
+pusha BP
+push -4
+add
+loadf
+pusha BP
+push -6
+add
+loadi
+pusha BP
+push -10
+add
+loadf
+call letraHipoteca
+outf
+ret 0,10,0

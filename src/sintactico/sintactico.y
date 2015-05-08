@@ -119,11 +119,11 @@ definicion_struct
 		;
 		
 definicion_funcion
-		: 	FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias END FUNCTION ';'		{$$ = new DefinicionFuncion((Tipo)$7, (String)$2, (List<DefinicionVariable>)$4, (List<DefinicionVariable>)$8, (List<Sentencia>)$9, lexico.line(), lexico.column());}
+		: 	FUNCTION IDENT '(' listaParametrosOpcional ')' AS tipo definiciones_variable_opc sentencias_opc END FUNCTION ';'		{$$ = new DefinicionFuncion((Tipo)$7, (String)$2, (List<DefinicionVariable>)$4, (List<DefinicionVariable>)$8, (List<Sentencia>)$9, lexico.line(), lexico.column());}
 		;
 		
 definicion_procedimiento
-		:	PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias END PROC ';'						{$$ = new DefinicionFuncion(null,(String)$2, (List<DefinicionVariable>)$4, (List<DefinicionVariable>)$6, (List<Sentencia>)$7, lexico.line(), lexico.column());}
+		:	PROC IDENT '(' listaParametrosOpcional ')' definiciones_variable_opc sentencias_opc END PROC ';'						{$$ = new DefinicionFuncion(null,(String)$2, (List<DefinicionVariable>)$4, (List<DefinicionVariable>)$6, (List<Sentencia>)$7, lexico.line(), lexico.column());}
 		
 listaParametrosOpcional
 		:  	/*vacío*/							{$$ = new ArrayList<DefinicionVariable>();} 				
@@ -159,7 +159,7 @@ sentencia
 		|	expresion '=' expresion ";"												{$$ = new Asignacion((Expresion)$1,(Expresion)$3, lexico.line(), lexico.column());}
 		|	RETURN expresion ";"													{$$ = new Return((Expresion)$2, lexico.line(), lexico.column());}
 		|	RETURN ";"																{$$ = new Return(null, lexico.line(), lexico.column());}
-		|	WHILE expresion DO sentencias END WHILE ';'								{$$ = new While((Expresion)$2, (List<Sentencia>)$4, lexico.line(), lexico.column());}
+		|	WHILE expresion DO sentencias_opc END WHILE ';'								{$$ = new While((Expresion)$2, (List<Sentencia>)$4, lexico.line(), lexico.column());}
 		|	IF expresion THEN sentencias_opc END IF ';'								{$$ = new IF((Expresion)$2, (List<Sentencia>)$4, lexico.line(), lexico.column());}
 		|	IF expresion THEN sentencias_opc ELSE sentencias_opc END IF ';'			{$$ = new IF((Expresion)$2, (List<Sentencia>)$4, (List<Sentencia>)$6, lexico.line(), lexico.column());}
 		|  	IDENT '(' expresiones_opc ')' ";"										{$$ = new InvocacionProcedimiento((String)$1, (List<Expresion>)$3, lexico.line(), lexico.column());}
@@ -193,6 +193,7 @@ expresion
 		|	expresion '.' expresion				{$$ = new AccesoCampo((Expresion)$1, (Expresion)$3, lexico.line(), lexico.column());}
 		|	expresion '<' expresion				{$$ = new Comparacion((Expresion)$1, "<", (Expresion)$3, lexico.line(), lexico.column());}
 		|	expresion '>' expresion				{$$ = new Comparacion((Expresion)$1, ">", (Expresion)$3, lexico.line(), lexico.column());}
+		| 	'(' expresion ')' 					{$$ = $2; }
 		|	expresion MENORIGUAL expresion		{$$ = new Comparacion((Expresion)$1, "<=", (Expresion)$3, lexico.line(), lexico.column());}
 		|	expresion MAYORIGUAL expresion		{$$ = new Comparacion((Expresion)$1, ">=", (Expresion)$3, lexico.line(), lexico.column());}
 		|	expresion AND expresion				{$$ = new Logica((Expresion)$1, "and", (Expresion)$3, lexico.line(), lexico.column());}

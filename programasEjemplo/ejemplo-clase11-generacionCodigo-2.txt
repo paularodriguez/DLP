@@ -1,0 +1,78 @@
+/*
+Test 2 para probar la Fase de Generación de Código
+
+COMPROBACION: Si cuando pida un valor se introduce un 2 debería salir: 
+C
+1200
+A
+1000
+B
+1100
+C
+1200
+D
+1300
+
+CONSEJO: No limitarse a comprobar el resultado de la ejecución. Se recomienda además abrir el fichero generado usando el depurador GVM y comprobar sus instrucciones.
+
+Para facilitar esta tarea es de gran utilidad que el alumno haya generado directivas '#line' en el fichero de salida.
+Para información sobre la función de dicha directiva se debe abrir con GVM el siguiente tutorial: 
+Tutoriales\2 Uso básico del depurador\4 Fusión Alto Nivel.mp
+
+NOTA: Es posible que el alumno deba adaptar ligeramente la sintaxis del lenguaje si no coincide
+con la del lenguaje que le corresponde.
+*/
+
+type Persona
+	inicial as character;
+	sueldo as real;  
+end type;
+
+dim empresa[4] as Persona;
+
+proc inicia()
+	dim i as integer;
+
+	i = 0;
+	while i < 4 do
+		empresa[i].inicial = ctype(character,i + ctype(integer,'A'));
+		empresa[i].sueldo = ctype(real, 1000 + i * 100);
+		i = i + 1;
+	end while;
+end proc;
+
+proc busca(i as integer)
+	if i < 0 or i >= 4 then
+		return;
+	end if;
+	print empresa[i].inicial;
+	print empresa[i].sueldo;
+end proc;
+
+function imprime() as integer
+	dim i as integer;
+	dim aux as Persona;
+
+	i = 0;
+	while not i >= 4 do
+		aux.inicial = empresa[i].inicial;
+		aux.sueldo = empresa[i].sueldo;
+		
+		print aux.inicial;
+		print aux.sueldo;
+		
+		i = i + 1;
+	end while; 
+	return i;
+end function;
+
+proc main()
+	dim posicion as integer;
+
+	inicia();
+
+	read posicion;
+	busca(posicion);
+
+	posicion = imprime();	// No se recoge el valor de retorno
+end proc;

@@ -1,0 +1,114 @@
+/*
+Test para probar la Fase de Inferencia.
+
+COMPROBACION: El compilador del alumno debe detectar todos los errores indicados en los comentarios.
+
+ADVERTENCIA: Hay algunos errores que producen otros errores derivados.
+
+Por ejemplo:
+
+	print juan + anton;	// suma de dos estructuras 
+
+Lo anterior produce el error de que se están sumando dos expresiones de tipos no simples y además
+puede producir el error de que la expresión a imprimir tampoco es de tipo simple (al no quedar
+un tipo simple asociado a la suma al no haberse podido calcular su tipo).
+Estos errores derivados son normales y no es necesario intentar suprimirlos. 
+
+NOTA: Es posible que el alumno deba adaptar ligeramente la sintaxis del lenguaje si no coincide
+con la del lenguaje que le corresponde.
+*/
+
+type Persona
+	edad as integer;
+	meses[12] as integer;
+end type;
+
+dim juan as Persona;
+dim anton as Persona;
+
+
+function g() as Persona 	// Error: Retorno de tipo no simple
+
+end function;
+
+//proc f(a[10] as integer) 	// Los parámetros deben de ser tipos primitivos -- error solucionado en sintáctico
+proc f(a as integer)
+	return 25;	// El return no debe tener expresión en funciones void
+end proc;
+
+function h() as integer
+	return 5.6;	// Tipo de retorno no coincide
+end function;
+
+function j(a as integer, b as real) as real
+	h(2);	// Numero de argumentos incorrecto
+	return; // Debe haber un valor de retorno
+end function;
+
+proc main()
+	dim i as integer;
+	dim f as real;
+	dim v[10] as integer;
+
+	if 2.5 then
+	end if;	// La condicion debe ser de tipo entero
+	
+	if i then
+	end if;
+	
+	while juan do// La condicion debe ser de tipo entero
+	end while;
+	
+	while i do
+	end while;
+	
+	5 = 6; // Valor de la izquierda no modificable
+	i = f; // Valores de distinto tipo
+	juan = anton; // Valor de la izquierda debe ser simple
+
+	read juan;	// Debe ser un tipo simple
+	read 35;	// Debe ser modificable
+	read i;
+	
+	print juan; // Debe ser tipo simple
+	print f / 2.5;
+	
+	//no se recoge el retorno de la función
+	j(12, 12.5);
+	j(12, 12); // Tipo de los parámetros no coincide
+	j(12);		// Número de argumentos no coincide
+	j(12, 12.5, 4); // Número de argumentos no coincide
+	
+	print main();	// No tiene tipo de retorno
+	print j(12, 12.5);
+	print j(12, 12); // Tipo de los parámetros no coincide
+	print j(12);		// Número de argumentos no coincide
+	print j(12, 12.5, 4); // Número de argumentos no coincide
+
+	print juan + anton;	// Deben ser tipos simples
+	print 2.5 * 2;		// Deben ser del mismo tipo
+	print i - 2;
+
+	print 2.5 and f;	// Deben ser tipo entero
+	print 2 or i;
+	
+	print juan > anton;	// Deben ser tipos simples
+	print 2.5 < 2;		// Deben ser del mismo tipo
+	print i == 2;
+	
+	print ctype(integer,2.5) + i;
+	print ctype(Persona, 2.5);	// Tipos simples
+	print ctype(integer,juan);		// Expresiones de tipos simples
+	print ctype(real, 2.5);		// Deben ser distintos tipos
+	
+	print juan[5];	// Debe ser tipo array
+	print 2[5];	// Debe ser tipo array
+	print v[5.0];	// Debe ser indice entero
+	print v[i+2];
+	
+	print juan.edad;
+	print 5.edad;	// Se requiere tipo struct
+	print juan.nombre; // Campo no definido
+
+end proc;
+

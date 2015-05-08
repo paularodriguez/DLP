@@ -1,0 +1,31 @@
+type Punto
+	x as integer;
+	y as integer;
+end type;
+
+dim b as integer;
+
+proc main()
+	d = b;  //variable d no declarada
+	f(8); //función f no declarada
+end proc;
+
+dim p as integer;
+
+proc f(p as integer)
+	dim p as integer;  //variable declarada (parámetro)
+end proc;
+
+type Punto			// estructura declarada
+	x as real;
+	y as real;
+end type;
+
+type Persona
+	a[20] as Empresa;		//estructura no declarada
+end type;
+
+function f() as real		//función ya declarada
+end function;
+
+dim b as character;      //variable ya definida

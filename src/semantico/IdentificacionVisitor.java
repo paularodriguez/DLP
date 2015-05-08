@@ -35,8 +35,8 @@ public class IdentificacionVisitor extends DefaultVisitor {
 	public Object visit(DefinicionVariable node) {
 
 		if (variables.getVariable(node.getNombre()) != null) {
-			gestorErrores.error("La variable " + node.getNombre()
-					+ " ya está definida.");
+			gestorErrores.error("Error: La variable " + node.getNombre()
+					+ " ya está definida. Línea: " + node.getLinea() + ", Columna: " + node.getColumna());
 		} else {
 			variables.put(node.getNombre(), node);
 		}
@@ -53,8 +53,9 @@ public class IdentificacionVisitor extends DefaultVisitor {
 	public Object visit(DefinicionFuncion node) {
 
 		if (funciones.get(node.getNombre()) != null) {
-			gestorErrores.error("La función " + node.getNombre()
-					+ " ya está definida.");
+			gestorErrores.error("Error: La función " + node.getNombre()
+					+ " ya está definida. Línea: " + node.getLinea()
+					+ ", Columna: " + node.getColumna());
 		} else {
 			funciones.put(node.getNombre(), node);
 		}
@@ -68,8 +69,8 @@ public class IdentificacionVisitor extends DefaultVisitor {
 	public Object visit(DefinicionStruct node) {
 
 		if (estructuras.get(node.getNombre()) != null) {
-			gestorErrores.error("El tipo estructura " + node.getNombre()
-					+ " ya está definido.");
+			gestorErrores.error("Error: El tipo estructura " + node.getNombre()
+					+ " ya está definido. Línea: " + node.getLinea() + ", Columna: " + node.getColumna());
 		} else {
 			estructuras.put(node.getNombre(), node);
 		}
@@ -81,8 +82,8 @@ public class IdentificacionVisitor extends DefaultVisitor {
 	public Object visit(Campo node) {
 
 		if (campos.get(node.getNombre()) != null) {
-			gestorErrores.error("El campo " + node.getNombre()
-					+ " ya está definido.");
+			gestorErrores.error("Error: El campo " + node.getNombre()
+					+ " ya está definido. Línea: " + node.getLinea() + ", Columna: " + node.getColumna());
 		} else {
 			campos.put(node.getNombre(), node);
 		}
@@ -99,8 +100,8 @@ public class IdentificacionVisitor extends DefaultVisitor {
 		if (funciones.get(node.getNombre()) != null) {
 			node.setDefinicion(funciones.get(node.getNombre()));
 		} else {
-			gestorErrores.error("La función " + node.getNombre()
-					+ " no ha sido declarada.");
+			gestorErrores.error("Error: La función " + node.getNombre()
+					+ " no ha sido declarada. Línea: " + node.getLinea() + ", Columna: " + node.getColumna());
 		}
 		return super.visit(node);
 	}
@@ -109,8 +110,8 @@ public class IdentificacionVisitor extends DefaultVisitor {
 		if (funciones.get(node.getIdentificador()) != null) {
 			node.setDefinicion(funciones.get(node.getIdentificador()));
 		} else {
-			gestorErrores.error("La función " + node.getIdentificador()
-					+ " no ha sido declarada.");
+			gestorErrores.error("Error: La función " + node.getIdentificador()
+					+ " no ha sido declarada. Línea: " + node.getLinea() + ", Columna: " + node.getColumna());
 		}
 		return super.visit(node);
 	}
@@ -119,8 +120,8 @@ public class IdentificacionVisitor extends DefaultVisitor {
 		if (variables.getFromAny(node.getNombre()) != null) {
 			node.setDefinicion(variables.getFromAny(node.getNombre()));
 		} else {
-			gestorErrores.error("La variable " + node.getNombre()
-					+ " no ha sido declarada.");
+			gestorErrores.error("Error: La variable " + node.getNombre()
+					+ " no ha sido declarada. Línea: " + node.getLinea() + ", Columna: " + node.getColumna());
 		}
 		return super.visit(node);
 	}
@@ -132,27 +133,23 @@ public class IdentificacionVisitor extends DefaultVisitor {
 
 		return null;
 	}
-	
-	@Override
-	public Object visit(TipoArray node){
-		if (node.getTipo() instanceof TipoStruct){
-			node.setTipo(estructuras.get(((TipoStruct) node.getTipo())
-					.getNombre()));
-		}
-		//evita que se revisite la DefinicionStruct
-		if (node.getTipo() instanceof DefinicionStruct){
-			return null;
-		}
-		return super.visit(node);	
-	}
 
 	@Override
 	public Object visit(TipoStruct node) {
 		if (!estructuras.containsKey(node.getNombre())) {
-			gestorErrores.error("La estructura " + node.getNombre()
+			gestorErrores.error("Error: La estructura " + node.getNombre()
 					+ " no ha sido declarada.");
 		}
 		return super.visit(node);
+	}
+	
+	@Override
+	public Object visit(TipoArray node) {
+		if (node.getTipo() instanceof TipoStruct) {
+			node.setTipo(estructuras.get(((TipoStruct) node.getTipo())
+					.getNombre()));
+		}
+		return null;
 	}
 
 }

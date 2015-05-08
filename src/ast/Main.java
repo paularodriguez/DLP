@@ -3,6 +3,8 @@ package ast;
 import generacionCodigo.GeneracionCodigo;
 import gestionMemoria.GestionMemoria;
 import gestorErrores.GestorErrores;
+import introspector.model.IntrospectorModel;
+import introspector.view.IntrospectorTree;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -58,17 +60,18 @@ public class Main {
 			GestionMemoria vGestionMemoria = new GestionMemoria();
 			parser.ast.acepta(vGestionMemoria);
 		}
-		
+
 		if (!gestor.hayErrores()) {
 			GeneracionCodigo gCodigo = new GeneracionCodigo();
 			parser.ast.acepta(gCodigo);
 		}
 
-		/*
-		 * if (!gestor.hayErrores()) { IntrospectorModel modelo = new
-		 * IntrospectorModel("Program", parser.ast); new
-		 * IntrospectorTree("Instrospector", modelo); }
-		 */
+		/*if (!gestor.hayErrores()) {
+			IntrospectorModel modelo = new IntrospectorModel("Program",
+					parser.ast);
+			new IntrospectorTree("Instrospector", modelo);
+		}*/
+
 	}
 
 }

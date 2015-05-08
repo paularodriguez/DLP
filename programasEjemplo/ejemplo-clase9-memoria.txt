@@ -1,0 +1,42 @@
+/*
+Test para probar la Fase de Gestión de Memoria.
+
+COMPROBACION: Las direcciones asignadas a cada nodo deben coincidir con la dirección del comentario de cada definición.
+
+CONSEJO: Para poder validar más cómodamente este ejercicio se aconseja añadir a 'visitor/ASTPrinter.java' la siguiente sentencia:
+
+	print(indent + 1, "direccion", "int", node.getDireccion());
+
+Esta llamada deberá añadirse en los métodos visit de los nodos a los que se les haya asignado un atributo 'direccion' (habitualmente aquellos que representen definiciones de variables globales, locales, parámetros y/o campos de estructuras)
+
+NOTA: Es posible que el alumno deba adaptar ligeramente la sintaxis del lenguaje si no coincide
+con la del lenguaje que le corresponde.
+*/
+
+dim a as character;	// Dir 0
+ 
+type Persona
+	edad as integer;	// Dir 0 
+	meses[12] as integer;	// Dir 2 
+	a as real;	// Dir 26 
+end type;
+
+dim b as real;// Dir 1 
+
+type Prueba
+	campo1 as integer; // Dir 0 
+	campo2 as integer; // Dir 2 
+end type;
+
+dim c[2] as Persona;	// Dir 5 
+dim d as integer;		// Dir 65 
+
+proc f(a as integer, b as real, h as character) // a = BP+9, b = BP+5, c = BP+4 
+	dim c as character;	// BP-1 
+	dim d as integer;	// BP-3 
+	dim e[2] as Persona; // BP-63 
+	dim f as real; 	// BP-67 
+end proc;
+
+proc main()
+end proc;
