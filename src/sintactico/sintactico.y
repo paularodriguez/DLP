@@ -47,7 +47,7 @@ import gestorErrores.GestorErrores;
 %left AND OR DISTINTO
 %left IGUALDAD MAYORIGUAL MENORIGUAL '<' '>' 
 %left '+', '-'
-%left '*', '/', '%'
+%left '*', '/'
 %right NOT	
 %nonassoc '(' ')' '[' ']'
 %left '.'
@@ -188,7 +188,6 @@ expresion
 		|	expresion '-' expresion				{$$ = new Aritmetica((Expresion)$1, "-", (Expresion)$3, lexico.line(), lexico.column());}
 		|	expresion '*' expresion				{$$ = new Aritmetica((Expresion)$1, "*", (Expresion)$3, lexico.line(), lexico.column());}
 		|	expresion '/' expresion				{$$ = new Aritmetica((Expresion)$1, "/", (Expresion)$3, lexico.line(), lexico.column());}	
-		|	expresion '%' expresion				{$$ = new Aritmetica((Expresion)$1, "%", (Expresion)$3, lexico.line(), lexico.column());}
 		|	expresion '[' expresion ']'			{$$ = new AccesoArray((Expresion)$1, (Expresion)$3, lexico.line(), lexico.column());}
 		|	expresion '.' expresion				{$$ = new AccesoCampo((Expresion)$1, (Expresion)$3, lexico.line(), lexico.column());}
 		|	expresion '<' expresion				{$$ = new Comparacion((Expresion)$1, "<", (Expresion)$3, lexico.line(), lexico.column());}

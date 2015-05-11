@@ -149,6 +149,10 @@ public class IdentificacionVisitor extends DefaultVisitor {
 			node.setTipo(estructuras.get(((TipoStruct) node.getTipo())
 					.getNombre()));
 		}
+		
+		if (node.getTipo() instanceof TipoArray) {
+			node.getTipo().acepta(this);
+		}
 		return null;
 	}
 

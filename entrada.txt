@@ -1,61 +1,18 @@
-/*
-Test 1 para probar la Fase de Generación de Código
 
-COMPROBACION. Al ejecutar el programa deberá salir:
-743,2314
 
-CONSEJO: No limitarse a comprobar el resultado de la ejecución. Se recomienda además abrir el fichero generado usando el depurador GVM y comprobar sus instrucciones.
+type Persona
+	edad as integer;
+end type;
 
-Para facilitar esta tarea es de gran utilidad que el alumno haya generado directivas '#line' en el fichero de salida.
-Para información sobre la función de dicha directiva se debe abrir con GVM el siguiente tutorial: 
-Tutoriales\2 Uso básico del depurador\4 Fusión Alto Nivel.mp
+dim g[1][2] as Persona;
 
-NOTA: Es posible que el alumno deba adaptar ligeramente la sintaxis del lenguaje si no coincide
-con la del lenguaje que le corresponde.
-*/
-
-function potencia(base as real, exponente as integer) as real
-	dim total as real;
-
-	if exponente == 0 then
-		total = 1.0;
-	else
-		if exponente < 0 then
-			total = 1.0 / potencia(base, 0 - exponente);
-		else 
-			total = base;
-			while exponente > 1 do
-				total = total * base;
-				exponente = exponente - 1;
-			end while;
-		end if;
-	end if;
-	return total;
-end function;
-	
-function letraHipoteca(capital as real, años as integer, interes as real) as real
-	dim mensual as real;
-
-	mensual = interes / 12.0;
-	return capital * mensual / (100.0 * (1.0 - potencia(1.0 + mensual/100.0, 0 - años * 12)));
-end function;
 
 proc main()
-	dim precioVivienda as real;
-	dim añosHipoteca as integer;
-	dim interes as real;
-
-	precioVivienda = 200000.0;
-	añosHipoteca = 30;
-	interes = 2.04;	
-/*
-	read precioVivienda;
-	read añosHipoteca;
-	read interes;
-*/
-
-	print letraHipoteca(precioVivienda, añosHipoteca, interes);
-
-//	Con los datos anteriores deberían salir 743 euros de letra al mes
-
+	
+	g[0][0].edad = 1;
+	
+	print g[0][0].edad;
+	
+	print g[0][1].edad;
+	
 end proc;

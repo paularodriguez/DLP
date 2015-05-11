@@ -1,199 +1,53 @@
 #source "entrada.txt"
 call main
 halt
-#FUNC potencia
-#PARAM base:real
-#PARAM exponente:int
-#LOCAL total:real
-#RET real
-potencia:
-enter 4
-#Line 32
-pusha BP
-push 4
-add
-loadi
-pushi 0
-eqi
-jz else_0
-#Line 21
-pusha BP
-push -4
-add
-pushf 1.0
-storef
-jmp fin_if_0
-else_0:
-#Line 31
-pusha BP
-push 4
-add
-loadi
-pushi 0
-lti
-jz else_1
-#Line 24
-pusha BP
-push -4
-add
-pushf 1.0
-pusha BP
-push 6
-add
-loadf
-pushi 0
-pusha BP
-push 4
-add
-loadi
-subi
-call potencia
-divf
-storef
-jmp fin_if_1
-else_1:
-#Line 26
-pusha BP
-push -4
-add
-pusha BP
-push 6
-add
-loadf
-storef
-#Line 30
-inicioWhile_0:
-pusha BP
-push 4
-add
-loadi
-pushi 1
-gti
-jz finWhile_0
-#Line 28
-pusha BP
-push -4
-add
-pusha BP
-push -4
-add
-loadf
-pusha BP
-push 6
-add
-loadf
-mulf
-storef
-#Line 29
-pusha BP
-push 4
-add
-pusha BP
-push 4
-add
-loadi
-pushi 1
-subi
-storei
-jmp inicioWhile_0
-finWhile_0:
-fin_if_1:
-fin_if_0:
-#Line 33
-pusha BP
-push -4
-add
-loadf
-ret 4,4,6
-#FUNC letraHipoteca
-#PARAM capital:real
-#PARAM años:int
-#PARAM interes:real
-#LOCAL mensual:real
-#RET real
-letraHipoteca:
-enter 4
-#Line 39
-pusha BP
-push -4
-add
-pusha BP
-push 4
-add
-loadf
-pushf 12.0
-divf
-storef
-#Line 40
-pusha BP
-push 10
-add
-loadf
-pusha BP
-push -4
-add
-loadf
-mulf
-pushf 100.0
-pushf 1.0
-pushf 1.0
-pusha BP
-push -4
-add
-loadf
-pushf 100.0
-divf
-addf
-pushi 0
-pusha BP
-push 8
-add
-loadi
-pushi 12
-muli
-subi
-call potencia
-subf
-mulf
-divf
-ret 4,4,10
+#TYPE Persona: {
+	edad:int
+}
+#VAR g:1*2*Persona
 #FUNC main
-#LOCAL precioVivienda:real
-#LOCAL añosHipoteca:int
-#LOCAL interes:real
 main:
-enter 10
-#Line 48
-pusha BP
-push -4
+enter 0
+#Line 12
+pusha 0
+pushi 0
+push 4
+mul
 add
-pushf 200000.0
-storef
-#Line 49
-pusha BP
-push -6
+pushi 0
+push 2
+mul
 add
-pushi 30
+push 0
+add
+pushi 1
 storei
-#Line 50
-pusha BP
-push -10
+#Line 14
+pusha 0
+pushi 0
+push 4
+mul
 add
-pushf 2.04
-storef
-#Line 57
-pusha BP
-push -4
+pushi 0
+push 2
+mul
 add
-loadf
-pusha BP
-push -6
+push 0
 add
 loadi
-pusha BP
-push -10
+outi
+#Line 16
+pusha 0
+pushi 0
+push 4
+mul
 add
-loadf
-call letraHipoteca
-outf
-ret 0,10,0
+pushi 1
+push 2
+mul
+add
+push 0
+add
+loadi
+outi
+ret 0,0,0

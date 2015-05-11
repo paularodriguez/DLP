@@ -66,7 +66,7 @@ public class Main {
 			parser.ast.acepta(gCodigo);
 		}
 
-		/*if (!gestor.hayErrores()) {
+	/*	if (!gestor.hayErrores()) {
 			IntrospectorModel modelo = new IntrospectorModel("Program",
 					parser.ast);
 			new IntrospectorTree("Instrospector", modelo);

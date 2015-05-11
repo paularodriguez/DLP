@@ -82,8 +82,7 @@ public class DefinicionStruct extends AbstractNodoAST implements Definicion, Tip
 
 	@Override
 	public String sufijo() {
-		// TODO Auto-generated method stub
-		return null;
+		return nombre;
 	}
 
 	@Override
