@@ -3,8 +3,6 @@ package ast;
 import generacionCodigo.GeneracionCodigo;
 import gestionMemoria.GestionMemoria;
 import gestorErrores.GestorErrores;
-import introspector.model.IntrospectorModel;
-import introspector.view.IntrospectorTree;
 
 import java.io.FileReader;
 import java.io.IOException;

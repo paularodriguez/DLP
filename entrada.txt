@@ -1,18 +1,12 @@
+proc g()
+end proc;
 
+proc f()
+	g();
+end proc;
 
-type Persona
-	edad as integer;
-end type;
-
-dim g[1][2] as Persona;
 
 
 proc main()
-	
-	g[0][0].edad = 1;
-	
-	print g[0][0].edad;
-	
-	print g[0][1].edad;
-	
+	f();
 end proc;

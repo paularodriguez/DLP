@@ -1,53 +1,19 @@
 #source "entrada.txt"
 call main
 halt
-#TYPE Persona: {
-	edad:int
-}
-#VAR g:1*2*Persona
+#FUNC g
+g:
+enter 0
+ret 0,0,0
+#FUNC f
+f:
+enter 0
+#Line 5
+call g
+ret 0,0,0
 #FUNC main
 main:
 enter 0
-#Line 12
-pusha 0
-pushi 0
-push 4
-mul
-add
-pushi 0
-push 2
-mul
-add
-push 0
-add
-pushi 1
-storei
-#Line 14
-pusha 0
-pushi 0
-push 4
-mul
-add
-pushi 0
-push 2
-mul
-add
-push 0
-add
-loadi
-outi
-#Line 16
-pusha 0
-pushi 0
-push 4
-mul
-add
-pushi 1
-push 2
-mul
-add
-push 0
-add
-loadi
-outi
+#Line 11
+call f
 ret 0,0,0

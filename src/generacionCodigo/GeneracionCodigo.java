@@ -400,10 +400,12 @@ public class GeneracionCodigo extends DefaultVisitor {
 		}
 
 		out.println("call " + node.getNombre());
-
-		// comprobar la definicion en INVOCACION PROCEDIMIENTO
+		
+		//node.getDefinicion(); -- Definición del procedimiento
+		//node.getDefinicionFuncion(); -- Definición de la función a la que pertenece
+		
 		/*
-		 * if (node.getDefinicionFuncion().getRetorno() != null){
+		 * if (node.getDefinicion.getRetorno() != null){
 		 * out.println("pop"); }
 		 */
 		// hacer un pop que retire los residuos de la pila

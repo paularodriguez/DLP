@@ -201,7 +201,7 @@ public class InferenciaVisitor extends DefaultVisitor {
 		if (!(node.getExpresion().getTipo() instanceof TipoEntero
 				|| node.getExpresion().getTipo() instanceof TipoReal || node.getExpresion().getTipo() instanceof TipoChar)) {
 			gestorErrores
-					.error("Error semántico: No se puede hacer un cast a un tipo no simple. Linea: "
+					.error("Error semántico: No se puede hacer un cast desde un tipo no simple. Linea: "
 							+ node.getLinea()
 							+ ", Columna: "
 							+ node.getColumna());
